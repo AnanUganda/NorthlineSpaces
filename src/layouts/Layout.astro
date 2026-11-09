@@ -21,6 +21,7 @@ const {
 
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#14160f" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -30,7 +31,7 @@ const {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;450;500;600&display=swap"
       rel="stylesheet"
     />
   </head>
@@ -41,39 +42,57 @@ const {
 
 <style is:global>
   :root {
-    --bg: #f4f1ea;
-    --surface: #fffdf9;
-    --ink: #17181b;
-    --muted: #6f6e66;
-    --line: #e2ddd1;
-    --accent: #3c6e57;
-    --accent-ink: #ffffff;
-    --radius: 14px;
-    --maxw: 760px;
+    /* Warm paper — light */
+    --bg: oklch(0.966 0.009 90);
+    --surface: oklch(0.992 0.006 90);
+    --ink: oklch(0.235 0.012 80);
+    --muted: oklch(0.505 0.014 80);
+    --faint: oklch(0.66 0.012 85);
+    --line: color-mix(in oklab, var(--ink) 12%, transparent);
+    --line-strong: color-mix(in oklab, var(--ink) 22%, transparent);
+    --accent: oklch(0.52 0.082 158);
+    --accent-ink: oklch(0.99 0.01 90);
+
+    /* Type */
+    --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+    --font-body: "Inter", "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas,
+      monospace;
+
+    /* Easing + rhythm */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-inout: cubic-bezier(0.76, 0, 0.24, 1);
+    --gutter: clamp(1.25rem, 5vw, 4.5rem);
+
     color-scheme: light;
   }
 
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #121310;
-      --surface: #1a1b17;
-      --ink: #f2efe7;
-      --muted: #a6a398;
-      --line: #2b2c27;
-      --accent: #7fb79c;
-      --accent-ink: #10110e;
+      /* Deep warm ink — dark */
+      --bg: oklch(0.172 0.013 150);
+      --surface: oklch(0.212 0.015 150);
+      --ink: oklch(0.945 0.01 90);
+      --muted: oklch(0.715 0.014 95);
+      --faint: oklch(0.52 0.014 140);
+      --line: color-mix(in oklab, var(--ink) 15%, transparent);
+      --line-strong: color-mix(in oklab, var(--ink) 28%, transparent);
+      --accent: oklch(0.805 0.072 160);
+      --accent-ink: oklch(0.18 0.02 155);
       color-scheme: dark;
     }
   }
 
   :root[data-theme="dark"] {
-    --bg: #121310;
-    --surface: #1a1b17;
-    --ink: #f2efe7;
-    --muted: #a6a398;
-    --line: #2b2c27;
-    --accent: #7fb79c;
-    --accent-ink: #10110e;
+    --bg: oklch(0.172 0.013 150);
+    --surface: oklch(0.212 0.015 150);
+    --ink: oklch(0.945 0.01 90);
+    --muted: oklch(0.715 0.014 95);
+    --faint: oklch(0.52 0.014 140);
+    --line: color-mix(in oklab, var(--ink) 15%, transparent);
+    --line-strong: color-mix(in oklab, var(--ink) 28%, transparent);
+    --accent: oklch(0.805 0.072 160);
+    --accent-ink: oklch(0.18 0.02 155);
     color-scheme: dark;
   }
 
@@ -87,14 +106,33 @@ const {
     padding: 0;
   }
 
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
     min-height: 100vh;
     min-height: 100dvh;
     background-color: var(--bg);
     color: var(--ink);
-    font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+  }
+
+  /* Fine film grain — texture without weight */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
   ::selection {
@@ -104,5 +142,21 @@ const {
 
   a {
     color: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-delay: 0ms !important;
+      transition-duration: 0.001ms !important;
+    }
   }
 </style>

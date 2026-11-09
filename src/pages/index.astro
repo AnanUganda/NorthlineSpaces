@@ -2,26 +2,34 @@
 import Layout from "../layouts/Layout.astro";
 
 const year = new Date().getFullYear();
-const services = ["Rent", "Buy", "Custom builds"];
+const offerings = ["Rent", "Buy", "Custom builds"];
+const colophon = ["Est. 2026", "Southern California", "Portable storage"];
 ---
 
 <Layout>
-  <div class="page">
-    <div class="glow" aria-hidden="true"></div>
+  <div class="frame">
+    <span class="edge" aria-hidden="true">Coming&nbsp;soon · {year}</span>
 
-    <header class="top">
+    <!-- Masthead -->
+    <header class="masthead">
       <a class="wordmark" href="/" aria-label="Northline home">Northline</a>
-      <span class="locale">Southern California</span>
+      <span class="status">
+        <span class="status__dot" aria-hidden="true"></span>
+        In development
+      </span>
     </header>
 
+    <!-- Hero -->
     <main class="hero">
       <p class="eyebrow">
-        <span class="dot" aria-hidden="true"></span>
+        <span class="eyebrow__no">(01)</span>
+        <span class="eyebrow__rule" aria-hidden="true"></span>
         Premium portable storage
       </p>
 
       <h1 class="headline">
-        Something solid<br />is coming&nbsp;soon.
+        <span class="line"><span>Something <em>solid</em></span></span>
+        <span class="line"><span>is coming soon.</span></span>
       </h1>
 
       <p class="lede">
@@ -31,254 +39,420 @@ const services = ["Rent", "Buy", "Custom builds"];
       </p>
 
       <ul class="chips" aria-label="What we offer">
-        {services.map((s) => <li class="chip">{s}</li>)}
+        {
+          offerings.map((item, i) => (
+            <li class="chip">
+              <span class="chip__no">0{i + 1}</span>
+              {item}
+            </li>
+          ))
+        }
       </ul>
 
       <form class="notify" id="notify" novalidate>
-        <label class="sr-only" for="email">Email address</label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          inputmode="email"
-          autocomplete="email"
-          placeholder="you@email.com"
-          required
-        />
-        <button type="submit">Notify me</button>
+        <div class="field">
+          <label class="sr-only" for="email">Email address</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            inputmode="email"
+            autocomplete="email"
+            placeholder="you@email.com"
+            required
+          />
+          <button type="submit">
+            Notify me
+            <svg
+              class="arrow"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M2 8h11M9 4l4 4-4 4"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"></path>
+            </svg>
+          </button>
+        </div>
+        <p class="note" id="note" role="status" aria-live="polite">
+          Be the first to know when we launch. No noise.
+        </p>
       </form>
-      <p class="notify-note" id="notify-note" role="status" aria-live="polite">
-        Be the first to know when we launch.
-      </p>
     </main>
 
-    <footer class="bottom">
-      <span>&copy; {year} Northline</span>
-      <span class="sep" aria-hidden="true">•</span>
-      <span>Portable storage, done right.</span>
+    <!-- Colophon -->
+    <footer class="colophon">
+      <ul class="meta" aria-label="About Northline">
+        {colophon.map((c) => <li>{c}</li>)}
+      </ul>
+      <span class="copy">&copy; {year} Northline</span>
     </footer>
   </div>
 </Layout>
 
 <style>
-  .page {
+  .frame {
     position: relative;
     min-height: 100vh;
     min-height: 100dvh;
     display: grid;
     grid-template-rows: auto 1fr auto;
-    gap: 32px;
-    max-width: 1120px;
-    margin: 0 auto;
-    padding: 28px 24px 32px;
-    overflow: hidden;
+    max-width: 1340px;
+    margin-inline: auto;
+    padding: clamp(1.4rem, 3.5vw, 2.6rem) var(--gutter)
+      clamp(1.4rem, 3vw, 2.2rem);
   }
 
-  /* Soft ambient glow behind the hero */
-  .glow {
+  /* Vertical edge label */
+  .edge {
     position: fixed;
-    top: -18%;
-    left: 50%;
-    width: min(900px, 120vw);
-    height: min(900px, 120vw);
-    transform: translateX(-50%);
-    background: radial-gradient(
-      circle at center,
-      color-mix(in srgb, var(--accent) 24%, transparent),
-      transparent 62%
-    );
-    z-index: 0;
-    pointer-events: none;
-    filter: blur(6px);
+    top: 50%;
+    right: clamp(0.5rem, 1.4vw, 1.1rem);
+    translate: 0 -50%;
+    writing-mode: vertical-rl;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--faint);
+    user-select: none;
+    z-index: 2;
   }
 
-  .top,
-  .hero,
-  .bottom {
-    position: relative;
-    z-index: 1;
-  }
-
-  /* Header */
-  .top {
+  /* ---- Masthead ---- */
+  .masthead {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
+    padding-bottom: clamp(1.1rem, 2.4vw, 1.8rem);
+    border-bottom: 1px solid var(--line);
   }
 
   .wordmark {
-    font-family: Fraunces, Georgia, serif;
+    font-family: var(--font-display);
     font-weight: 600;
-    font-size: 20px;
-    letter-spacing: 0.01em;
+    font-size: clamp(1.15rem, 1.5vw, 1.45rem);
+    letter-spacing: -0.01em;
     text-decoration: none;
     color: var(--ink);
   }
 
-  .locale {
-    font-size: 13px;
-    color: var(--muted);
-    letter-spacing: 0.02em;
-  }
-
-  /* Hero */
-  .hero {
-    align-self: center;
-    max-width: var(--maxw);
-    padding: 8px 0;
-  }
-
-  .eyebrow {
+  .status {
     display: inline-flex;
     align-items: center;
     gap: 9px;
-    margin: 0 0 22px;
-    font-size: 13px;
-    font-weight: 500;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--muted);
   }
 
-  .dot {
-    width: 8px;
-    height: 8px;
+  .status__dot {
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: var(--accent);
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 60%, transparent);
-    animation: pulse 2.4s ease-out infinite;
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--accent) 55%, transparent);
+    animation: pulse 2.6s var(--ease-out) infinite;
   }
 
   @keyframes pulse {
     0% {
-      box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent);
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--accent) 50%, transparent);
     }
     70% {
-      box-shadow: 0 0 0 10px transparent;
+      box-shadow: 0 0 0 9px transparent;
     }
     100% {
       box-shadow: 0 0 0 0 transparent;
     }
   }
 
+  /* ---- Hero ---- */
+  .hero {
+    align-self: center;
+    padding: clamp(2rem, 7vh, 5rem) 0;
+    max-width: 62rem;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0 0 clamp(1.4rem, 3vw, 2.1rem);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .eyebrow__no {
+    color: var(--accent);
+  }
+
+  .eyebrow__rule {
+    width: clamp(28px, 6vw, 64px);
+    height: 1px;
+    background: var(--line-strong);
+  }
+
   .headline {
-    font-family: Fraunces, Georgia, serif;
+    margin: 0 0 clamp(1.5rem, 3vw, 2.2rem);
+    font-family: var(--font-display);
     font-weight: 500;
-    font-size: clamp(2.6rem, 7.5vw, 5rem);
-    line-height: 1.02;
-    letter-spacing: -0.015em;
-    margin: 0 0 24px;
+    font-size: clamp(2.9rem, 9.2vw, 7.4rem);
+    line-height: 0.96;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  .headline em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  /* Masked line reveal */
+  .line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.04em;
+  }
+
+  .line > span {
+    display: block;
+    translate: 0 110%;
+    animation: line-rise 0.95s var(--ease-out) forwards;
+  }
+
+  .line:nth-child(1) > span {
+    animation-delay: 0.1s;
+  }
+  .line:nth-child(2) > span {
+    animation-delay: 0.22s;
+  }
+
+  @keyframes line-rise {
+    to {
+      translate: 0 0;
+    }
   }
 
   .lede {
-    font-size: clamp(1rem, 2.4vw, 1.2rem);
-    line-height: 1.6;
+    max-width: 44ch;
+    margin: 0 0 clamp(1.8rem, 3.5vw, 2.6rem);
+    font-size: clamp(1.02rem, 1.5vw, 1.2rem);
+    line-height: 1.58;
     color: var(--muted);
-    max-width: 48ch;
-    margin: 0 0 28px;
+    letter-spacing: -0.005em;
   }
 
+  /* Staggered entrance for everything below the headline */
+  .lede,
+  .chips,
+  .notify {
+    opacity: 0;
+    translate: 0 16px;
+    animation: rise 0.8s var(--ease-out) forwards;
+  }
+  .lede {
+    animation-delay: 0.42s;
+  }
+  .chips {
+    animation-delay: 0.52s;
+  }
+  .notify {
+    animation-delay: 0.62s;
+  }
+
+  @keyframes rise {
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+
+  /* ---- Chips ---- */
   .chips {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     list-style: none;
     padding: 0;
-    margin: 0 0 36px;
+    margin: 0 0 clamp(2.2rem, 4.5vw, 3.2rem);
   }
 
   .chip {
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.01em;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    font-weight: 450;
     color: var(--ink);
-    background: var(--surface);
-    border: 1px solid var(--line);
-    padding: 7px 14px;
+    border: 1px solid var(--line-strong);
+    padding: 8px 15px;
     border-radius: 999px;
+    transition:
+      border-color 0.35s var(--ease-out),
+      color 0.35s var(--ease-out),
+      transform 0.35s var(--ease-out);
   }
 
-  /* Notify form */
+  .chip__no {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    color: var(--faint);
+    transition: color 0.35s var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .chip:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .chip:hover .chip__no {
+      color: var(--accent);
+    }
+  }
+
+  /* ---- Notify ---- */
   .notify {
-    display: flex;
-    gap: 10px;
-    max-width: 440px;
+    max-width: 460px;
   }
 
-  .notify input {
+  .field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1.5px solid var(--line-strong);
+    transition: border-color 0.35s var(--ease-out);
+  }
+
+  .field:focus-within {
+    border-color: var(--accent);
+  }
+
+  .field input {
     flex: 1 1 auto;
     min-width: 0;
     font: inherit;
-    font-size: 15px;
+    font-size: 1.05rem;
     color: var(--ink);
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 13px 15px;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    background: transparent;
+    border: 0;
+    padding: 12px 2px;
   }
 
-  .notify input::placeholder {
-    color: color-mix(in srgb, var(--muted) 80%, transparent);
+  .field input::placeholder {
+    color: var(--faint);
   }
 
-  .notify input:focus-visible {
+  .field input:focus {
     outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
   }
 
-  .notify button {
+  .field button {
     flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
     font: inherit;
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--accent-ink);
-    background: var(--accent);
-    border: 1px solid var(--accent);
-    border-radius: var(--radius);
-    padding: 13px 22px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--ink);
+    background: transparent;
+    border: 0;
+    padding: 10px 2px 10px 12px;
     cursor: pointer;
-    transition: transform 0.1s ease, filter 0.15s ease;
+    transition: color 0.3s var(--ease-out);
   }
 
-  .notify button:hover {
-    filter: brightness(1.06);
+  .field button:hover {
+    color: var(--accent);
   }
 
-  .notify button:active {
-    transform: translateY(1px);
+  .field button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
   }
 
-  .notify button:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent);
+  .arrow {
+    transition: transform 0.3s var(--ease-out);
   }
 
-  .notify-note {
+  .field button:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  .note {
     margin: 14px 0 0;
     font-size: 13px;
     color: var(--muted);
+    letter-spacing: -0.003em;
   }
 
-  .notify-note.ok {
+  .note.is-ok {
     color: var(--accent);
-    font-weight: 500;
   }
 
-  /* Footer */
-  .bottom {
+  .note.is-error {
+    color: oklch(0.6 0.16 25);
+  }
+
+  /* ---- Colophon ---- */
+  .colophon {
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: space-between;
+    gap: 16px 24px;
     flex-wrap: wrap;
-    font-size: 13px;
+    padding-top: clamp(1.1rem, 2.4vw, 1.8rem);
+    border-top: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     color: var(--muted);
   }
 
-  .sep {
-    opacity: 0.5;
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .meta li {
+    position: relative;
+  }
+
+  .meta li + li::before {
+    content: "";
+    position: absolute;
+    left: -12px;
+    top: 50%;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--faint);
+    transform: translateY(-50%);
+  }
+
+  .copy {
+    color: var(--faint);
   }
 
   .sr-only {
@@ -293,21 +467,31 @@ const services = ["Rent", "Buy", "Custom builds"];
     border: 0;
   }
 
-  @media (max-width: 560px) {
-    .page {
-      padding: 22px 18px 26px;
-      gap: 26px;
-    }
-    .notify {
-      flex-direction: column;
-    }
-    .notify button {
-      width: 100%;
+  @media (max-width: 900px) {
+    .edge {
+      display: none;
     }
   }
 
+  @media (max-width: 560px) {
+    .colophon {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+  }
+
+  /* Reduced motion: show everything, no transforms */
   @media (prefers-reduced-motion: reduce) {
-    .dot {
+    .line > span,
+    .lede,
+    .chips,
+    .notify {
+      opacity: 1;
+      translate: 0 0;
+      animation: none;
+    }
+    .status__dot {
       animation: none;
     }
   }
@@ -316,20 +500,24 @@ const services = ["Rent", "Buy", "Custom builds"];
 <script>
   const form = document.getElementById("notify") as HTMLFormElement | null;
   const input = document.getElementById("email") as HTMLInputElement | null;
-  const note = document.getElementById("notify-note");
+  const note = document.getElementById("note");
 
   form?.addEventListener("submit", (e) => {
     e.preventDefault();
     if (!input || !note) return;
+
     if (!input.value || !input.checkValidity()) {
       input.focus();
       note.textContent = "Please enter a valid email address.";
-      note.classList.remove("ok");
+      note.classList.remove("is-ok");
+      note.classList.add("is-error");
       return;
     }
-    // Front-end only for now — no list is wired up yet.
+
+    // Front-end only for now — not yet wired to Wix Forms.
     note.textContent = "Thanks — we'll be in touch when Northline launches.";
-    note.classList.add("ok");
+    note.classList.remove("is-error");
+    note.classList.add("is-ok");
     form.reset();
   });
 </script>
