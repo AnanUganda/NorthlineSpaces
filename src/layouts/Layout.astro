@@ -1,0 +1,108 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Northline — Coming Soon",
+  description =
+    "Northline is coming soon. Premium portable storage buildings to rent, buy, or build custom across Southern California.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --bg: #f4f1ea;
+    --surface: #fffdf9;
+    --ink: #17181b;
+    --muted: #6f6e66;
+    --line: #e2ddd1;
+    --accent: #3c6e57;
+    --accent-ink: #ffffff;
+    --radius: 14px;
+    --maxw: 760px;
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121310;
+      --surface: #1a1b17;
+      --ink: #f2efe7;
+      --muted: #a6a398;
+      --line: #2b2c27;
+      --accent: #7fb79c;
+      --accent-ink: #10110e;
+      color-scheme: dark;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #121310;
+    --surface: #1a1b17;
+    --ink: #f2efe7;
+    --muted: #a6a398;
+    --line: #2b2c27;
+    --accent: #7fb79c;
+    --accent-ink: #10110e;
+    color-scheme: dark;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    background-color: var(--bg);
+    color: var(--ink);
+    font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  a {
+    color: inherit;
+  }
+</style>
