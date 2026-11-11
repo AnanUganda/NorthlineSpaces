@@ -1,0 +1,65 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHero from "../components/PageHero.astro";
+import Eyebrow from "../components/Eyebrow.astro";
+import Button from "../components/Button.astro";
+import Icon from "../components/Icon.astro";
+import { images, href } from "../data/site";
+
+const reasons = [
+  { t: "Secure.", d: "Lockable and solid, to help keep tools and materials safe overnight." },
+  { t: "Insulated.", d: "Helps protect heat-sensitive materials, adhesives, finishes and electronics." },
+  { t: "Looks professional.", d: "A clean unit on site reflects well on your business, especially in upscale neighborhoods." },
+  { t: "Easy access.", d: "Wide roll-up door, plus a walk-in side door on select sizes." },
+  { t: "Doubles as a site office.", d: "With a window and side door, the larger units work as a simple on-site workspace." },
+];
+---
+
+<Layout slug="jobsite-storage">
+  <PageHero
+    no="01"
+    label="Jobsite storage"
+    sub="Keep tools, materials and equipment safe, dry and close, so your crew spends less time hauling and more time building."
+    image={images.unitStudioAngle}
+    alt="Three-quarter view of a Northline unit showing the window and walk-in side door"
+  >
+    Secure, insulated storage <em class="accent">right on your jobsite.</em>
+    <Fragment slot="actions">
+      <Button href={href("quote")} label="Get My Free Quote" />
+      <a class="link" href={href("pricing")}>See pricing <Icon name="arrow-right" /></a>
+    </Fragment>
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <div class="split">
+        <div class="split__sticky">
+          <Eyebrow no="02" label="Built for contractors" />
+          <h2 class="h2" data-reveal>Everything on site, <em class="accent">nothing in the truck.</em></h2>
+        </div>
+        <div class="reasons" data-reveal>
+          {reasons.map((r) => <div class="reason"><span><strong>{r.t}</strong> {r.d}</span></div>)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--flush-top">
+    <div class="container">
+      <div class="split">
+        <div>
+          <Eyebrow no="03" label="Flexible terms" />
+          <h2 class="h2" data-reveal>Month to month, for as long as <em class="accent">the job runs.</em></h2>
+        </div>
+        <div>
+          <p class="lede mb-3" data-reveal>
+            Working on more than one site? Ask about multiple units.
+          </p>
+          <div data-reveal style="--delay: 80ms">
+            <Button href={href("quote")} label="Get My Free Quote" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

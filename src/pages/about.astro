@@ -1,0 +1,114 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import PageHero from "../components/PageHero.astro";
+import Eyebrow from "../components/Eyebrow.astro";
+import Button from "../components/Button.astro";
+import Icon from "../components/Icon.astro";
+import Logo from "../components/Logo.astro";
+import { images, href, beliefs, business } from "../data/site";
+---
+
+<Layout slug="about">
+  <PageHero
+    no="01"
+    label="About"
+    sub="We build storage we'd be proud to put in our own driveway."
+    image={images.heroDriveway}
+    alt="A Northline unit on the driveway of a family home at golden hour"
+  >
+    A family business, <em class="accent">not a franchise.</em>
+    <Fragment slot="actions">
+      <Button href={href("quote")} label="Get My Free Quote" />
+      <a class="link" href={href("unit")}>See the unit <Icon name="arrow-right" /></a>
+    </Fragment>
+  </PageHero>
+
+  <!-- Our story -->
+  <section class="section">
+    <div class="container">
+      <div class="split">
+        <div class="split__sticky">
+          <Eyebrow no="02" label="Our story" />
+          <h2 class="h2" data-reveal>Beautiful homes deserve better than <em class="accent">a beat-up box.</em></h2>
+        </div>
+        <div class="prose">
+          <p class="intro mb-4" data-reveal>
+            We kept seeing the same thing: beautiful homes, and a beat-up metal
+            storage box parked out front.
+          </p>
+          <p class="lede" data-reveal style="--delay: 60ms">
+            Storage is something almost everyone needs at some point — during a
+            move, a remodel or a busy season of life. It shouldn't have to look
+            like an afterthought.
+          </p>
+          <p class="lede" data-reveal style="--delay: 120ms">
+            So we started building our own. Units that are insulated to protect
+            what's inside, and designed to look good outside. And we decided to
+            run the business the way we'd want to be treated: honest prices, a
+            real person on the phone, and care for every property we visit.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Beliefs -->
+  <section class="section section--flush-top">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <Eyebrow no="03" label="What we believe" />
+          <h2 class="h2" data-reveal>Three things <em class="accent">we won't bend on.</em></h2>
+        </div>
+      </div>
+      <div class="feature-list" data-reveal>
+        {
+          beliefs.map((b, i) => (
+            <div class="feature">
+              <span class="index">(0{i + 1})</span>
+              <div>
+                <h3 class="feature__title">{b.title}</h3>
+                <p class="feature__desc">{b.desc}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- The name -->
+  <section class="section section--dark process">
+    <div class="process__bg" aria-hidden="true">
+      <Image src={images.detailBadgeTrim} alt="" widths={[1200, 1800]} sizes="100vw" format="webp" quality={55} />
+    </div>
+    <div class="container">
+      <div class="split split--even" style="align-items: center">
+        <div>
+          <Eyebrow no="04" label="The name" />
+          <h2 class="h2 mb-3" data-reveal>A fixed point <em class="accent">to steer by.</em></h2>
+          <p class="lede muted mb-3" data-reveal style="--delay: 80ms">
+            Our mark carries a compass star. It's the standard we hold every
+            unit, every delivery and every phone call to — do it right, and do
+            it the same way every time.
+          </p>
+          <div data-reveal style="--delay: 140ms">
+            <Button href={href("quote")} label="Get My Free Quote" variant="light" />
+          </div>
+        </div>
+        <div data-reveal style="--delay: 120ms; justify-self: center">
+          <Logo class="about-mark" star="soft" />
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .about-mark {
+    width: clamp(160px, 28vw, 320px);
+    height: auto;
+    color: var(--on-dark);
+  }
+</style>

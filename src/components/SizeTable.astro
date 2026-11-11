@@ -1,0 +1,42 @@
+---
+import { sizes } from "../data/site";
+
+/** The three sizes as hairline cards. `mode` controls which prices show. */
+interface Props {
+  mode?: "both" | "rent" | "buy";
+}
+const { mode = "both" } = Astro.props;
+---
+
+<div class="sizes" data-reveal>
+  {
+    sizes.map((s) => (
+      <div class:list={["size", { "size--featured": s.featured }]}>
+        {s.featured && <span class="size__badge">Most popular</span>}
+        <div class="size__name">
+          {s.name}
+          <small>ft</small>
+        </div>
+        <p class="size__fits">{s.fits}</p>
+        <div class="size__prices">
+          {mode !== "buy" && (
+            <div class="size__price">
+              <span>Rent</span>
+              <strong>
+                {s.rent} <small>/ month</small>
+              </strong>
+            </div>
+          )}
+          {mode !== "rent" && (
+            <div class="size__price">
+              <span>Buy</span>
+              <strong>
+                <small>From</small> {s.buy}
+              </strong>
+            </div>
+          )}
+        </div>
+      </div>
+    ))
+  }
+</div>

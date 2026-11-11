@@ -1,0 +1,41 @@
+---
+import type { FaqGroup, FaqItem } from "../data/site";
+
+/**
+ * FAQ accordion on native <details>. Pass either flat `items` or `groups`.
+ * The very first question is open by default.
+ */
+interface Props {
+  items?: FaqItem[];
+  groups?: FaqGroup[];
+}
+const { items, groups } = Astro.props;
+
+const blocks: { group?: string; items: FaqItem[] }[] = groups
+  ? groups.map((g) => ({ group: g.group, items: g.items }))
+  : [{ items: items ?? [] }];
+let first = true;
+---
+
+<div class="faq" data-reveal>
+  {
+    blocks.map((b) => (
+      <>
+        {b.group && <p class="faq__group">{b.group}</p>}
+        {b.items.map((item) => {
+          const open = first;
+          first = false;
+          return (
+            <details open={open}>
+              <summary>
+                <span>{item.q}</span>
+                <span class="faq__icon" aria-hidden="true" />
+              </summary>
+              <div class="faq__body">{item.a}</div>
+            </details>
+          );
+        })}
+      </>
+    ))
+  }
+</div>

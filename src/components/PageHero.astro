@@ -1,0 +1,46 @@
+---
+import { Image } from "astro:assets";
+import Eyebrow from "./Eyebrow.astro";
+
+/**
+ * Inner-page hero: eyebrow, big title (use <em class="accent"> in the slot),
+ * description + buttons on the right, optional wide image below.
+ */
+interface Props {
+  no: string;
+  label: string;
+  sub?: string;
+  image?: ImageMetadata;
+  alt?: string;
+}
+const { no, label, sub, image, alt = "" } = Astro.props;
+---
+
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero__grid">
+      <div>
+        <Eyebrow no={no} label={label} />
+        <h1 class="h1 page-hero__title words" data-words>
+          <slot />
+        </h1>
+      </div>
+      <div class="page-hero__aside">
+        {sub && <p class="lede" data-reveal style="--delay: 200ms">{sub}</p>}
+        <div class="btn-row" data-reveal style="--delay: 280ms">
+          <slot name="actions" />
+        </div>
+      </div>
+    </div>
+
+    {
+      image && (
+        <div class="page-hero__media" data-reveal="scale">
+          <div class="media">
+            <Image src={image} alt={alt} widths={[800, 1400, 2000]} sizes="(max-width: 1264px) 100vw, 1200px" format="webp" quality={72} loading="eager" />
+          </div>
+        </div>
+      )
+    }
+  </div>
+</section>

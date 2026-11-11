@@ -25,3 +25,6 @@ npm-debug.log*
 .DS_Store
 .vscode/
 .idea/
+
+# original multi-MB concept renders (web copies live in src/assets/images)
+raw-images/

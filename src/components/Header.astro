@@ -1,0 +1,83 @@
+---
+import Logo from "./Logo.astro";
+import Icon from "./Icon.astro";
+import Button from "./Button.astro";
+import { nav, headerLinks, href, business } from "../data/site";
+
+/**
+ * Sticky header + full-screen menu overlay.
+ * `light` = sits transparent over a dark hero with light text until scrolled.
+ * `current` = slug of the current page, for aria-current.
+ */
+interface Props {
+  light?: boolean;
+  current?: string;
+}
+const { light = false, current = "" } = Astro.props;
+
+const inline = headerLinks
+  .map((slug) => nav.find((n) => n.slug === slug))
+  .filter(Boolean) as typeof nav;
+const pad = (n: number) => String(n).padStart(2, "0");
+---
+
+<header class:list={["header", { "is-light": light }]} id="site-header">
+  <div class="container header__inner">
+    <a class="brand" href={href("")} aria-label="Northline Spaces — home">
+      <Logo class="brand__mark" />
+      <span class="brand__text">
+        <span class="brand__name">{business.wordmark}</span>
+        <span class="brand__sub">{business.tagline}</span>
+      </span>
+    </a>
+
+    <div class="header__nav">
+      <nav class="header__links" aria-label="Primary">
+        {
+          inline.map((item) => (
+            <a href={href(item.slug)} aria-current={current === item.slug ? "page" : undefined}>
+              {item.short ?? item.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <button
+        class="menu-btn"
+        id="menu-btn"
+        type="button"
+        aria-controls="site-menu"
+        aria-expanded="false"
+      >
+        <span class="menu-btn__open">Menu</span>
+        <span class="menu-btn__close">Close</span>
+        <span class="menu-btn__circle">
+          <Icon name="plus" />
+        </span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="menu" id="site-menu" aria-hidden="true">
+  <div></div>
+  <nav class="container menu__links" aria-label="All pages">
+    {
+      nav.map((item, i) => (
+        <a
+          class="menu__link"
+          href={href(item.slug)}
+          style={`transition-delay: ${60 + i * 45}ms`}
+          aria-current={current === item.slug ? "page" : undefined}
+        >
+          {item.label}
+          <span class="sup">({pad(i + 1)})</span>
+        </a>
+      ))
+    }
+  </nav>
+  <div class="container menu__foot">
+    <span>{business.name} · {business.town}, {business.state}</span>
+    <Button href={href("quote")} label="Get My Free Quote" size="sm" />
+  </div>
+</div>

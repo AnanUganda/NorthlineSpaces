@@ -1,0 +1,83 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHero from "../components/PageHero.astro";
+import Eyebrow from "../components/Eyebrow.astro";
+import Button from "../components/Button.astro";
+import Icon from "../components/Icon.astro";
+import { images, href, business } from "../data/site";
+
+const reasons = [
+  { t: "It's right outside.", d: "Need something mid-project? It's a few steps away." },
+  { t: "It protects what matters.", d: "Insulation helps keep dust, heat and weather away from furniture, rugs and electronics." },
+  { t: "It doesn't look like a construction site.", d: "Your home still looks cared for while the work gets done." },
+  { t: "It flexes with your project.", d: "Renovations run long. Keep it month to month, with no penalty for extra time." },
+];
+
+const how = [
+  "Tell us your project dates and address",
+  `We call within ${business.callbackMinutes} minutes to confirm your price`,
+  `We deliver for ${business.deliveryFee} and place it where you want`,
+  "Load it up, then keep it as long as the project needs",
+];
+---
+
+<Layout slug="renovation-storage">
+  <PageHero
+    no="01"
+    label="Renovation storage"
+    sub="Clear the room, protect your furniture, and get to it any time — without hauling everything across town to a storage facility."
+    image={images.heroDriveway}
+    alt="A Northline unit parked neatly on the driveway of a modern farmhouse"
+  >
+    Renovating? Keep your things safe, dry and <em class="accent">right outside.</em>
+    <Fragment slot="actions">
+      <Button href={href("quote")} label="Get My Free Quote" />
+      <a class="link" href={href("pricing")}>See pricing <Icon name="arrow-right" /></a>
+    </Fragment>
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <div class="split">
+        <div class="split__sticky">
+          <Eyebrow no="02" label="Why homeowners choose Northline" />
+          <h2 class="h2" data-reveal>Storage that stays <em class="accent">out of the way.</em></h2>
+        </div>
+        <div class="reasons" data-reveal>
+          {reasons.map((r) => <div class="reason"><span><strong>{r.t}</strong> {r.d}</span></div>)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--flush-top">
+    <div class="container">
+      <div class="split">
+        <div>
+          <Eyebrow no="03" label="For businesses too" />
+          <h2 class="h2" data-reveal>Remodeling an office, shop <em class="accent">or restaurant?</em></h2>
+        </div>
+        <p class="lede" data-reveal style="--delay: 80ms">
+          Store furniture, stock and equipment on site so you can keep things moving.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--flush-top">
+    <div class="container">
+      <div class="split">
+        <div class="split__sticky">
+          <Eyebrow no="04" label="How it works" />
+          <h2 class="h2 mb-3" data-reveal>Four steps, <em class="accent">start to finish.</em></h2>
+          <div data-reveal style="--delay: 80ms">
+            <Button href={href("quote")} label="Get My Free Quote" />
+          </div>
+        </div>
+        <ol class="how" data-reveal>
+          {how.map((h) => <li>{h}</li>)}
+        </ol>
+      </div>
+    </div>
+  </section>
+</Layout>

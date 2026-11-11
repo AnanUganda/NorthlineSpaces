@@ -1,523 +1,362 @@
 ---
+import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
+import Eyebrow from "../components/Eyebrow.astro";
+import Button from "../components/Button.astro";
+import Icon from "../components/Icon.astro";
+import SizeTable from "../components/SizeTable.astro";
+import Faq from "../components/Faq.astro";
+import {
+  images,
+  href,
+  audiences,
+  beliefs,
+  process,
+  homeFaq,
+  business,
+} from "../data/site";
 
-const year = new Date().getFullYear();
-const offerings = ["Rent", "Buy", "Custom builds"];
-const colophon = ["Est. 2026", "Southern California", "Portable storage"];
+const stats = [
+  { no: "01", value: "15", unit: "min", label: "To a real person", sub: "We call back with your price", icon: "clock" },
+  { no: "02", value: "$99", unit: "", label: "Delivery & pickup", sub: "Within 10 miles of Fallbrook", icon: "tag" },
+  { no: "03", value: "3", unit: "", label: "Sizes", sub: "8×12, 8×16 and 8×20", icon: "shield" },
+  { no: "04", value: "0", unit: "", label: "Hidden fees", sub: "The price you see is the price you pay", icon: "thermo" },
+] as const;
+
+const work = [
+  {
+    span: "span-7",
+    ratio: "media--4x3",
+    image: images.unitOpenInterior,
+    alt: "Northline unit with the roll-up door open, showing the lit, wood-lined interior",
+    title: "Walk right in",
+    year: "Interior",
+    desc: "Ground-level loading through a wide roll-up door. Lit, lined and insulated inside.",
+    chips: ["Roll-up door", "Insulated", "Ground level"],
+  },
+  {
+    span: "span-5",
+    ratio: "media--3x4",
+    image: images.detailBadgeTrim,
+    alt: "Close-up of the cedar-tone trim and Northline badge on the unit",
+    title: "Built like it's meant to stay",
+    year: "Detail",
+    desc: "Charcoal ribbed siding, warm cedar-tone trim, clean simple lines.",
+    chips: ["Cedar-tone trim", "Ribbed siding"],
+  },
+  {
+    span: "span-5",
+    ratio: "media--1x1",
+    image: images.unitStudioFront,
+    alt: "Front elevation of a Northline storage unit",
+    title: "Handsome from the street",
+    year: "Front",
+    desc: "Designed to sit in front of a beautiful home without looking out of place.",
+    chips: ["Secure locking", "Weatherproof"],
+  },
+  {
+    span: "span-7",
+    ratio: "media--4x3",
+    image: images.unitStudioAngle,
+    alt: "Three-quarter view of a Northline unit showing the window and walk-in side door",
+    title: "Window and side door",
+    year: "Select sizes",
+    desc: "Natural light to see what you're doing, and a walk-in door so you can grab something without opening the main one.",
+    chips: ["Window", "Side door", "8×16 · 8×20"],
+  },
+];
 ---
 
-<Layout>
-  <div class="frame">
-    <span class="edge" aria-hidden="true">Coming&nbsp;soon · {year}</span>
+<Layout slug="" light>
+  <!-- ===================== Hero ===================== -->
+  <section class="hero">
+    <div class="hero__frame">
+      <div class="hero__media">
+        <Image
+          src={images.heroDriveway}
+          alt="A Northline portable storage unit parked on the paver driveway of a modern farmhouse at golden hour"
+          widths={[900, 1400, 2000, 2400]}
+          sizes="100vw"
+          format="webp"
+          quality={72}
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+      <div class="hero__grid" aria-hidden="true">
+        <span class="hero__cross" style="left: 25%; top: 25%"></span>
+        <span class="hero__cross" style="left: 75%; top: 25%"></span>
+        <span class="hero__cross" style="left: 50%; top: 50%"></span>
+        <span class="hero__cross" style="left: 25%; top: 75%"></span>
+        <span class="hero__cross" style="left: 75%; top: 75%"></span>
+      </div>
 
-    <!-- Masthead -->
-    <header class="masthead">
-      <a class="wordmark" href="/" aria-label="Northline home">Northline</a>
-      <span class="status">
-        <span class="status__dot" aria-hidden="true"></span>
-        In development
-      </span>
-    </header>
+      <div class="hero__body">
+        <h1 class="h1 hero__title words" data-words>
+          Storage that looks like it belongs.
+        </h1>
 
-    <!-- Hero -->
-    <main class="hero">
-      <p class="eyebrow">
-        <span class="eyebrow__no">(01)</span>
-        <span class="eyebrow__rule" aria-hidden="true"></span>
-        Premium portable storage
-      </p>
+        <a class="hero__card" href={href("unit")} data-reveal style="--delay: 700ms">
+          <div class="media">
+            <Image src={images.unitStudioFront} alt="" widths={[128, 256]} sizes="64px" format="webp" quality={70} />
+          </div>
+          <div>
+            <div class="hero__card-label">Most popular</div>
+            <div class="hero__card-title">8×16 insulated unit</div>
+            <div class="hero__card-meta">{business.town}, {business.state} — {business.founded}</div>
+          </div>
+          <Icon name="arrow-up-right" />
+        </a>
+      </div>
 
-      <h1 class="headline">
-        <span class="line"><span>Something <em>solid</em></span></span>
-        <span class="line"><span>is coming soon.</span></span>
-      </h1>
-
-      <p class="lede">
-        Northline builds premium portable storage buildings — insulated, wired,
-        and made to last. Rent one by the month, buy one outright, or design a
-        custom build for your space.
-      </p>
-
-      <ul class="chips" aria-label="What we offer">
+      <div class="hero__strip">
         {
-          offerings.map((item, i) => (
-            <li class="chip">
-              <span class="chip__no">0{i + 1}</span>
-              {item}
-            </li>
+          audiences.map((a) => (
+            <a href={href(a.slug)}>
+              <span class="index">({a.index})</span>
+              {a.short}
+            </a>
           ))
         }
-      </ul>
+        <span class="hero__scroll">Scroll to explore</span>
+      </div>
+    </div>
+  </section>
 
-      <form class="notify" id="notify" novalidate>
-        <div class="field">
-          <label class="sr-only" for="email">Email address</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            inputmode="email"
-            autocomplete="email"
-            placeholder="you@email.com"
-            required
-          />
-          <button type="submit">
-            Notify me
-            <svg
-              class="arrow"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M2 8h11M9 4l4 4-4 4"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-                stroke-linejoin="round"></path>
-            </svg>
-          </button>
+  <!-- ===================== About / intro ===================== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <Eyebrow no="01" label="About Northline" />
+          <p class="label accent" data-reveal>Now delivering across {business.area}</p>
         </div>
-        <p class="note" id="note" role="status" aria-live="polite">
-          Be the first to know when we launch. No noise.
+      </div>
+
+      <div class="split">
+        <div></div>
+        <p class="intro" data-reveal>
+          Most portable storage is a metal box. Ours is closer to a small,
+          well-built room — insulated, secure and handsome enough for any
+          driveway. We're a {business.town} family, and we build storage we'd be
+          proud to park in front of our own home.
         </p>
-      </form>
-    </main>
+      </div>
 
-    <!-- Colophon -->
-    <footer class="colophon">
-      <ul class="meta" aria-label="About Northline">
-        {colophon.map((c) => <li>{c}</li>)}
-      </ul>
-      <span class="copy">&copy; {year} Northline</span>
-    </footer>
-  </div>
+      <div class="stats mt-5" data-reveal>
+        {
+          stats.map((s) => (
+            <div class="stat">
+              <span class="stat__no">{s.no}</span>
+              <Icon name={s.icon} class="stat__icon" />
+              <div class="stat__value">
+                {s.value}
+                {s.unit && <span style="font-size: 0.4em; letter-spacing: -0.02em; margin-left: 0.15em">{s.unit}</span>}
+              </div>
+              <div>
+                <div class="stat__label">{s.label}</div>
+                <div class="stat__sub">{s.sub}</div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Services ===================== -->
+  <section class="section section--flush-top">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <Eyebrow no="02" label="What we do" />
+          <h2 class="h2" data-reveal>Storage for every <em class="accent">situation.</em></h2>
+        </div>
+        <p class="lede section-head__aside" data-reveal style="--delay: 80ms">
+          Renovating, moving, building or just out of room — one well-built
+          unit, delivered to your driveway or jobsite.
+        </p>
+      </div>
+
+      <div class="svc" data-reveal>
+        {
+          audiences.map((a, i) => (
+            <article class:list={["svc__item", { "is-open": i === 0 }]} tabindex="0" aria-label={a.title}>
+              <Image src={a.image} alt="" widths={[800, 1200, 1600]} sizes="(max-width: 860px) 100vw, 900px" format="webp" quality={70} />
+              <div class="svc__collapsed">
+                <span>
+                  <span class="index">({a.index})</span>
+                  {a.title}
+                </span>
+              </div>
+              <div class="svc__open">
+                <span class="svc__tag">({a.index})</span>
+                <h3 class="svc__title">{a.title}</h3>
+                <p class="svc__desc">{a.blurb}</p>
+                <div class="svc__foot">
+                  <span>{a.tags.join(" · ")}</span>
+                  <a class="link" href={href(a.slug)}>
+                    Explore <Icon name="arrow-right" />
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== The unit ===================== -->
+  <section class="section section--flush-top">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <Eyebrow no="03" label="The unit" />
+          <h2 class="h2" data-reveal>Built to protect. <em class="accent">Designed to look good doing it.</em></h2>
+        </div>
+        <div class="section-head__aside" data-reveal style="--delay: 80ms">
+          <p class="lede mb-2">
+            Insulated walls and ceiling for inland summers. A wide roll-up
+            door. Charcoal siding with cedar-tone trim.
+          </p>
+          <a class="link" href={href("unit")}>See the unit <Icon name="arrow-right" /></a>
+        </div>
+      </div>
+
+      <div class="masonry">
+        {
+          work.map((w, i) => (
+            <a class:list={["work", w.span]} href={href("unit")} data-reveal="scale" style={`--delay: ${(i % 2) * 90}ms`}>
+              <div class:list={["media", "media--hover", "work__media", w.ratio]}>
+                <Image src={w.image} alt={w.alt} widths={[700, 1100, 1500]} sizes="(max-width: 860px) 100vw, 700px" format="webp" quality={72} />
+                <span class="img-btn">
+                  <Icon name="arrow-up-right" />
+                </span>
+              </div>
+              <div class="work__row">
+                <span class="work__title">{w.title}</span>
+                <span class="work__year">{w.year}</span>
+              </div>
+              <p class="work__desc">{w.desc}</p>
+              <div class="chips">{w.chips.map((c) => <span class="chip">{c}</span>)}</div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Sizes & pricing ===================== -->
+  <section class="section section--flush-top">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <Eyebrow no="04" label="Sizes & pricing" />
+          <h2 class="h2" data-reveal>Simple pricing. <em class="accent">No surprises.</em></h2>
+        </div>
+        <div class="section-head__aside" data-reveal style="--delay: 80ms">
+          <p class="lede mb-2">
+            The price you see is the price you pay. Month to month, keep it as
+            long as you need. {business.deliveryFee} delivery and pickup within{" "}
+            {business.deliveryRadius} of {business.town}.
+          </p>
+          <Button href={href("pricing")} label="See full pricing" variant="outline" size="sm" />
+        </div>
+      </div>
+
+      <SizeTable mode="both" />
+      <p class="small muted mt-2" data-reveal>
+        Not sure which size? Tell us what you're storing and we'll help you choose when we call.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== Process (dark) ===================== -->
+  <section class="section section--dark process">
+    <div class="process__bg" aria-hidden="true">
+      <Image src={images.unitOpenInterior} alt="" widths={[1200, 1800]} sizes="100vw" format="webp" quality={55} />
+    </div>
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <Eyebrow no="05" label="How it works" />
+          <h2 class="h2" data-reveal>Four steps. <em class="accent">One phone call.</em></h2>
+        </div>
+        <div class="section-head__aside" data-reveal style="--delay: 80ms">
+          <p class="lede muted mb-2">
+            No forms that go nowhere, no "call for pricing". Tell us what you
+            need and a real person calls you back.
+          </p>
+          <Button href={href("quote")} label="Get My Free Quote" variant="light" size="sm" />
+        </div>
+      </div>
+
+      <div class="steps">
+        {
+          process.map((p, i) => (
+            <div class="step" data-reveal style={`--delay: ${i * 80}ms`}>
+              <span class="step__no">
+                <Icon name="arrow-right" /> 0{i + 1}.
+              </span>
+              <h3 class="step__title">{p.title}</h3>
+              <p class="step__desc">{p.desc}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Beliefs ===================== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <Eyebrow no="06" label="What we believe" />
+          <h2 class="h2" data-reveal>A family business, <em class="accent">not a franchise.</em></h2>
+        </div>
+        <div class="section-head__aside" data-reveal style="--delay: 80ms">
+          <p class="lede mb-2">
+            We run Northline the way we'd want to be treated: honest prices, a
+            real person on the phone, and care for every property we visit.
+          </p>
+          <a class="link" href={href("about")}>Our story <Icon name="arrow-right" /></a>
+        </div>
+      </div>
+
+      <div class="feature-list" data-reveal>
+        {
+          beliefs.map((b, i) => (
+            <div class="feature">
+              <span class="index">(0{i + 1})</span>
+              <div>
+                <h3 class="feature__title">{b.title}</h3>
+                <p class="feature__desc">{b.desc}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FAQ ===================== -->
+  <section class="section section--flush-top">
+    <div class="container">
+      <div class="split">
+        <div class="split__sticky">
+          <Eyebrow no="07" label="FAQ" />
+          <h2 class="h2 mb-2" data-reveal>Questions, <em class="accent">answered.</em></h2>
+          <p class="lede mb-2" data-reveal style="--delay: 80ms">
+            Sizes, delivery, permits, buying — the things people ask us most.
+          </p>
+          <a class="link" href={href("faq")} data-reveal style="--delay: 140ms">
+            Ask us anything <Icon name="arrow-right" />
+          </a>
+        </div>
+        <Faq items={homeFaq} />
+      </div>
+    </div>
+  </section>
 </Layout>
-
-<style>
-  .frame {
-    position: relative;
-    min-height: 100vh;
-    min-height: 100dvh;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    max-width: 1340px;
-    margin-inline: auto;
-    padding: clamp(1.4rem, 3.5vw, 2.6rem) var(--gutter)
-      clamp(1.4rem, 3vw, 2.2rem);
-  }
-
-  /* Vertical edge label */
-  .edge {
-    position: fixed;
-    top: 50%;
-    right: clamp(0.5rem, 1.4vw, 1.1rem);
-    translate: 0 -50%;
-    writing-mode: vertical-rl;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--faint);
-    user-select: none;
-    z-index: 2;
-  }
-
-  /* ---- Masthead ---- */
-  .masthead {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding-bottom: clamp(1.1rem, 2.4vw, 1.8rem);
-    border-bottom: 1px solid var(--line);
-  }
-
-  .wordmark {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: clamp(1.15rem, 1.5vw, 1.45rem);
-    letter-spacing: -0.01em;
-    text-decoration: none;
-    color: var(--ink);
-  }
-
-  .status {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .status__dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 0 0 color-mix(in oklab, var(--accent) 55%, transparent);
-    animation: pulse 2.6s var(--ease-out) infinite;
-  }
-
-  @keyframes pulse {
-    0% {
-      box-shadow: 0 0 0 0 color-mix(in oklab, var(--accent) 50%, transparent);
-    }
-    70% {
-      box-shadow: 0 0 0 9px transparent;
-    }
-    100% {
-      box-shadow: 0 0 0 0 transparent;
-    }
-  }
-
-  /* ---- Hero ---- */
-  .hero {
-    align-self: center;
-    padding: clamp(2rem, 7vh, 5rem) 0;
-    max-width: 62rem;
-  }
-
-  .eyebrow {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin: 0 0 clamp(1.4rem, 3vw, 2.1rem);
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 400;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .eyebrow__no {
-    color: var(--accent);
-  }
-
-  .eyebrow__rule {
-    width: clamp(28px, 6vw, 64px);
-    height: 1px;
-    background: var(--line-strong);
-  }
-
-  .headline {
-    margin: 0 0 clamp(1.5rem, 3vw, 2.2rem);
-    font-family: var(--font-display);
-    font-weight: 500;
-    font-size: clamp(2.9rem, 9.2vw, 7.4rem);
-    line-height: 0.96;
-    letter-spacing: -0.03em;
-    text-wrap: balance;
-  }
-
-  .headline em {
-    font-style: italic;
-    font-weight: 400;
-    color: var(--accent);
-  }
-
-  /* Masked line reveal */
-  .line {
-    display: block;
-    overflow: hidden;
-    padding-bottom: 0.04em;
-  }
-
-  .line > span {
-    display: block;
-    translate: 0 110%;
-    animation: line-rise 0.95s var(--ease-out) forwards;
-  }
-
-  .line:nth-child(1) > span {
-    animation-delay: 0.1s;
-  }
-  .line:nth-child(2) > span {
-    animation-delay: 0.22s;
-  }
-
-  @keyframes line-rise {
-    to {
-      translate: 0 0;
-    }
-  }
-
-  .lede {
-    max-width: 44ch;
-    margin: 0 0 clamp(1.8rem, 3.5vw, 2.6rem);
-    font-size: clamp(1.02rem, 1.5vw, 1.2rem);
-    line-height: 1.58;
-    color: var(--muted);
-    letter-spacing: -0.005em;
-  }
-
-  /* Staggered entrance for everything below the headline */
-  .lede,
-  .chips,
-  .notify {
-    opacity: 0;
-    translate: 0 16px;
-    animation: rise 0.8s var(--ease-out) forwards;
-  }
-  .lede {
-    animation-delay: 0.42s;
-  }
-  .chips {
-    animation-delay: 0.52s;
-  }
-  .notify {
-    animation-delay: 0.62s;
-  }
-
-  @keyframes rise {
-    to {
-      opacity: 1;
-      translate: 0 0;
-    }
-  }
-
-  /* ---- Chips ---- */
-  .chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    list-style: none;
-    padding: 0;
-    margin: 0 0 clamp(2.2rem, 4.5vw, 3.2rem);
-  }
-
-  .chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13.5px;
-    font-weight: 450;
-    color: var(--ink);
-    border: 1px solid var(--line-strong);
-    padding: 8px 15px;
-    border-radius: 999px;
-    transition:
-      border-color 0.35s var(--ease-out),
-      color 0.35s var(--ease-out),
-      transform 0.35s var(--ease-out);
-  }
-
-  .chip__no {
-    font-family: var(--font-mono);
-    font-size: 10.5px;
-    letter-spacing: 0.04em;
-    color: var(--faint);
-    transition: color 0.35s var(--ease-out);
-  }
-
-  @media (hover: hover) {
-    .chip:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-    }
-    .chip:hover .chip__no {
-      color: var(--accent);
-    }
-  }
-
-  /* ---- Notify ---- */
-  .notify {
-    max-width: 460px;
-  }
-
-  .field {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    border-bottom: 1.5px solid var(--line-strong);
-    transition: border-color 0.35s var(--ease-out);
-  }
-
-  .field:focus-within {
-    border-color: var(--accent);
-  }
-
-  .field input {
-    flex: 1 1 auto;
-    min-width: 0;
-    font: inherit;
-    font-size: 1.05rem;
-    color: var(--ink);
-    background: transparent;
-    border: 0;
-    padding: 12px 2px;
-  }
-
-  .field input::placeholder {
-    color: var(--faint);
-  }
-
-  .field input:focus {
-    outline: none;
-  }
-
-  .field button {
-    flex: 0 0 auto;
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    font: inherit;
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--ink);
-    background: transparent;
-    border: 0;
-    padding: 10px 2px 10px 12px;
-    cursor: pointer;
-    transition: color 0.3s var(--ease-out);
-  }
-
-  .field button:hover {
-    color: var(--accent);
-  }
-
-  .field button:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 4px;
-  }
-
-  .arrow {
-    transition: transform 0.3s var(--ease-out);
-  }
-
-  .field button:hover .arrow {
-    transform: translateX(4px);
-  }
-
-  .note {
-    margin: 14px 0 0;
-    font-size: 13px;
-    color: var(--muted);
-    letter-spacing: -0.003em;
-  }
-
-  .note.is-ok {
-    color: var(--accent);
-  }
-
-  .note.is-error {
-    color: oklch(0.6 0.16 25);
-  }
-
-  /* ---- Colophon ---- */
-  .colophon {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px 24px;
-    flex-wrap: wrap;
-    padding-top: clamp(1.1rem, 2.4vw, 1.8rem);
-    border-top: 1px solid var(--line);
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px 22px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .meta li {
-    position: relative;
-  }
-
-  .meta li + li::before {
-    content: "";
-    position: absolute;
-    left: -12px;
-    top: 50%;
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;
-    background: var(--faint);
-    transform: translateY(-50%);
-  }
-
-  .copy {
-    color: var(--faint);
-  }
-
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
-
-  @media (max-width: 900px) {
-    .edge {
-      display: none;
-    }
-  }
-
-  @media (max-width: 560px) {
-    .colophon {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-    }
-  }
-
-  /* Reduced motion: show everything, no transforms */
-  @media (prefers-reduced-motion: reduce) {
-    .line > span,
-    .lede,
-    .chips,
-    .notify {
-      opacity: 1;
-      translate: 0 0;
-      animation: none;
-    }
-    .status__dot {
-      animation: none;
-    }
-  }
-</style>
-
-<script>
-  const form = document.getElementById("notify") as HTMLFormElement | null;
-  const input = document.getElementById("email") as HTMLInputElement | null;
-  const note = document.getElementById("note");
-
-  form?.addEventListener("submit", (e) => {
-    e.preventDefault();
-    if (!input || !note) return;
-
-    if (!input.value || !input.checkValidity()) {
-      input.focus();
-      note.textContent = "Please enter a valid email address.";
-      note.classList.remove("is-ok");
-      note.classList.add("is-error");
-      return;
-    }
-
-    // Front-end only for now — not yet wired to Wix Forms.
-    note.textContent = "Thanks — we'll be in touch when Northline launches.";
-    note.classList.remove("is-error");
-    note.classList.add("is-ok");
-    form.reset();
-  });
-</script>

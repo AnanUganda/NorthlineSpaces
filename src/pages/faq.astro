@@ -1,0 +1,31 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHero from "../components/PageHero.astro";
+import Button from "../components/Button.astro";
+import Icon from "../components/Icon.astro";
+import Faq from "../components/Faq.astro";
+import { href, faq } from "../data/site";
+---
+
+<Layout slug="faq">
+  <PageHero
+    no="01"
+    label="FAQ"
+    sub="Sizes, pricing, delivery, permits and buying — the things people ask us most. Don't see yours? Ask us anything when we call."
+  >
+    Questions? <em class="accent">We've got answers.</em>
+    <Fragment slot="actions">
+      <Button href={href("quote")} label="Get My Free Quote" />
+      <a class="link" href={href("pricing")}>See pricing <Icon name="arrow-right" /></a>
+    </Fragment>
+  </PageHero>
+
+  <section class="section section--flush-top">
+    <div class="container">
+      <div class="split">
+        <div></div>
+        <Faq groups={faq} />
+      </div>
+    </div>
+  </section>
+</Layout>

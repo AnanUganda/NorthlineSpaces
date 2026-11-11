@@ -1,0 +1,42 @@
+---
+import Button from "./Button.astro";
+import Icon from "./Icon.astro";
+import { closing, href } from "../data/site";
+
+/** The closing block that ends every page. */
+interface Props {
+  facts?: boolean;
+}
+const { facts = true } = Astro.props;
+---
+
+<section class="cta">
+  <div class="container">
+    <p class="cta__avail" data-reveal>{closing.availability}</p>
+    <h2 class="h2 cta__title" data-reveal style="--delay: 60ms">
+      {closing.title[0]}<br />
+      <em class="accent">{closing.title[1]}</em>
+    </h2>
+    <p class="cta__sub" data-reveal style="--delay: 120ms">{closing.sub}</p>
+    <div class="btn-row" data-reveal style="--delay: 180ms">
+      <Button href={href("quote")} label={closing.button} />
+      <a class="link" href={href("pricing")}>
+        {closing.secondary} <Icon name="arrow-right" />
+      </a>
+    </div>
+
+    {
+      facts && (
+        <div class="cta__facts" data-reveal style="--delay: 240ms">
+          {closing.facts.map((f) => (
+            <div class="fact">
+              <span class="fact__no">{f.no}</span>
+              <span class="fact__value">{f.value}</span>
+              <span class="fact__label">{f.label}</span>
+            </div>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</section>

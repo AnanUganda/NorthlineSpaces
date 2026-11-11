@@ -1,0 +1,32 @@
+---
+/**
+ * The Northline mark: a bold N with a four-point compass star where the
+ * right stroke would begin. The N takes `currentColor`; the star takes the
+ * accent (or sand on dark backgrounds).
+ */
+interface Props {
+  class?: string;
+  star?: "accent" | "soft";
+}
+const { class: className = "", star = "accent" } = Astro.props;
+const starColor = star === "soft" ? "var(--accent-soft)" : "var(--accent)";
+---
+
+<svg
+  class={className}
+  viewBox="0 0 100 100"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+>
+  <!-- left stroke -->
+  <path d="M12 24h17v66H12z" fill="currentColor"></path>
+  <!-- diagonal -->
+  <path d="M12 24h18l58 54v12H70L12 36z" fill="currentColor"></path>
+  <!-- short right stroke -->
+  <path d="M71 56h17v34H71z" fill="currentColor"></path>
+  <!-- compass star -->
+  <path
+    d="M80 8l4.2 15.8L100 28l-15.8 4.2L80 48l-4.2-15.8L60 28l15.8-4.2z"
+    fill={starColor}></path>
+</svg>

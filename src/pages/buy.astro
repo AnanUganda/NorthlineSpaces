@@ -1,0 +1,100 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHero from "../components/PageHero.astro";
+import Eyebrow from "../components/Eyebrow.astro";
+import Button from "../components/Button.astro";
+import Icon from "../components/Icon.astro";
+import SizeTable from "../components/SizeTable.astro";
+import { images, href, business } from "../data/site";
+
+const uses = [
+  "Extra storage for the garage overflow",
+  "A workshop or hobby space",
+  "Garden and outdoor equipment storage",
+  "A simple backyard office",
+  "Permanent storage on a farm, ranch or business property",
+];
+---
+
+<Layout slug="buy">
+  <PageHero
+    no="01"
+    label="Buy a unit"
+    sub="A permanent, good-looking space for your property. Insulated, secure and built by our family."
+    image={images.unitStudioFront}
+    alt="Front elevation of a Northline storage unit"
+  >
+    Make it <em class="accent">yours.</em>
+    <Fragment slot="actions">
+      <Button href={href("quote")} label="Get My Free Quote" />
+      <a class="link" href={href("unit")}>See the unit <Icon name="arrow-right" /></a>
+    </Fragment>
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <div class="split">
+        <div class="split__sticky">
+          <Eyebrow no="02" label="What people use theirs for" />
+          <h2 class="h2" data-reveal>More than <em class="accent">storage.</em></h2>
+        </div>
+        <div class="reasons" data-reveal>
+          {uses.map((u) => <div class="reason"><span>{u}</span></div>)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--flush-top">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <Eyebrow no="03" label="Prices" />
+          <h2 class="h2" data-reveal>Three sizes, <em class="accent">transparent prices.</em></h2>
+        </div>
+        <p class="lede section-head__aside" data-reveal style="--delay: 80ms">
+          Delivery is {business.deliveryFee} within {business.deliveryRadius} of {business.town}.
+          Further away, we'll quote your distance fee upfront.
+        </p>
+      </div>
+      <SizeTable mode="buy" />
+    </div>
+  </section>
+
+  <section class="section section--flush-top">
+    <div class="container">
+      <div class="feature-list" data-reveal>
+        <div class="feature">
+          <span class="index">(04)</span>
+          <div>
+            <h3 class="feature__title">Renting first?</h3>
+            <p class="feature__desc">
+              Try before you buy. Rent a unit, and if you love it, ask us about buying it.
+            </p>
+          </div>
+        </div>
+        <div class="feature">
+          <span class="index">(05)</span>
+          <div>
+            <h3 class="feature__title">Good to know</h3>
+            <p class="feature__desc">
+              A permanent unit may be treated differently from a temporary one
+              by your city or HOA. We recommend checking local rules before you
+              buy, and we're happy to help.
+            </p>
+          </div>
+        </div>
+        <div class="feature">
+          <span class="index">(06)</span>
+          <div>
+            <h3 class="feature__title">Built by our family</h3>
+            <p class="feature__desc mb-2">
+              Made with care in {business.town}, not mass-produced.
+            </p>
+            <Button href={href("quote")} label="Get My Free Quote" size="sm" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

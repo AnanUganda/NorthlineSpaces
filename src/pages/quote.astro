@@ -1,0 +1,141 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHero from "../components/PageHero.astro";
+import Eyebrow from "../components/Eyebrow.astro";
+import Button from "../components/Button.astro";
+import { quoteForm, business } from "../data/site";
+---
+
+<Layout slug="quote" cta={false}>
+  <PageHero
+    no="01"
+    label="Get a quote"
+    sub={`Tell us what you need. We'll call you within ${business.callbackMinutes} minutes with your price, no obligation.`}
+  >
+    Get your <em class="accent">free quote.</em>
+  </PageHero>
+
+  <section class="section section--flush-top">
+    <div class="container">
+      <div class="split">
+        <!-- What happens next -->
+        <div class="split__sticky">
+          <Eyebrow no="02" label="What happens next" />
+          <ol class="how" data-reveal>
+            {
+              quoteForm.next.map((n) => (
+                <li>
+                  <span>
+                    <strong>{n.title}</strong> {n.desc}
+                  </span>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <!-- Form -->
+        <div>
+          <!--
+            TODO: wire to Wix Forms so submissions land in the Northline Wix
+            dashboard (Inbox / Contacts / automations). The form currently
+            validates on the client and shows the thank-you state.
+          -->
+          <form class="form" id="quote-form" novalidate data-reveal>
+            <div class="form__row">
+              <div class="field">
+                <label for="need">I need <span class="req">*</span></label>
+                <select id="need" name="need" required>
+                  <option value="" selected disabled>Choose one</option>
+                  {quoteForm.needs.map((n) => <option value={n}>{n}</option>)}
+                </select>
+              </div>
+              <div class="field">
+                <label for="size">Unit size <span class="req">*</span></label>
+                <select id="size" name="size" required>
+                  <option value="" selected disabled>Choose a size</option>
+                  {quoteForm.sizes.map((s) => <option value={s}>{s}</option>)}
+                </select>
+              </div>
+            </div>
+
+            <div class="form__row">
+              <div class="field">
+                <label for="date">Delivery date <span class="req">*</span></label>
+                <input id="date" name="date" type="date" required />
+              </div>
+              <div class="field">
+                <label for="address">Delivery address or zip code <span class="req">*</span></label>
+                <input id="address" name="address" type="text" autocomplete="street-address" placeholder="Street address or zip" required />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="notes">Anything we should know? <span class="faint">(optional)</span></label>
+              <textarea id="notes" name="notes" placeholder="Gate codes, a tight driveway, what you're storing…"></textarea>
+            </div>
+
+            <div class="form__row">
+              <div class="field">
+                <label for="name">Name <span class="req">*</span></label>
+                <input id="name" name="name" type="text" autocomplete="name" required />
+              </div>
+              <div class="field">
+                <label for="phone">Phone <span class="req">*</span></label>
+                <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="email">Email <span class="req">*</span></label>
+              <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required />
+            </div>
+
+            <div class="btn-row">
+              <Button label={quoteForm.button} type="submit" />
+            </div>
+            <p class="form__note">{quoteForm.note}</p>
+            <p class="form__note" id="form-error" role="alert" style="color:#b4452c; display:none">
+              Please fill in the required fields.
+            </p>
+          </form>
+
+          <div class="form__success" id="quote-success" role="status" aria-live="polite">
+            <p class="h4 mb-1">{quoteForm.thanks.title}</p>
+            <p class="muted">{quoteForm.thanks.body}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const form = document.getElementById("quote-form") as HTMLFormElement | null;
+  const success = document.getElementById("quote-success");
+  const error = document.getElementById("form-error");
+
+  form?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let valid = true;
+
+    form.querySelectorAll<HTMLInputElement | HTMLSelectElement>("[required]").forEach((el) => {
+      const field = el.closest(".field");
+      const ok = el.checkValidity() && el.value.trim() !== "";
+      field?.classList.toggle("is-invalid", !ok);
+      if (!ok) valid = false;
+    });
+
+    if (!valid) {
+      if (error) error.style.display = "block";
+      form.querySelector<HTMLElement>(".is-invalid input, .is-invalid select")?.focus();
+      return;
+    }
+
+    // Front-end only for now — Wix Forms wiring is the next step.
+    if (error) error.style.display = "none";
+    form.classList.add("is-sent");
+    success?.classList.add("is-visible");
+    success?.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+</script>

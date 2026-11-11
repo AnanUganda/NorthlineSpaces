@@ -1,0 +1,14 @@
+---
+/** Section eyebrow: "• (01) About the studio" */
+interface Props {
+  no: string;
+  label: string;
+  class?: string;
+}
+const { no, label, class: className = "" } = Astro.props;
+---
+
+<p class={`eyebrow ${className}`}>
+  <span class="eyebrow__no">({no})</span>
+  <span>{label}</span>
+</p>

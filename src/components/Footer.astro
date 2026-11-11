@@ -1,0 +1,68 @@
+---
+import Logo from "./Logo.astro";
+import Icon from "./Icon.astro";
+import Button from "./Button.astro";
+import { nav, href, business } from "../data/site";
+
+const year = new Date().getFullYear();
+const sitemapA = nav.slice(0, 5);
+const sitemapB = nav.slice(5);
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <a class="brand" href={href("")} aria-label="Northline Spaces — home">
+          <Logo class="brand__mark" />
+          <span class="brand__text">
+            <span class="brand__name">{business.wordmark}</span>
+            <span class="brand__sub">{business.tagline}</span>
+          </span>
+        </a>
+        <p class="footer__desc">
+          Insulated portable storage buildings, designed to look good in any
+          driveway. Rent by the month, or buy one for keeps. Built by our family
+          in {business.town}.
+        </p>
+        <address class="footer__addr">
+          {business.town}, {business.state}<br />
+          Serving {business.area}
+        </address>
+      </div>
+
+      <div class="footer__col">
+        <h4>Sitemap</h4>
+        <ul>
+          {sitemapA.map((n) => <li><a href={href(n.slug)}>{n.label}</a></li>)}
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>More</h4>
+        <ul>
+          {sitemapB.map((n) => <li><a href={href(n.slug)}>{n.label}</a></li>)}
+        </ul>
+      </div>
+
+      <div class="footer__cta">
+        <h4 class="label faint">Get a quote</h4>
+        <p>Tell us what you need. We'll call within {business.callbackMinutes} minutes with your price.</p>
+        <Button href={href("quote")} label="Get My Free Quote" size="sm" />
+      </div>
+    </div>
+
+    <div class="footer__wordmark" aria-hidden="true">Northline</div>
+
+    <div class="footer__bar">
+      <span>&copy; {year} {business.name}. All rights reserved.</span>
+      <nav aria-label="Legal">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#top" class="link">
+          Back to top <Icon name="arrow-up" />
+        </a>
+      </nav>
+    </div>
+  </div>
+</footer>

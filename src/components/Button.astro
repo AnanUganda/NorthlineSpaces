@@ -1,0 +1,57 @@
+---
+import Icon from "./Icon.astro";
+
+/**
+ * Pill button: label left, circular arrow inset on the right.
+ * Variants: dark (default), light (for dark sections / over photos), outline.
+ */
+interface Props {
+  href?: string;
+  label: string;
+  variant?: "dark" | "light" | "outline";
+  size?: "md" | "sm";
+  icon?: "arrow-right" | "arrow-up-right" | "plus";
+  type?: "button" | "submit";
+  class?: string;
+  onDark?: boolean;
+}
+const {
+  href,
+  label,
+  variant = "dark",
+  size = "md",
+  icon = "arrow-right",
+  type = "button",
+  class: className = "",
+  onDark = false,
+} = Astro.props;
+
+const classes = [
+  "btn",
+  variant === "light" && "btn--light",
+  variant === "outline" && "btn--outline",
+  onDark && "btn--on-dark",
+  size === "sm" && "btn--sm",
+  className,
+]
+  .filter(Boolean)
+  .join(" ");
+---
+
+{
+  href ? (
+    <a class={classes} href={href}>
+      <span>{label}</span>
+      <span class="btn__circle">
+        <Icon name={icon} />
+      </span>
+    </a>
+  ) : (
+    <button class={classes} type={type}>
+      <span>{label}</span>
+      <span class="btn__circle">
+        <Icon name={icon} />
+      </span>
+    </button>
+  )
+}

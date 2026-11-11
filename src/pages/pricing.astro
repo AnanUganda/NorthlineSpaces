@@ -1,0 +1,106 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHero from "../components/PageHero.astro";
+import Eyebrow from "../components/Eyebrow.astro";
+import Button from "../components/Button.astro";
+import Icon from "../components/Icon.astro";
+import SizeTable from "../components/SizeTable.astro";
+import { images, href, business } from "../data/site";
+
+const included = [
+  "Insulated, weatherproof unit",
+  "Secure locking",
+  "Placement exactly where you want it",
+  "A real person on the phone within 15 minutes",
+];
+---
+
+<Layout slug="pricing">
+  <PageHero
+    no="01"
+    label="Pricing"
+    sub="The price you see is the price you pay. No hidden fees, no fine print, and no “call for pricing.”"
+    image={images.unitStudioFront}
+    alt="Front elevation of a Northline storage unit"
+  >
+    Simple pricing. <em class="accent">No surprises.</em>
+    <Fragment slot="actions">
+      <Button href={href("quote")} label="Get My Free Quote" />
+      <a class="link" href={href("unit")}>See the unit <Icon name="arrow-right" /></a>
+    </Fragment>
+  </PageHero>
+
+  <!-- Rent -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <Eyebrow no="02" label="Rent by the month" />
+          <h2 class="h2" data-reveal>Month to month. <em class="accent">Keep it as long as you need.</em></h2>
+        </div>
+        <p class="lede section-head__aside" data-reveal style="--delay: 80ms">
+          Three sizes, one flat monthly price each. Most people choose the 8×16.
+        </p>
+      </div>
+      <SizeTable mode="rent" />
+    </div>
+  </section>
+
+  <!-- Buy -->
+  <section class="section section--flush-top">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <Eyebrow no="03" label="Buy your own" />
+          <h2 class="h2" data-reveal>Or make it <em class="accent">yours for keeps.</em></h2>
+        </div>
+        <div class="section-head__aside" data-reveal style="--delay: 80ms">
+          <p class="lede mb-2">A permanent, good-looking space for your property.</p>
+          <a class="link" href={href("buy")}>Learn more about buying a unit <Icon name="arrow-right" /></a>
+        </div>
+      </div>
+      <SizeTable mode="buy" />
+    </div>
+  </section>
+
+  <!-- Delivery + full service + included -->
+  <section class="section section--flush-top">
+    <div class="container">
+      <div class="feature-list" data-reveal>
+        <div class="feature">
+          <span class="index">(04)</span>
+          <div>
+            <h3 class="feature__title">Delivery and pickup</h3>
+            <p class="feature__desc mb-2">
+              <strong>Within {business.deliveryRadius} of {business.town}:</strong> a flat{" "}
+              {business.deliveryFee} for delivery and pickup.
+            </p>
+            <p class="feature__desc">
+              <strong>Beyond {business.deliveryRadius}:</strong> we'll quote your distance fee
+              upfront, before you book.
+            </p>
+          </div>
+        </div>
+        <div class="feature">
+          <span class="index">(05)</span>
+          <div>
+            <h3 class="feature__title">Full-service moves</h3>
+            <p class="feature__desc">
+              Want us to load and unload for you? Every move is different, so
+              we'll put together a custom quote.
+            </p>
+          </div>
+        </div>
+        <div class="feature">
+          <span class="index">(06)</span>
+          <div>
+            <h3 class="feature__title">What's always included</h3>
+            <ul class="feature__desc" style="display: grid; gap: 8px">
+              {included.map((i) => <li>— {i}</li>)}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

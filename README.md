@@ -1,19 +1,19 @@
-# Northline — website frontend
+# Northline Spaces — website
 
-A standard, **self-managed Astro site**. It starts as a Coming Soon page; build
-the rest of the site out from here. It can optionally read live content from the
-Northline Wix site (`northlinespaces.com`) through the Wix SDK — no secrets are
-required for public reads.
+The marketing site for Northline Spaces: insulated portable storage units in
+Fallbrook / North County San Diego, to rent by the month or buy.
+
+A standard, **self-managed Astro site** that builds to static files. Wix is the
+business backend (dashboard, forms, data); this repo is the frontend.
 
 ## Stack
 
-- **Astro 7** — static output by default (hosts anywhere).
-- **React** (`@astrojs/react`) — for interactive "islands" when you need them.
-- **Wix SDK** (`@wix/sdk`) — wired and ready, using only the public client id.
-
-No Wix CLI, no managed-hosting integration, no secret env vars needed to run or
-build. (The old project was locked to an agency-owned headless project we
-couldn't access — that's all been removed.)
+- **Astro 7** — static output, `build.format: "file"` (see *Hosting* below).
+- **Vanilla CSS + JS** — one design-system stylesheet, one small interaction
+  script. No animation libraries. React is installed but not enabled; add
+  `react()` to `astro.config.mjs` when an interactive island is needed.
+- **Wix SDK** (`@wix/sdk`) — wired in `src/lib/wix.ts` with the public client
+  id only, ready for live data.
 
 ## Requirements
 
@@ -33,29 +33,58 @@ npm run build      # production build → dist/
 npm run preview    # preview the production build
 ```
 
-## Project layout
+## Where things live
 
-- `src/pages/index.astro` — the Coming Soon landing page.
-- `src/pages/*.astro` — add new pages here (file-based routing: `about.astro` → `/about`).
-- `src/layouts/Layout.astro` — shared shell: fonts, global design tokens, light/dark.
-- `src/lib/wix.ts` — ready-to-use Wix client + usage example.
+| Path | What it is |
+| --- | --- |
+| `src/data/site.ts` | **All content** — copy, prices, sizes, FAQs, nav, SEO. Edit here, not in pages. |
+| `src/styles/global.css` | The design system: tokens, type scale, every component class. |
+| `src/layouts/Layout.astro` | Page shell: SEO, fonts, header, closing CTA, footer, global script. |
+| `src/components/` | Header + menu, Footer, Button, Eyebrow, PageHero, SizeTable, Faq, Cta, Logo, Icon. |
+| `src/pages/` | The 10 pages (home, unit, pricing, renovation-storage, moving, jobsite-storage, buy, about, faq, quote). |
+| `src/assets/images/` | Web-ready renders (≤ 2400px JPEG). Astro optimizes them to webp at build. |
+| `raw-images/` | Original multi-MB renders. **Git-ignored.** |
 
-## Connecting Wix content (when you're ready)
+## Design system (short version)
 
-Public reads need **only** the public client id, which already lives in
-`src/lib/wix.ts`. To pull in live data:
+Warm editorial. Linen background `#F3F0EB`, warm near-black ink `#161412`, one
+bronze accent `#8A6742`, sand `#F1DFC2` on dark. Inter with optical sizing.
+Signature moves: parenthetical numbering `(01)`, accent on the last words of a
+headline, pill buttons with an inset arrow circle, hairline rules, big tight
+type. Motion is CSS-only and respects `prefers-reduced-motion`.
 
-1. Install the solution package you need, e.g. `npm install @wix/bookings`
-   (or `@wix/stores`, `@wix/data`, `@wix/ecom`, …).
+## Hosting (Wix Headless, static)
+
+The site deploys to a **Wix-managed Headless** site as static files. Wix static
+hosting serves `pricing.html`, not `/pricing/`, so:
+
+- `astro.config.mjs` sets `build.format: "file"` → `dist/pricing.html`.
+- `href()` in `src/data/site.ts` appends `.html` to links **in production
+  builds only**; dev keeps clean `/pricing` routes.
+
+If the site ever moves to server rendering, change those two spots and nothing
+else.
+
+**Deploying:** build, then upload `dist/` to the headless site
+(`metaSiteId 796df013-8501-4447-9e2d-d87808b7d2b0`). The whole build is ~5.5 MB,
+under Wix's 20 MiB cap.
+
+## Still to do
+
+- **Wire the quote form to Wix Forms** so submissions land in the Northline Wix
+  dashboard (`src/pages/quote.astro` validates on the client only for now).
+- **Confirm placeholder facts** with the client — the list is `placeholders`
+  at the bottom of `src/data/site.ts` (prices, which sizes have the window and
+  side door, minimum term, hours, the family story, etc.).
+- Replace the default favicon with the Northline mark.
+- Privacy / Terms pages (footer links are placeholders).
+
+## Connecting Wix content
+
+Public reads need only the public client id in `src/lib/wix.ts`:
+
+1. `npm install @wix/bookings` (or `@wix/stores`, `@wix/data`, `@wix/forms`, …)
 2. Build a client and query — see the example in `src/lib/wix.ts`.
 
-- **Site:** `northlinespaces.com` (metaSiteId `407e3184-dee5-4e40-a0df-f5f31c6071d0`).
-- **Secrets:** the client *secret* and API key are admin-only. If a future
-  server-side feature needs one, keep it in a local `.env` (git-ignored, see
-  `.env.example`) — never in the repo and never shipped to the browser.
-
-## Hosting
-
-The static build in `dist/` deploys to any static host. If you later need
-server-rendered pages, add an Astro adapter (`@astrojs/node`, Vercel, Netlify,
-or Cloudflare) and set `output: "server"` in `astro.config.mjs`.
+Secrets (client secret / API key) are admin-only: keep them in a local `.env`
+(git-ignored), never in the repo or the browser.

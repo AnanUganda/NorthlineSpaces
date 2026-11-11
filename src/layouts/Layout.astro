@@ -1,14 +1,25 @@
 ---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Cta from "../components/Cta.astro";
+import { seo, business } from "../data/site";
+
 interface Props {
+  /** Page slug ("" for home). Drives SEO defaults + current nav state. */
+  slug?: string;
   title?: string;
   description?: string;
+  /** Header sits transparent with light text over a dark hero. */
+  light?: boolean;
+  /** Render the closing "Get My Free Quote" block before the footer. */
+  cta?: boolean;
 }
 
-const {
-  title = "Northline — Coming Soon",
-  description =
-    "Northline is coming soon. Premium portable storage buildings to rent, buy, or build custom across Southern California.",
-} = Astro.props;
+const { slug = "", light = false, cta = true } = Astro.props;
+const meta = seo[slug] ?? seo[""];
+const title = Astro.props.title ?? meta.title;
+const description = Astro.props.description ?? meta.description;
 ---
 
 <!doctype html>
@@ -21,142 +32,143 @@ const {
 
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#14160f" />
+    <meta name="theme-color" content="#f3f0eb" />
 
-    <!-- Open Graph -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={business.name} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;450;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap"
       rel="stylesheet"
     />
   </head>
-  <body>
-    <slot />
+  <body id="top">
+    <Header light={light} current={slug} />
+
+    <main>
+      <slot />
+    </main>
+
+    {cta && <Cta />}
+    <Footer />
+
+    <script>
+      /* ---------------------------------------------------------------
+         Global interactions. Small, dependency-free, reduced-motion aware.
+         --------------------------------------------------------------- */
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      /* Header: translucent + hairline once scrolled */
+      const header = document.getElementById("site-header");
+      const onScroll = () => header?.classList.toggle("is-scrolled", window.scrollY > 24);
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+
+      /* Full-screen menu */
+      const menuBtn = document.getElementById("menu-btn");
+      const menu = document.getElementById("site-menu");
+      const setMenu = (open: boolean) => {
+        header?.classList.toggle("is-open", open);
+        menu?.classList.toggle("is-open", open);
+        menu?.setAttribute("aria-hidden", String(!open));
+        menuBtn?.setAttribute("aria-expanded", String(open));
+        document.body.classList.toggle("menu-open", open);
+      };
+      menuBtn?.addEventListener("click", () => setMenu(!menu?.classList.contains("is-open")));
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") setMenu(false);
+      });
+      menu?.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setMenu(false)));
+
+      /* Word-by-word headline reveal: wrap words, keep <em>/<br> intact */
+      const wrapWords = (root: Node, counter: { i: number }): Node => {
+        if (root.nodeType === Node.TEXT_NODE) {
+          const frag = document.createDocumentFragment();
+          const parts = (root.textContent ?? "").split(/(\s+)/);
+          for (const part of parts) {
+            if (!part) continue;
+            if (/^\s+$/.test(part)) {
+              frag.appendChild(document.createTextNode(" "));
+              continue;
+            }
+            const outer = document.createElement("span");
+            outer.className = "w";
+            const inner = document.createElement("span");
+            inner.textContent = part;
+            inner.style.setProperty("--i", String(counter.i++));
+            outer.appendChild(inner);
+            frag.appendChild(outer);
+          }
+          return frag;
+        }
+        if (root instanceof HTMLBRElement) return root.cloneNode();
+        if (root instanceof HTMLElement) {
+          const clone = root.cloneNode(false) as HTMLElement;
+          root.childNodes.forEach((n) => clone.appendChild(wrapWords(n, counter)));
+          return clone;
+        }
+        return root.cloneNode(true);
+      };
+
+      document.querySelectorAll<HTMLElement>("[data-words]").forEach((el) => {
+        if (reduce) {
+          el.classList.add("in");
+          return;
+        }
+        const counter = { i: 0 };
+        const frag = document.createDocumentFragment();
+        Array.from(el.childNodes).forEach((n) => frag.appendChild(wrapWords(n, counter)));
+        el.replaceChildren(frag);
+      });
+
+      /* Reveal on enter */
+      const targets = document.querySelectorAll<HTMLElement>("[data-reveal], [data-words]");
+      if (reduce || !("IntersectionObserver" in window)) {
+        targets.forEach((t) => t.classList.add("in"));
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add("in");
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { threshold: 0.12, rootMargin: "0px 0px -6% 0px" }
+        );
+        targets.forEach((t) => io.observe(t));
+      }
+
+      /* Services accordion: click (and hover on fine pointers) opens a card */
+      const svc = document.querySelector<HTMLElement>(".svc");
+      if (svc) {
+        const items = Array.from(svc.querySelectorAll<HTMLElement>(".svc__item"));
+        const open = (target: HTMLElement) => {
+          items.forEach((it) => it.classList.toggle("is-open", it === target));
+        };
+        const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+        items.forEach((it) => {
+          it.addEventListener("click", (e) => {
+            if (!it.classList.contains("is-open")) {
+              e.preventDefault();
+              open(it);
+            }
+          });
+          it.addEventListener("keydown", (e) => {
+            if ((e as KeyboardEvent).key === "Enter" || (e as KeyboardEvent).key === " ") {
+              e.preventDefault();
+              open(it);
+            }
+          });
+          if (fine) it.addEventListener("mouseenter", () => open(it));
+        });
+      }
+    </script>
   </body>
 </html>
-
-<style is:global>
-  :root {
-    /* Warm paper — light */
-    --bg: oklch(0.966 0.009 90);
-    --surface: oklch(0.992 0.006 90);
-    --ink: oklch(0.235 0.012 80);
-    --muted: oklch(0.505 0.014 80);
-    --faint: oklch(0.66 0.012 85);
-    --line: color-mix(in oklab, var(--ink) 12%, transparent);
-    --line-strong: color-mix(in oklab, var(--ink) 22%, transparent);
-    --accent: oklch(0.52 0.082 158);
-    --accent-ink: oklch(0.99 0.01 90);
-
-    /* Type */
-    --font-display: "Fraunces", Georgia, "Times New Roman", serif;
-    --font-body: "Inter", "Helvetica Neue", Arial, sans-serif;
-    --font-mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas,
-      monospace;
-
-    /* Easing + rhythm */
-    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-inout: cubic-bezier(0.76, 0, 0.24, 1);
-    --gutter: clamp(1.25rem, 5vw, 4.5rem);
-
-    color-scheme: light;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      /* Deep warm ink — dark */
-      --bg: oklch(0.172 0.013 150);
-      --surface: oklch(0.212 0.015 150);
-      --ink: oklch(0.945 0.01 90);
-      --muted: oklch(0.715 0.014 95);
-      --faint: oklch(0.52 0.014 140);
-      --line: color-mix(in oklab, var(--ink) 15%, transparent);
-      --line-strong: color-mix(in oklab, var(--ink) 28%, transparent);
-      --accent: oklch(0.805 0.072 160);
-      --accent-ink: oklch(0.18 0.02 155);
-      color-scheme: dark;
-    }
-  }
-
-  :root[data-theme="dark"] {
-    --bg: oklch(0.172 0.013 150);
-    --surface: oklch(0.212 0.015 150);
-    --ink: oklch(0.945 0.01 90);
-    --muted: oklch(0.715 0.014 95);
-    --faint: oklch(0.52 0.014 140);
-    --line: color-mix(in oklab, var(--ink) 15%, transparent);
-    --line-strong: color-mix(in oklab, var(--ink) 28%, transparent);
-    --accent: oklch(0.805 0.072 160);
-    --accent-ink: oklch(0.18 0.02 155);
-    color-scheme: dark;
-  }
-
-  * {
-    box-sizing: border-box;
-  }
-
-  html,
-  body {
-    margin: 0;
-    padding: 0;
-  }
-
-  html {
-    -webkit-text-size-adjust: 100%;
-  }
-
-  body {
-    min-height: 100vh;
-    min-height: 100dvh;
-    background-color: var(--bg);
-    color: var(--ink);
-    font-family: var(--font-body);
-    font-size: 16px;
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-  }
-
-  /* Fine film grain — texture without weight */
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    pointer-events: none;
-    opacity: 0.035;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-
-  ::selection {
-    background: var(--accent);
-    color: var(--accent-ink);
-  }
-
-  a {
-    color: inherit;
-  }
-
-  :focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
-    border-radius: 2px;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.001ms !important;
-      animation-delay: 0ms !important;
-      transition-duration: 0.001ms !important;
-    }
-  }
-</style>
