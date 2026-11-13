@@ -42,6 +42,9 @@ const pad = (n: number) => String(n).padStart(2, "0");
         }
       </nav>
 
+      <!-- Desktop: the main CTA. Mobile: the menu trigger (hamburger → ×). -->
+      <Button href={href("quote")} label="Get My Free Quote" size="sm" class="header__cta" />
+
       <button
         class="menu-btn"
         id="menu-btn"
@@ -52,7 +55,8 @@ const pad = (n: number) => String(n).padStart(2, "0");
         <span class="menu-btn__open">Menu</span>
         <span class="menu-btn__close">Close</span>
         <span class="menu-btn__circle">
-          <Icon name="plus" />
+          <Icon name="menu" class="menu-btn__open" />
+          <Icon name="x" class="menu-btn__close" />
         </span>
       </button>
     </div>

@@ -758,8 +758,38 @@ a:hover > .img-btn,
   display: inline;
 }
 
+/* The icons inside the circle swap hamburger → × */
+.header.is-open .menu-btn__circle .menu-btn__close {
+  display: block;
+}
+
 .header.is-open .menu-btn__circle {
   transform: rotate(90deg);
+}
+
+/* Desktop shows the CTA; the menu trigger is mobile-only */
+.header__cta {
+  display: inline-flex;
+}
+
+@media (min-width: 1041px) {
+  .menu-btn {
+    display: none;
+  }
+}
+
+@media (max-width: 1040px) {
+  .header__cta {
+    display: none;
+  }
+}
+
+/* Over a photo the CTA inverts to the light pill */
+.header.is-light:not(.is-scrolled):not(.is-open) .header__cta {
+  --btn-bg: var(--on-dark);
+  --btn-fg: var(--ink);
+  --btn-circle: var(--ink);
+  --btn-arrow: var(--on-dark);
 }
 
 /* ---------- Full-screen menu ---------- */
@@ -790,8 +820,20 @@ a:hover > .img-btn,
   align-self: center;
   display: flex;
   flex-direction: column;
-  gap: clamp(4px, 1vw, 10px);
+  gap: clamp(6px, 1vw, 12px);
   padding-block: 24px;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* Mobile: the hamburger menu gets roomier spacing between items */
+@media (max-width: 1040px) {
+  .menu__links {
+    gap: 18px;
+  }
+  .menu__link {
+    line-height: 1.1;
+  }
 }
 
 .menu__link {
