@@ -15,8 +15,8 @@ import { defineConfig } from "astro/config";
 // `.html` suffix in that one helper.
 export default defineConfig({
   // Public origin, used for canonical URLs, og:url and og:image.
-  // Switch to "https://northlinespaces.com" when the domain goes live.
-  site: "https://headless-rjybovjyjtf-openbrand-1409.wix-site-host.com",
+  // www is the primary host (the apex redirects to it).
+  site: "https://www.northlinespaces.com",
 
   integrations: [],
 

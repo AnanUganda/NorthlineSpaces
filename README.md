@@ -76,9 +76,9 @@ curl -X POST "https://www.wixapis.com/headless-business-setup/v1/headless-busine
   -H "Authorization: Bearer $TOKEN" -F "files=@site.zip"
 ```
 
-**At domain launch:** set `site` in `astro.config.mjs` to
-`https://northlinespaces.com`, rebuild and redeploy, so canonical URLs and
-share images use the real domain.
+**Domain:** `site` in `astro.config.mjs` is `https://www.northlinespaces.com`
+(www is the primary host; the apex redirects to it). Canonical URLs and share
+images are built from it.
 
 ## Still to do
 
