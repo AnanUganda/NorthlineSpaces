@@ -65,14 +65,15 @@ hosting serves `pricing.html`, not `/pricing/`, so:
 If the site ever moves to server rendering, change those two spots and nothing
 else.
 
-**Deploying:** build, zip `dist/`, and drop it on the headless site
-(`metaSiteId 5f03d924-e3d6-4ca4-9ac6-1f5fc8948b31`, the migration project for
-northlinespaces.com). The whole build is ~6 MB, under Wix's 20 MiB cap.
+**Deploying:** build, zip `dist/`, and drop it on the Northline site
+(`metaSiteId 407e3184-dee5-4e40-a0df-f5f31c6071d0`, northlinespaces.com — the
+original site, which serves this frontend since the headless migration). The
+whole build is ~6 MB, under Wix's 20 MiB cap.
 
 ```bash
 npm run build && (cd dist && zip -r -q ../site.zip .)
 TOKEN=$(npx -y @wix/cli@latest token | grep ^OauthNG)
-curl -X POST "https://www.wixapis.com/headless-business-setup/v1/headless-business/5f03d924-e3d6-4ca4-9ac6-1f5fc8948b31/drop" \
+curl -X POST "https://www.wixapis.com/headless-business-setup/v1/headless-business/407e3184-dee5-4e40-a0df-f5f31c6071d0/drop" \
   -H "Authorization: Bearer $TOKEN" -F "files=@site.zip"
 ```
 
