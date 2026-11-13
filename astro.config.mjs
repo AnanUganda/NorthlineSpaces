@@ -16,7 +16,7 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
   // Public origin, used for canonical URLs, og:url and og:image.
   // Switch to "https://northlinespaces.com" when the domain goes live.
-  site: "https://headless-lcgnzqotssu-openbrand-1409.wix-site-host.com",
+  site: "https://headless-rjybovjyjtf-openbrand-1409.wix-site-host.com",
 
   integrations: [],
 
