@@ -14,6 +14,10 @@ import { defineConfig } from "astro/config";
 // moves to server rendering, switch this back to "directory" and drop the
 // `.html` suffix in that one helper.
 export default defineConfig({
+  // Public origin, used for canonical URLs, og:url and og:image.
+  // Switch to "https://northlinespaces.com" when the domain goes live.
+  site: "https://headless-lcgnzqotssu-openbrand-1409.wix-site-host.com",
+
   integrations: [],
 
   build: {

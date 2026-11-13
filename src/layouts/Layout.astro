@@ -3,7 +3,8 @@ import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Cta from "../components/Cta.astro";
-import { seo, business } from "../data/site";
+import { getImage } from "astro:assets";
+import { seo, business, href, images, faq, homeFaq, sizes } from "../data/site";
 
 interface Props {
   /** Page slug ("" for home). Drives SEO defaults + current nav state. */
@@ -20,6 +21,61 @@ const { slug = "", light = false, cta = true } = Astro.props;
 const meta = seo[slug] ?? seo[""];
 const title = Astro.props.title ?? meta.title;
 const description = Astro.props.description ?? meta.description;
+
+const site = Astro.site ?? new URL(Astro.url.origin);
+const canonical = new URL(href(slug), site).href;
+
+// 1200x630 share card from the hero render
+const og = await getImage({ src: images.heroDriveway, width: 1200, height: 630, fit: "cover", format: "jpg", quality: 78 });
+const ogImage = new URL(og.src, site).href;
+
+// Structured data: the business on every page, FAQs where they appear
+const business_ld = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": new URL("/#business", site).href,
+  name: business.name,
+  description: seo[""].description,
+  url: new URL("/", site).href,
+  image: ogImage,
+  slogan: "Spaces delivered",
+  priceRange: "$$",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: business.town,
+    addressRegion: business.state,
+    addressCountry: "US",
+  },
+  areaServed: [
+    { "@type": "City", name: "Fallbrook, CA" },
+    { "@type": "AdministrativeArea", name: "North County San Diego" },
+  ],
+  makesOffer: sizes.map((s) => ({
+    "@type": "Offer",
+    name: `${s.name} insulated portable storage unit rental`,
+    price: s.rent.replace(/[^0-9.]/g, ""),
+    priceCurrency: "USD",
+    priceSpecification: {
+      "@type": "UnitPriceSpecification",
+      price: s.rent.replace(/[^0-9.]/g, ""),
+      priceCurrency: "USD",
+      unitText: "MONTH",
+    },
+  })),
+};
+
+const faqItems = slug === "faq" ? faq.flatMap((g) => g.items) : slug === "" ? homeFaq : [];
+const faq_ld = faqItems.length
+  ? {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((i) => ({
+        "@type": "Question",
+        name: i.q,
+        acceptedAnswer: { "@type": "Answer", text: i.a },
+      })),
+    }
+  : null;
 ---
 
 <!doctype html>
@@ -34,11 +90,25 @@ const description = Astro.props.description ?? meta.description;
     <meta name="description" content={description} />
     <meta name="theme-color" content="#f3f0eb" />
 
+    <link rel="canonical" href={canonical} />
+
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={business.name} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A Northline insulated storage unit on the driveway of a modern home" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(business_ld)} />
+    {faq_ld && <script type="application/ld+json" set:html={JSON.stringify(faq_ld)} />}
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
