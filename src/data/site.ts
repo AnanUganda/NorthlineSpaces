@@ -13,6 +13,9 @@ import detailBadgeTrim from "../assets/images/detail-badge-trim.jpg";
 import unitStudioAngle from "../assets/images/unit-studio-angle.jpg";
 import unitStudioFront from "../assets/images/unit-studio-front.jpg";
 import logoLockupDark from "../assets/images/logo-lockup-dark.jpg";
+import renovationLoaded from "../assets/images/renovation-loaded.jpg";
+import gardenWorkshop from "../assets/images/garden-workshop.jpg";
+import estateAerial from "../assets/images/estate-aerial.jpg";
 
 export const images = {
   heroDriveway,
@@ -21,6 +24,12 @@ export const images = {
   unitStudioAngle,
   unitStudioFront,
   logoLockupDark,
+  /** Loaded unit outside a home mid-renovation (papered windows). */
+  renovationLoaded,
+  /** Unit in a backyard garden, side door open on a workshop. */
+  gardenWorkshop,
+  /** Aerial of a unit on an estate courtyard. */
+  estateAerial,
 };
 
 /* ------------------------------------------------------------------ */
@@ -134,7 +143,7 @@ export const audiences: Audience[] = [
     blurb:
       "Clear the room, protect your furniture, and get to it any time — a few steps from the work, not across town.",
     tags: ["Homeowners", "Businesses", "Month to month"],
-    image: heroDriveway,
+    image: renovationLoaded,
   },
   {
     slug: "moving",
@@ -164,7 +173,7 @@ export const audiences: Audience[] = [
     blurb:
       "A permanent, good-looking space for your property — insulated, secure and built by our family.",
     tags: ["Own it", "Workshop", "Backyard office"],
-    image: unitStudioFront,
+    image: gardenWorkshop,
   },
 ];
 
