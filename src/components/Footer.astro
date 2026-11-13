@@ -32,21 +32,21 @@ const sitemapB = nav.slice(5);
       </div>
 
       <div class="footer__col">
-        <h4>Sitemap</h4>
+        <p class="footer__h">Sitemap</p>
         <ul>
           {sitemapA.map((n) => <li><a href={href(n.slug)}>{n.label}</a></li>)}
         </ul>
       </div>
 
       <div class="footer__col">
-        <h4>More</h4>
+        <p class="footer__h">More</p>
         <ul>
           {sitemapB.map((n) => <li><a href={href(n.slug)}>{n.label}</a></li>)}
         </ul>
       </div>
 
       <div class="footer__cta">
-        <h4 class="label faint">Get a quote</h4>
+        <p class="label faint">Get a quote</p>
         <p>Tell us what you need. We'll call within {business.callbackMinutes} minutes with your price.</p>
         <Button href={href("quote")} label="Get My Free Quote" size="sm" />
       </div>

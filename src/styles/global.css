@@ -333,6 +333,27 @@ p {
   color: var(--accent);
 }
 
+/* Eyebrow living inside an H1 (keyword kicker): reset the H1's type */
+.h1-kicker {
+  display: flex;
+  width: fit-content;
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  text-wrap: nowrap;
+  white-space: normal;
+}
+
+.hero .h1-kicker {
+  color: var(--on-dark);
+  text-shadow: 0 1px 2px rgba(22, 20, 18, 0.5);
+}
+
+.hero .h1-kicker .eyebrow__no {
+  color: var(--accent-soft);
+}
+
 .section--dark .eyebrow__no {
   color: var(--accent-soft);
 }
@@ -2022,7 +2043,7 @@ body.menu-open {
   color: var(--ink);
 }
 
-.footer__col h4 {
+.footer__col .footer__h {
   font-size: 13px;
   font-weight: 600;
   color: var(--ink-42);

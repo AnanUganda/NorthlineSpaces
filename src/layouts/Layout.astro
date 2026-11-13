@@ -177,6 +177,7 @@ const faq_ld = faqItems.length
           return frag;
         }
         if (root instanceof HTMLBRElement) return root.cloneNode();
+        if (root instanceof HTMLElement && root.hasAttribute("data-static")) return root.cloneNode(true);
         if (root instanceof HTMLElement) {
           const clone = root.cloneNode(false) as HTMLElement;
           root.childNodes.forEach((n) => clone.appendChild(wrapWords(n, counter)));

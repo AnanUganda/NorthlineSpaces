@@ -1,9 +1,8 @@
 ---
 import { Image } from "astro:assets";
-import Eyebrow from "./Eyebrow.astro";
 
 /**
- * Inner-page hero: eyebrow, big title (use <em class="accent"> in the slot),
+ * Inner-page hero: keyword eyebrow (inside the H1, for SEO), big title (use <em class="accent"> in the slot),
  * description + buttons on the right, optional wide image below.
  */
 interface Props {
@@ -20,8 +19,11 @@ const { no, label, sub, image, alt = "" } = Astro.props;
   <div class="container">
     <div class="page-hero__grid">
       <div>
-        <Eyebrow no={no} label={label} />
         <h1 class="h1 page-hero__title words" data-words>
+          <span class="eyebrow h1-kicker" data-static>
+            <span class="eyebrow__no" aria-hidden="true">({no})</span>
+            <span>{label}</span>
+          </span>
           <slot />
         </h1>
       </div>
