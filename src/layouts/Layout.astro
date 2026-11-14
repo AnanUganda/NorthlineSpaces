@@ -3,8 +3,8 @@ import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Cta from "../components/Cta.astro";
-import { getImage } from "astro:assets";
-import { seo, business, href, images, faq, homeFaq, sizes } from "../data/site";
+import { seo, href, images } from "../data/site";
+import { getContent, seoFor } from "../lib/content";
 
 interface Props {
   /** Page slug ("" for home). Drives SEO defaults + current nav state. */
@@ -18,16 +18,17 @@ interface Props {
 }
 
 const { slug = "", light = false, cta = true } = Astro.props;
-const meta = seo[slug] ?? seo[""];
+const content = await getContent();
+const { business, faq, homeFaq, sizes } = content;
+const meta = seoFor(content, slug);
 const title = Astro.props.title ?? meta.title;
 const description = Astro.props.description ?? meta.description;
 
 const site = Astro.site ?? new URL(Astro.url.origin);
 const canonical = new URL(href(slug), site).href;
 
-// 1200x630 share card from the hero render
-const og = await getImage({ src: images.heroDriveway, width: 1200, height: 630, fit: "cover", format: "jpg", quality: 78 });
-const ogImage = new URL(og.src, site).href;
+// 1200x630 share card, pre-built from the hero render (scripts/optimize-images.mjs)
+const ogImage = new URL("/img/og-default.jpg", site).href;
 
 // Structured data: the business on every page, FAQs where they appear
 const business_ld = {
@@ -35,7 +36,9 @@ const business_ld = {
   "@type": "LocalBusiness",
   "@id": new URL("/#business", site).href,
   name: business.name,
-  description: seo[""].description,
+  description: seoFor(content, "").description,
+  ...(business.phone ? { telephone: business.phone } : {}),
+  ...(business.email ? { email: business.email } : {}),
   url: new URL("/", site).href,
   image: ogImage,
   slogan: "Spaces delivered",

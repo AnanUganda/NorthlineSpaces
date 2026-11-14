@@ -1,7 +1,10 @@
 ---
 import Button from "./Button.astro";
 import Icon from "./Icon.astro";
-import { closing, href } from "../data/site";
+import { href } from "../data/site";
+import { getContent } from "../lib/content";
+
+const { closing } = await getContent();
 
 /** The closing block that ends every page. */
 interface Props {

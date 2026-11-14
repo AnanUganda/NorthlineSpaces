@@ -1,5 +1,7 @@
 ---
-import { sizes } from "../data/site";
+import { getContent } from "../lib/content";
+
+const { sizes } = await getContent();
 
 /** The three sizes as hairline cards. `mode` controls which prices show. */
 interface Props {

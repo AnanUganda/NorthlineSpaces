@@ -1,16 +1,20 @@
 ---
-import { Image } from "astro:assets";
+import Img from "../components/Img.astro";
 import Layout from "../layouts/Layout.astro";
 import PageHero from "../components/PageHero.astro";
 import Eyebrow from "../components/Eyebrow.astro";
 import Button from "../components/Button.astro";
 import Icon from "../components/Icon.astro";
 import Logo from "../components/Logo.astro";
-import { images, href, beliefs, business } from "../data/site";
+import { images, href, beliefs } from "../data/site";
+import { getContent } from "../lib/content";
+
+const { business } = await getContent();
 ---
 
 <Layout slug="about">
   <PageHero
+    slug="about"
     no="01"
     label="About Northline Spaces"
     sub="We build storage we'd be proud to put in our own driveway."
@@ -81,7 +85,7 @@ import { images, href, beliefs, business } from "../data/site";
   <!-- The name -->
   <section class="section section--dark process">
     <div class="process__bg" aria-hidden="true">
-      <Image src={images.detailBadgeTrim} alt="" widths={[1200, 1800]} sizes="100vw" format="webp" quality={55} />
+      <Img src={images.detailBadgeTrim} alt="" widths={[1200, 1800]} sizes="100vw" format="webp" quality={55} />
     </div>
     <div class="container">
       <div class="split split--even" style="align-items: center">

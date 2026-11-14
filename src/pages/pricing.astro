@@ -5,7 +5,10 @@ import Eyebrow from "../components/Eyebrow.astro";
 import Button from "../components/Button.astro";
 import Icon from "../components/Icon.astro";
 import SizeTable from "../components/SizeTable.astro";
-import { images, href, business } from "../data/site";
+import { images, href } from "../data/site";
+import { getContent } from "../lib/content";
+
+const { business } = await getContent();
 
 const included = [
   "Insulated, weatherproof unit",
@@ -17,6 +20,7 @@ const included = [
 
 <Layout slug="pricing">
   <PageHero
+    slug="pricing"
     no="01"
     label="Portable storage pricing in Fallbrook"
     sub="The price you see is the price you pay. No hidden fees, no fine print, and no “call for pricing.”"

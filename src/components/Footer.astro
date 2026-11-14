@@ -2,7 +2,10 @@
 import Logo from "./Logo.astro";
 import Icon from "./Icon.astro";
 import Button from "./Button.astro";
-import { nav, href, business } from "../data/site";
+import { nav, href } from "../data/site";
+import { getContent } from "../lib/content";
+
+const { business } = await getContent();
 
 const year = new Date().getFullYear();
 const sitemapA = nav.slice(0, 5);
@@ -28,6 +31,9 @@ const sitemapB = nav.slice(5);
         <address class="footer__addr">
           {business.town}, {business.state}<br />
           Serving {business.area}
+          {business.phone && <><br /><a href={`tel:${business.phone.replace(/[^0-9+]/g, "")}`}>{business.phone}</a></>}
+          {business.email && <><br /><a href={`mailto:${business.email}`}>{business.email}</a></>}
+          <br />{business.hours}
         </address>
       </div>
 

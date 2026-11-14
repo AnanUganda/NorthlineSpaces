@@ -53,33 +53,42 @@ Signature moves: parenthetical numbering `(01)`, accent on the last words of a
 headline, pill buttons with an inset arrow circle, hairline rules, big tight
 type. Motion is CSS-only and respects `prefers-reduced-motion`.
 
-## Hosting (Wix Headless, static)
+## Content: edit it in the Wix CMS
 
-The site deploys to a **Wix-managed Headless** site as static files. Wix static
-hosting serves `pricing.html`, not `/pricing/`, so:
+Prices, FAQs, business details and page headlines/SEO live in the **Wix CMS**
+(Northline site dashboard → CMS). Edits show on the live site within ~30 seconds,
+no rebuild needed.
 
-- `astro.config.mjs` sets `build.format: "file"` → `dist/pricing.html`.
-- `href()` in `src/data/site.ts` appends `.html` to links **in production
-  builds only**; dev keeps clean `/pricing` routes.
+| Collection | Holds |
+| --- | --- |
+| Site Settings | phone, email, hours, callback time, delivery fee/radius, availability line |
+| Sizes | each size: what it fits, rent + buy price, "most popular", display order |
+| FAQs | question, answer, group, "show on homepage", display order |
+| Unit Features | the features table on The Unit page |
+| Page Content | per page: keyword line, headline + highlighted part, subheadline, SEO title/description, optional hero image |
 
-If the site ever moves to server rendering, change those two spots and nothing
-else.
+`src/lib/content.ts` reads these on each request (30s cache) and falls back to
+`src/data/site.ts` for anything missing or empty, so a blank field or a CMS
+outage never empties a page. Design, layout and long-form section copy stay in
+code. Don't rename collections or field keys, or change the `slug` in Page
+Content — the code looks them up by those names.
 
-**Deploying:** build, zip `dist/`, and drop it on the Northline site
-(`metaSiteId 407e3184-dee5-4e40-a0df-f5f31c6071d0`, northlinespaces.com — the
-original site, which serves this frontend since the headless migration). The
-whole build is ~6 MB, under Wix's 20 MiB cap.
+## Hosting (Wix-managed Astro)
+
+Pages are server-rendered on Wix hosting (`@wix/astro` + the Wix hosting
+adapter, `output: "server"`). `wix.config.json` targets the Northline site
+(`407e3184`, northlinespaces.com). Env vars come from Wix:
 
 ```bash
-npm run build && (cd dist && zip -r -q ../site.zip .)
-TOKEN=$(npx -y @wix/cli@latest token | grep ^OauthNG)
-curl -X POST "https://www.wixapis.com/headless-business-setup/v1/headless-business/407e3184-dee5-4e40-a0df-f5f31c6071d0/drop" \
-  -H "Authorization: Bearer $TOKEN" -F "files=@site.zip"
+npm run env:pull          # writes .env.local (git-ignored)
+npm run build && npm run release
 ```
 
-**Domain:** `site` in `astro.config.mjs` is `https://www.northlinespaces.com`
-(www is the primary host; the apex redirects to it). Canonical URLs and share
-images are built from it.
+- Images: Wix hosting doesn't run Astro's on-the-fly image service, so
+  `scripts/optimize-images.mjs` pre-builds WebP sizes into `public/img/`
+  (runs automatically before `build`/`dev`), and `src/components/Img.astro`
+  serves them. Use `<Img>` for new images, not `astro:assets` `<Image>`.
+- URLs are clean (`/pricing`); the old `/pricing.html` links 301-redirect.
 
 ## Still to do
 

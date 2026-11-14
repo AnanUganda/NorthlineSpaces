@@ -1,0 +1,39 @@
+---
+/**
+ * Responsive image from src/assets/images, served as pre-built WebP files from
+ * /img (see scripts/optimize-images.mjs). Drop-in for Astro's <Image>: accepts
+ * the same common props; `widths`, `format` and `quality` are ignored because
+ * the variants are fixed at build time.
+ */
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  sizes?: string;
+  loading?: "eager" | "lazy";
+  fetchpriority?: "high" | "low" | "auto";
+  class?: string;
+  [key: string]: unknown;
+}
+const { src, alt, sizes = "100vw", loading = "lazy", fetchpriority, class: className } = Astro.props;
+
+const WIDTHS = [400, 800, 1200, 1600, 2400];
+const name = src.src.split("/").pop()!.split("?")[0].replace(/\.[^.]+$/, "").replace(/\.[A-Za-z0-9_-]+$/, "");
+const widths = WIDTHS.filter((w) => w <= src.width);
+if (!widths.length) widths.push(src.width);
+const url = (w: number) => `/img/${name}-${w}.webp`;
+const srcset = widths.map((w) => `${url(w)} ${w}w`).join(", ");
+const fallback = url(widths.find((w) => w >= 1200) ?? widths[widths.length - 1]);
+---
+
+<img
+  src={fallback}
+  srcset={srcset}
+  sizes={sizes}
+  width={src.width}
+  height={src.height}
+  alt={alt}
+  loading={loading}
+  decoding="async"
+  fetchpriority={fetchpriority}
+  class={className}
+/>

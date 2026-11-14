@@ -5,7 +5,10 @@ import Eyebrow from "../components/Eyebrow.astro";
 import Button from "../components/Button.astro";
 import Icon from "../components/Icon.astro";
 import SizeTable from "../components/SizeTable.astro";
-import { images, href, business } from "../data/site";
+import { images, href } from "../data/site";
+import { getContent } from "../lib/content";
+
+const { business } = await getContent();
 
 const uses = [
   "Extra storage for the garage overflow",
@@ -18,6 +21,7 @@ const uses = [
 
 <Layout slug="buy">
   <PageHero
+    slug="buy"
     no="01"
     label="Buy a portable storage unit"
     sub="A permanent, good-looking space for your property. Insulated, secure and built by our family."

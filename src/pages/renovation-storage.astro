@@ -4,7 +4,10 @@ import PageHero from "../components/PageHero.astro";
 import Eyebrow from "../components/Eyebrow.astro";
 import Button from "../components/Button.astro";
 import Icon from "../components/Icon.astro";
-import { images, href, business } from "../data/site";
+import { images, href } from "../data/site";
+import { getContent } from "../lib/content";
+
+const { business } = await getContent();
 
 const reasons = [
   { t: "It's right outside.", d: "Need something mid-project? It's a few steps away." },
@@ -23,6 +26,7 @@ const how = [
 
 <Layout slug="renovation-storage">
   <PageHero
+    slug="renovation-storage"
     no="01"
     label="Renovation storage in Fallbrook"
     sub="Clear the room, protect your furniture, and get to it any time — without hauling everything across town to a storage facility."

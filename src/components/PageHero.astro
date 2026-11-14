@@ -1,18 +1,31 @@
 ---
-import { Image } from "astro:assets";
+import Img from "./Img.astro";
+import { getContent } from "../lib/content";
 
 /**
  * Inner-page hero: keyword eyebrow (inside the H1, for SEO), big title (use <em class="accent"> in the slot),
  * description + buttons on the right, optional wide image below.
+ *
+ * With `slug`, the copy comes from the CMS "Page Content" entry for that page: keyword line,
+ * headline + highlighted part, subheadline and an optional hero image. Anything left empty in the
+ * CMS falls back to the props/slot written in the page.
  */
 interface Props {
+  slug?: string;
   no: string;
   label: string;
   sub?: string;
   image?: ImageMetadata;
   alt?: string;
 }
-const { no, label, sub, image, alt = "" } = Astro.props;
+const { slug, no, label: labelProp, sub: subProp, image, alt = "" } = Astro.props;
+
+const page = slug !== undefined ? (await getContent()).pages[slug] ?? {} : {};
+const label = page.keyword ?? labelProp;
+const sub = page.subheadline ?? subProp;
+const cmsHeadline = page.headline;
+const cmsAccent = page.headlineAccent;
+const cmsImage = page.heroImage;
 ---
 
 <section class="page-hero">
@@ -24,7 +37,16 @@ const { no, label, sub, image, alt = "" } = Astro.props;
             <span class="eyebrow__no" aria-hidden="true">({no})</span>
             <span>{label}</span>
           </span>
-          <slot />
+          {
+            cmsHeadline ? (
+              <>
+                {cmsHeadline}
+                {cmsAccent && <> <em class="accent">{cmsAccent}</em></>}
+              </>
+            ) : (
+              <slot />
+            )
+          }
         </h1>
       </div>
       <div class="page-hero__aside">
@@ -36,12 +58,20 @@ const { no, label, sub, image, alt = "" } = Astro.props;
     </div>
 
     {
-      image && (
+      cmsImage ? (
         <div class="page-hero__media" data-reveal="scale">
           <div class="media">
-            <Image src={image} alt={alt} widths={[800, 1400, 2000]} sizes="(max-width: 1264px) 100vw, 1200px" format="webp" quality={72} loading="eager" />
+            <img src={cmsImage} alt={alt} loading="eager" decoding="async" width="2000" height="857" />
           </div>
         </div>
+      ) : (
+        image && (
+          <div class="page-hero__media" data-reveal="scale">
+            <div class="media">
+              <Img src={image} alt={alt} widths={[800, 1400, 2000]} sizes="(max-width: 1264px) 100vw, 1200px" format="webp" quality={72} loading="eager" />
+            </div>
+          </div>
+        )
       )
     }
   </div>

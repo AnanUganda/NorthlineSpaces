@@ -1,32 +1,45 @@
 // @ts-check
 import { defineConfig } from "astro/config";
-// React is installed and ready — add it back here as `integrations: [react()]`
-// (import react from "@astrojs/react") the moment you build an interactive
-// island. The site currently needs only small vanilla scripts, so it's left
-// off to keep the build lean.
+import wix from "@wix/astro";
+import wixHostingAdapter from "@wix/astro-wix-hosting-adapter";
 
-// https://astro.build/config
-// Standard, self-managed Astro site that builds to static files.
+// Wix-managed Astro: pages render on request on Wix hosting, so content edited
+// in the Wix CMS (see src/lib/content.ts) shows on the live site without a
+// rebuild. `@wix/astro` signs Wix SDK calls in automatically; its env vars come
+// from `npx wix env pull` (.env.local, git-ignored).
 //
-// `build.format: "file"` emits `pricing.html` instead of `pricing/index.html`.
-// Wix static hosting serves files, not folder indexes, so links in production
-// point at `/pricing.html` (see `href()` in src/data/site.ts). If the site ever
-// moves to server rendering, switch this back to "directory" and drop the
-// `.html` suffix in that one helper.
+// Release: `npm run build && npm run release` (wix.config.json targets the
+// Northline site, 407e3184, which serves northlinespaces.com).
+
+const oldStaticPages = [
+  "unit",
+  "pricing",
+  "renovation-storage",
+  "moving",
+  "jobsite-storage",
+  "buy",
+  "about",
+  "faq",
+  "quote",
+];
+
 export default defineConfig({
   // Public origin, used for canonical URLs, og:url and og:image.
   // www is the primary host (the apex redirects to it).
   site: "https://www.northlinespaces.com",
 
-  integrations: [],
+  integrations: [wix()],
+  adapter: wixHostingAdapter(),
+  output: "server",
+  security: { checkOrigin: false },
 
-  build: {
-    format: "file",
-  },
+  // The site used to be static files at /<page>.html — keep those links working.
+  redirects: Object.fromEntries(
+    oldStaticPages.map((p) => [`/${p}.html`, { status: 301, destination: `/${p}` }])
+  ),
 
   image: {
-    // Allow Astro to optimize images served from Wix media,
-    // for when we start pulling in Wix content.
+    // Allow Astro to optimize images served from Wix media (CMS hero images).
     domains: ["static.wixstatic.com"],
   },
 });

@@ -4,11 +4,15 @@ import PageHero from "../components/PageHero.astro";
 import Button from "../components/Button.astro";
 import Icon from "../components/Icon.astro";
 import Faq from "../components/Faq.astro";
-import { href, faq } from "../data/site";
+import { href } from "../data/site";
+import { getContent } from "../lib/content";
+
+const { faq } = await getContent();
 ---
 
 <Layout slug="faq">
   <PageHero
+    slug="faq"
     no="01"
     label="Portable storage FAQ"
     sub="Sizes, pricing, delivery, permits and buying — the things people ask us most. Don't see yours? Ask us anything when we call."

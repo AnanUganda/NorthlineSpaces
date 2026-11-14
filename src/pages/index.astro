@@ -1,20 +1,17 @@
 ---
-import { Image } from "astro:assets";
+import Img from "../components/Img.astro";
 import Layout from "../layouts/Layout.astro";
 import Eyebrow from "../components/Eyebrow.astro";
 import Button from "../components/Button.astro";
 import Icon from "../components/Icon.astro";
 import SizeTable from "../components/SizeTable.astro";
 import Faq from "../components/Faq.astro";
-import {
-  images,
-  href,
-  audiences,
-  beliefs,
-  process,
-  homeFaq,
-  business,
-} from "../data/site";
+import { images, href, audiences, beliefs, process } from "../data/site";
+import { getContent } from "../lib/content";
+
+const content = await getContent();
+const { homeFaq, business } = content;
+const home = content.pages[""] ?? {};
 
 const stats = [
   { no: "01", value: "15", unit: "min", label: "To a real person", sub: "We call back with your price", icon: "clock" },
@@ -72,7 +69,7 @@ const work = [
   <section class="hero">
     <div class="hero__frame">
       <div class="hero__media">
-        <Image
+        <Img
           src={images.heroDriveway}
           alt="A Northline portable storage unit parked on the paver driveway of a modern farmhouse at golden hour"
           widths={[900, 1400, 2000, 2400]}
@@ -94,14 +91,15 @@ const work = [
       <div class="hero__body">
         <h1 class="h1 hero__title words" data-words>
           <span class="eyebrow h1-kicker" data-static>
-            <span>Insulated portable storage in Fallbrook, CA</span>
+            <span>{home.keyword ?? "Insulated portable storage in Fallbrook, CA"}</span>
           </span>
-          Storage that looks like it belongs.
+          {home.headline ?? "Storage that looks like it belongs."}
+          {home.headlineAccent && <> <em class="accent">{home.headlineAccent}</em></>}
         </h1>
 
         <a class="hero__card" href={href("unit")} data-reveal style="--delay: 700ms">
           <div class="media">
-            <Image src={images.unitStudioFront} alt="" widths={[128, 256]} sizes="64px" format="webp" quality={70} />
+            <Img src={images.unitStudioFront} alt="" widths={[128, 256]} sizes="64px" format="webp" quality={70} />
           </div>
           <div>
             <div class="hero__card-label">Most popular</div>
@@ -185,7 +183,7 @@ const work = [
         {
           audiences.map((a, i) => (
             <article class:list={["svc__item", { "is-open": i === 0 }]} tabindex="0" aria-label={a.title}>
-              <Image src={a.image} alt="" widths={[800, 1200, 1600]} sizes="(max-width: 860px) 100vw, 900px" format="webp" quality={70} />
+              <Img src={a.image} alt="" widths={[800, 1200, 1600]} sizes="(max-width: 860px) 100vw, 900px" format="webp" quality={70} />
               <div class="svc__collapsed">
                 <span>
                   <span class="index">({a.index})</span>
@@ -232,7 +230,7 @@ const work = [
           work.map((w, i) => (
             <a class:list={["work", w.span]} href={href("unit")} data-reveal="scale" style={`--delay: ${(i % 2) * 90}ms`}>
               <div class:list={["media", "media--hover", "work__media", w.ratio]}>
-                <Image src={w.image} alt={w.alt} widths={[700, 1100, 1500]} sizes="(max-width: 860px) 100vw, 700px" format="webp" quality={72} />
+                <Img src={w.image} alt={w.alt} widths={[700, 1100, 1500]} sizes="(max-width: 860px) 100vw, 700px" format="webp" quality={72} />
                 <span class="img-btn">
                   <Icon name="arrow-up-right" />
                 </span>
@@ -278,7 +276,7 @@ const work = [
   <!-- ===================== Process (dark) ===================== -->
   <section class="section section--dark process">
     <div class="process__bg" aria-hidden="true">
-      <Image src={images.unitOpenInterior} alt="" widths={[1200, 1800]} sizes="100vw" format="webp" quality={55} />
+      <Img src={images.unitOpenInterior} alt="" widths={[1200, 1800]} sizes="100vw" format="webp" quality={55} />
     </div>
     <div class="container">
       <div class="section-head">

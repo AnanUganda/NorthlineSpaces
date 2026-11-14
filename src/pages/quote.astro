@@ -3,11 +3,15 @@ import Layout from "../layouts/Layout.astro";
 import PageHero from "../components/PageHero.astro";
 import Eyebrow from "../components/Eyebrow.astro";
 import Button from "../components/Button.astro";
-import { quoteForm, business } from "../data/site";
+import { quoteForm } from "../data/site";
+import { getContent } from "../lib/content";
+
+const { business } = await getContent();
 ---
 
 <Layout slug="quote" cta={false}>
   <PageHero
+    slug="quote"
     no="01"
     label="Free portable storage quote"
     sub={`Tell us what you need. We'll call you within ${business.callbackMinutes} minutes with your price, no obligation.`}

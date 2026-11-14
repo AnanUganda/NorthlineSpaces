@@ -37,13 +37,10 @@ export const images = {
 /* ------------------------------------------------------------------ */
 
 /**
- * Builds a page URL. In production the site is built with
- * `build.format: "file"` for Wix static hosting, which serves `pricing.html`
- * rather than `/pricing/`, so links get a `.html` suffix. In dev, Astro
- * routes cleanly without it. This is the one place to change if hosting moves.
+ * Builds a page URL. Pages are server-rendered on Wix hosting, so URLs are
+ * clean (`/pricing`). The old static `.html` URLs redirect (astro.config.mjs).
  */
-export const href = (slug: string): string =>
-  slug === "" ? "/" : `/${slug}${import.meta.env.PROD ? ".html" : ""}`;
+export const href = (slug: string): string => (slug === "" ? "/" : `/${slug}`);
 
 export type NavItem = { slug: string; label: string; short?: string };
 
