@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="6 4 96 96">
+  <style>
+    .n { fill: #161412; }
+    .s { fill: #8a6742; }
+    @media (prefers-color-scheme: dark) {
+      .n { fill: #f3f0eb; }
+      .s { fill: #f1dfc2; }
+    }
+  </style>
+  <path class="n" d="M12 24h17v66H12z"/>
+  <path class="n" d="M12 24h18l58 54v12H70L12 36z"/>
+  <path class="n" d="M71 56h17v34H71z"/>
+  <path class="s" d="M80 8l4.2 15.8L100 28l-15.8 4.2L80 48l-4.2-15.8L60 28l15.8-4.2z"/>
+</svg>

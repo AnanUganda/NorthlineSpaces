@@ -138,7 +138,7 @@ export const audiences: Audience[] = [
     title: "Renovation storage",
     short: "Renovation",
     blurb:
-      "Clear the room, protect your furniture, and get to it any time — a few steps from the work, not across town.",
+      "Clear the room, protect your furniture, and get to it any time. It's a few steps from the work, not across town.",
     tags: ["Homeowners", "Businesses", "Month to month"],
     image: renovationLoaded,
   },
@@ -168,7 +168,7 @@ export const audiences: Audience[] = [
     title: "Buy a unit",
     short: "Buy a unit",
     blurb:
-      "A permanent, good-looking space for your property — insulated, secure and built by our family.",
+      "A permanent, good-looking space for your property. Insulated, secure and built by our family.",
     tags: ["Own it", "Workshop", "Backyard office"],
     image: gardenWorkshop,
   },
@@ -213,7 +213,7 @@ export const process = [
   },
   {
     title: "We call within 15 minutes",
-    desc: "A real person confirms your price during business hours — no obligation, no 'call for pricing'.",
+    desc: "A real person confirms your price during business hours. No obligation, and no 'call for pricing'.",
   },
   {
     title: "We deliver and place it",
@@ -221,7 +221,7 @@ export const process = [
   },
   {
     title: "Keep it as long as you need",
-    desc: "Month to month, with no penalty for extra time. Projects run long — your storage flexes with them.",
+    desc: "Month to month, with no penalty for extra time. Projects run long, and your storage can stay as long as they do.",
   },
 ];
 
@@ -231,7 +231,7 @@ export const features: { feature: string; benefit: string }[] = [
   { feature: "Window", benefit: "Natural light, so you can see what you're doing" },
   { feature: "Walk-in side door", benefit: "Grab something without opening the main door" },
   { feature: "Secure locking", benefit: "Your things stay safe" },
-  { feature: "Weatherproof build", benefit: "Dry inside, whatever the weather" },
+  { feature: "Weatherproof build", benefit: "Keeps the rain out, so what's inside stays dry" },
   { feature: "Built by our family", benefit: "Made with care, not mass-produced" },
 ];
 
@@ -253,12 +253,12 @@ export const faq: FaqGroup[] = [
       },
       {
         q: "What does insulated actually protect against?",
-        a: "Heat and big temperature swings, which can warp wood furniture and damage electronics, artwork and documents — especially during inland San Diego County summers.",
+        a: "Heat and big temperature swings, which can warp wood furniture and damage electronics, artwork and documents. Inland San Diego County summers are the worst for it.",
         home: true,
       },
       {
         q: "Can I see a unit before I book?",
-        a: "Ask us when we call — we're happy to arrange a look.",
+        a: "Ask when we call. We're happy to arrange a look.",
       },
     ],
   },
@@ -289,7 +289,7 @@ export const faq: FaqGroup[] = [
       },
       {
         q: "Where can you place the unit?",
-        a: "On a driveway or other firm, level surface. Ask us about other spots — we'll tell you what works.",
+        a: "On a driveway or other firm, level surface. Ask us about other spots and we'll tell you what works.",
       },
       {
         q: "Do I need a permit or HOA approval?",
@@ -329,7 +329,7 @@ export const faq: FaqGroup[] = [
     items: [
       {
         q: "Can I buy the unit I'm renting?",
-        a: "Ask us — if you love it, we'll talk you through buying it.",
+        a: "Ask us. If you love it, we'll talk you through buying it.",
       },
     ],
   },
@@ -370,7 +370,7 @@ export const seo: Record<string, { title: string; description: string }> = {
   unit: {
     title: "Insulated Portable Storage Units | Northline Spaces",
     description:
-      "Insulated, weatherproof portable storage units designed to look good in any driveway. Three sizes, roll-up door, secure locking — built by a Fallbrook family.",
+      "Insulated, weatherproof portable storage units designed to look good in any driveway. Three sizes, roll-up door, secure locking. Built by a Fallbrook family.",
   },
   pricing: {
     title: "Portable Storage Pricing in Fallbrook | Northline Spaces",
@@ -395,7 +395,7 @@ export const seo: Record<string, { title: string; description: string }> = {
   buy: {
     title: "Buy a Portable Storage Unit | Northline Spaces",
     description:
-      "Own a premium insulated storage unit for your property — workshop, garden storage or backyard office. Three sizes from $5,500, built by a Fallbrook family.",
+      "Own a premium insulated storage unit for your property: a workshop, garden storage or a backyard office. Three sizes from $5,500, built by a Fallbrook family.",
   },
   about: {
     title: "About Our Family | Northline Spaces",
@@ -404,7 +404,7 @@ export const seo: Record<string, { title: string; description: string }> = {
   },
   faq: {
     title: "Portable Storage FAQ | Northline Spaces",
-    description: "Answers on portable storage sizes, pricing, delivery, permits and HOAs, and buying a unit — from Northline Spaces in Fallbrook and North County San Diego.",
+    description: "Answers on portable storage sizes, pricing, delivery, permits and HOAs, and buying a unit, from Northline Spaces in Fallbrook and North County San Diego.",
   },
   quote: {
     title: "Get a Free Storage Quote | Northline Spaces",
