@@ -10,7 +10,13 @@ import { images, href, audiences, beliefs, process } from "../data/site";
 import { getContent } from "../lib/content";
 
 const content = await getContent();
-const { homeFaq, business } = content;
+const { homeFaq, business, closing } = content;
+
+const benefits = [
+  { title: "Your things stay protected.", desc: "Insulated walls and ceiling guard furniture, electronics and paperwork against Fallbrook's heat." },
+  { title: "Your home still looks good.", desc: "Charcoal siding and cedar-tone trim that suit a beautiful driveway." },
+  { title: "Loading is easy.", desc: "A wide roll-up door at ground level, with no ramps to wrestle." },
+];
 const home = content.pages[""] ?? {};
 
 const stats = [
@@ -93,9 +99,17 @@ const work = [
           <span class="eyebrow h1-kicker" data-static>
             <span>{home.keyword ?? "Insulated portable storage in Fallbrook, CA"}</span>
           </span>
-          {home.headline ?? "Storage that looks like it belongs."}
+          {home.headline ?? "Storage you'll be proud to see in your driveway."}
           {home.headlineAccent && <> <em class="accent">{home.headlineAccent}</em></>}
         </h1>
+        <p class="hero__sub" data-reveal style="--delay: 450ms">
+          {home.subheadline ??
+            "Beautifully built, insulated storage units delivered to your home or jobsite. Honest pricing, and a real person who calls you back within 15 minutes."}
+        </p>
+        <div class="btn-row hero__actions" data-reveal style="--delay: 560ms">
+          <Button href={href("quote")} label="Get My Free Quote" variant="light" />
+          <a class="link" href={href("pricing")}>See pricing <Icon name="arrow-right" /></a>
+        </div>
 
         <a class="hero__card" href={href("unit")} data-reveal style="--delay: 700ms">
           <div class="media">
@@ -126,23 +140,42 @@ const work = [
     </div>
   </section>
 
-  <!-- ===================== About / intro ===================== -->
+  <!-- ===================== The problem ===================== -->
   <section class="section">
     <div class="container">
-      <div class="section-head">
+      <div class="split">
+        <div class="split__sticky">
+          <Eyebrow no="01" label="The problem" />
+          <h2 class="h2" data-reveal>Storage shouldn't make your home <em class="accent">look worse.</em></h2>
+        </div>
         <div>
-          <Eyebrow no="01" label="About Northline" />
-          <p class="label accent" data-reveal>Now delivering across {business.area}</p>
+          <p class="intro mb-3" data-reveal>
+            A move or a remodel is stressful enough. Then a dented metal box
+            lands in your driveway and stays for months. The bill has fees
+            nobody mentioned. And when you call with a question, nobody picks up.
+          </p>
+          <p class="lede" data-reveal style="--delay: 80ms">
+            You shouldn't have to choose between protecting your things and
+            keeping your home looking good.
+          </p>
         </div>
       </div>
+    </div>
+  </section>
 
+  <!-- ===================== The guide ===================== -->
+  <section class="section section--flush-top">
+    <div class="container">
       <div class="split">
-        <div></div>
+        <div class="split__sticky">
+          <Eyebrow no="02" label="About Northline" />
+          <h2 class="h2" data-reveal>We built the storage we'd want in <em class="accent">our own driveway.</em></h2>
+        </div>
         <p class="intro" data-reveal>
-          Most portable storage is a metal box. Ours is closer to a small,
-          well-built room: insulated, secure and handsome enough for any
-          driveway. We're a {business.town} family, and we build storage we'd be
-          proud to park in front of our own home.
+          We're a {business.town} family, and we know how much care goes into a
+          home. So we build our own units: small, insulated, secure rooms that
+          look like they belong, and we run things the way we'd want to be
+          treated.
         </p>
       </div>
 
@@ -172,8 +205,8 @@ const work = [
     <div class="container">
       <div class="section-head">
         <div>
-          <Eyebrow no="02" label="What we do" />
-          <h2 class="h2" data-reveal>Storage for every <em class="accent">situation.</em></h2>
+          <Eyebrow no="03" label="How we can help" />
+          <h2 class="h2" data-reveal>Whatever you're working on, <em class="accent">we've got space for it.</em></h2>
         </div>
         <p class="lede section-head__aside" data-reveal style="--delay: 80ms">
           Renovating, moving, building or just out of room? One well-built unit, delivered to your driveway or jobsite.
@@ -214,16 +247,26 @@ const work = [
     <div class="container">
       <div class="section-head">
         <div>
-          <Eyebrow no="03" label="The unit" />
+          <Eyebrow no="04" label="Your unit" />
           <h2 class="h2" data-reveal>Built to protect. <em class="accent">Designed to look good doing it.</em></h2>
         </div>
         <div class="section-head__aside" data-reveal style="--delay: 80ms">
-          <p class="lede mb-2">
-            Insulated walls and ceiling for inland summers. A wide roll-up
-            door. Charcoal siding with cedar-tone trim.
-          </p>
           <a class="link" href={href("unit")}>See the unit <Icon name="arrow-right" /></a>
         </div>
+      </div>
+
+      <div class="feature-list mb-4" data-reveal>
+        {
+          benefits.map((b, i) => (
+            <div class="feature">
+              <span class="index">(0{i + 1})</span>
+              <div>
+                <h3 class="feature__title">{b.title}</h3>
+                <p class="feature__desc">{b.desc}</p>
+              </div>
+            </div>
+          ))
+        }
       </div>
 
       <div class="masonry">
@@ -254,7 +297,7 @@ const work = [
     <div class="container">
       <div class="section-head">
         <div>
-          <Eyebrow no="04" label="Sizes & pricing" />
+          <Eyebrow no="05" label="Sizes & pricing" />
           <h2 class="h2" data-reveal>Simple pricing. <em class="accent">No surprises.</em></h2>
         </div>
         <div class="section-head__aside" data-reveal style="--delay: 80ms">
@@ -282,8 +325,8 @@ const work = [
     <div class="container">
       <div class="section-head">
         <div>
-          <Eyebrow no="05" label="How it works" />
-          <h2 class="h2" data-reveal>Four steps. <em class="accent">One phone call.</em></h2>
+          <Eyebrow no="06" label="How it works" />
+          <h2 class="h2" data-reveal>Three simple steps. <em class="accent">One phone call.</em></h2>
         </div>
         <div class="section-head__aside" data-reveal style="--delay: 80ms">
           <p class="lede muted mb-2">
@@ -315,13 +358,13 @@ const work = [
     <div class="container">
       <div class="section-head">
         <div>
-          <Eyebrow no="06" label="What we believe" />
+          <Eyebrow no="07" label="What we believe" />
           <h2 class="h2" data-reveal>A family business, <em class="accent">not a franchise.</em></h2>
         </div>
         <div class="section-head__aside" data-reveal style="--delay: 80ms">
           <p class="lede mb-2">
-            We run Northline the way we'd want to be treated: honest prices, a
-            real person on the phone, and care for every property we visit.
+            When you call Northline, you talk to us. Honest prices, a real
+            person on the phone, and care for every property we visit.
           </p>
           <a class="link" href={href("about")}>Our story <Icon name="arrow-right" /></a>
         </div>
@@ -343,12 +386,41 @@ const work = [
     </div>
   </section>
 
+  <!-- ===================== Success + stakes ===================== -->
+  <section class="section section--flush-top">
+    <div class="container">
+      <div class="section-head section-head--stack">
+        <div>
+          <Eyebrow no="08" label="Picture it" />
+          <h2 class="h2" data-reveal>Your project with one less thing <em class="accent">to worry about.</em></h2>
+        </div>
+      </div>
+      <div class="outcomes" data-reveal>
+        <div class="outcomes__with">
+          <p class="label">With Northline</p>
+          <ul class="reasons">
+            {closing.withUs.map((t) => <li class="reason"><span>{t}</span></li>)}
+          </ul>
+          <div class="mt-3">
+            <Button href={href("quote")} label="Get My Free Quote" size="sm" />
+          </div>
+        </div>
+        <div class="outcomes__without">
+          <p class="label faint">Without it</p>
+          <ul>
+            {closing.withoutUs.map((t) => <li>{t}</li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===================== FAQ ===================== -->
   <section class="section section--flush-top">
     <div class="container">
       <div class="split">
         <div class="split__sticky">
-          <Eyebrow no="07" label="FAQ" />
+          <Eyebrow no="09" label="FAQ" />
           <h2 class="h2 mb-2" data-reveal>Questions, <em class="accent">answered.</em></h2>
           <p class="lede mb-2" data-reveal style="--delay: 80ms">
             Sizes, delivery, permits, buying: the things people ask us most.

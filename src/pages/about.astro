@@ -37,6 +37,25 @@ const { business } = await getContent();
           <h2 class="h2" data-reveal>Beautiful homes deserve better than <em class="accent">a beat-up box.</em></h2>
         </div>
         <div class="prose">
+          <figure class="owner" data-reveal="scale">
+            {
+              business.ownerPhoto ? (
+                <div class="media media--4x3">
+                  <img src={business.ownerPhoto} alt={`${business.ownerName}, ${business.name}`} width="1200" height="900" loading="eager" decoding="async" />
+                </div>
+              ) : (
+                <div class="media media--4x3 owner__placeholder" role="img" aria-label="Photo of the Northline family coming soon">
+                  <Logo class="owner__mark" />
+                  <span class="owner__note">Family photo coming soon</span>
+                </div>
+              )
+            }
+            <figcaption class="owner__caption">
+              <span class="label">{business.ownerName}</span>
+              <span class="small muted">{business.ownerCaption}</span>
+            </figcaption>
+          </figure>
+
           <p class="intro mb-4" data-reveal>
             We kept seeing the same thing: beautiful homes, and a beat-up metal
             storage box parked out front.
@@ -108,7 +127,47 @@ const { business } = await getContent();
 </Layout>
 
 <style>
-  .about-mark {
+  .owner {
+    margin: 0 0 clamp(28px, 4vw, 44px);
+  }
+
+  .owner__placeholder {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 14px;
+    border: 1px dashed var(--line-strong);
+    background:
+      repeating-linear-gradient(135deg, transparent 0 14px, rgba(22, 20, 18, 0.025) 14px 15px),
+      var(--surface, rgba(255, 255, 255, 0.35));
+  }
+
+  /* The svg comes from the Logo component, so it needs :global to match */
+  .owner__placeholder :global(.owner__mark) {
+    width: clamp(56px, 8vw, 88px);
+    height: auto;
+    color: var(--ink-42);
+    opacity: 0.6;
+  }
+
+  .owner__note {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink-42);
+  }
+
+  .owner__caption {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+    margin-top: 12px;
+  }
+
+  :global(.about-mark) {
     width: clamp(160px, 28vw, 320px);
     height: auto;
     color: var(--on-dark);

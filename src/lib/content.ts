@@ -23,7 +23,14 @@ import * as d from "../data/site";
 /* Types                                                              */
 /* ------------------------------------------------------------------ */
 
-export type Business = typeof d.business & { phone: string; email: string };
+export type Business = typeof d.business & {
+  phone: string;
+  email: string;
+  /** Owner / family photo, set in the CMS (Site Settings → Owner photo). */
+  ownerPhoto?: string;
+  ownerName: string;
+  ownerCaption: string;
+};
 
 export type PageEntry = {
   keyword?: string;
@@ -104,6 +111,9 @@ function mapBusiness(rows: Raw[] | null): Business {
     area: str(s.serviceArea) ?? d.business.area,
     phone: str(s.phone) ?? "",
     email: str(s.email) ?? "",
+    ownerPhoto: imageUrl(s.ownerPhoto),
+    ownerName: str(s.ownerName) ?? "The Northline family",
+    ownerCaption: str(s.ownerCaption) ?? `Founders, ${d.business.town}, ${d.business.state}`,
   };
 }
 
@@ -180,7 +190,7 @@ function mapClosing(business: Business, sizes: d.Size[], rows: Raw[] | null): ty
   return {
     ...d.closing,
     availability,
-    sub: `We'll call you within ${business.callbackMinutes} minutes with your price.`,
+    sub: `Get your price in ${business.callbackMinutes} minutes, and get your driveway back to looking like home.`,
     facts: [
       { no: "(01)", value: `${business.callbackMinutes} minutes`, label: "to a real person with your price" },
       { no: "(02)", value: d.closing.facts[1].value, label: d.closing.facts[1].label },

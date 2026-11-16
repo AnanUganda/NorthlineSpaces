@@ -1001,6 +1001,7 @@ body.menu-open {
   align-self: end;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto auto;
   align-items: end;
   gap: 32px;
   padding: clamp(120px, 18vh, 180px) clamp(24px, 3.5vw, 48px) clamp(28px, 3vw, 40px);
@@ -1011,7 +1012,74 @@ body.menu-open {
   text-wrap: balance;
 }
 
+.hero__sub {
+  grid-column: 1;
+  max-width: 46ch;
+  margin-top: 22px;
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.55;
+  color: var(--on-dark-60);
+  text-wrap: pretty;
+}
+
+.hero__actions {
+  grid-column: 1;
+  margin-top: 28px;
+}
+
+.hero__actions .link {
+  color: var(--on-dark);
+}
+
+/* Success + stakes: the "with" column carries the weight */
+.outcomes {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+  gap: 40px 64px;
+  align-items: start;
+}
+
+.outcomes .label {
+  margin-bottom: 18px;
+}
+
+.outcomes__without {
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+
+.outcomes__without ul {
+  display: grid;
+  gap: 12px;
+  font-size: 15px;
+  color: var(--ink-42);
+}
+
+.outcomes__without li {
+  padding-left: 18px;
+  position: relative;
+}
+
+.outcomes__without li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 8px;
+  height: 1px;
+  background: var(--ink-42);
+}
+
+@media (max-width: 860px) {
+  .outcomes {
+    grid-template-columns: 1fr;
+  }
+}
+
 .hero__card {
+  grid-column: 2;
+  grid-row: 1 / 4;
   display: grid;
   grid-template-columns: 64px 1fr auto;
   align-items: center;

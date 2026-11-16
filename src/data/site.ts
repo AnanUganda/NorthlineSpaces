@@ -180,7 +180,19 @@ export const audiences: Audience[] = [
 
 export const closing = {
   title: ["Ready for storage that", "looks the part?"],
-  sub: "We'll call you within 15 minutes with your price.",
+  sub: "Get your price in 15 minutes, and get your driveway back to looking like home.",
+  /** The customer's side of the story (StoryBrand), shown before the FAQ. */
+  withUs: [
+    "Your furniture is safe, dry and a few steps from your door",
+    "You know exactly what you're paying, from day one",
+    "Your driveway still looks like part of your home",
+    "A real person answers when you call",
+  ],
+  withoutUs: [
+    "Heat-warped furniture and damaged electronics",
+    "Fees you only discover on the bill",
+    "An eyesore your neighbors are counting the days on",
+  ],
   button: "Get My Free Quote",
   secondary: "See pricing",
   availability: "(Now delivering across Fallbrook & North County)",
@@ -208,20 +220,16 @@ export const beliefs = [
 
 export const process = [
   {
-    title: "Tell us what you need",
-    desc: "Your project dates, your address and what you're storing. Not sure on size? We'll help you choose.",
-  },
-  {
-    title: "We call within 15 minutes",
-    desc: "A real person confirms your price during business hours. No obligation, and no 'call for pricing'.",
+    title: "Get your free quote",
+    desc: "Tell us what you need. A real person calls you back within 15 minutes with your price.",
   },
   {
     title: "We deliver and place it",
-    desc: "A flat $99 within 10 miles of Fallbrook. We set the unit exactly where you want it.",
+    desc: "Your unit arrives for a flat $99 within 10 miles of Fallbrook, set exactly where you want it.",
   },
   {
-    title: "Keep it as long as you need",
-    desc: "Month to month, with no penalty for extra time. Projects run long, and your storage can stay as long as they do.",
+    title: "Load at your own pace",
+    desc: "Keep it month to month, for as long as you need. Call us when you're done.",
   },
 ];
 
