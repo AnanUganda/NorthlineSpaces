@@ -114,12 +114,14 @@ const work = [
         {
           audiences.map((a) => (
             <a href={href(a.slug)}>
-              <span class="index">({a.index})</span>
-              {a.short}
+              <span class="hero__strip-label">
+                <span class="index">({a.index})</span>
+                {a.short}
+              </span>
+              <Icon name="arrow-up-right" class="hero__strip-arrow" />
             </a>
           ))
         }
-        <span class="hero__scroll">Scroll to explore</span>
       </div>
     </div>
   </section>
