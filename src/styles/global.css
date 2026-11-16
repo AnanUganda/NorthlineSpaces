@@ -254,6 +254,28 @@ p {
   padding-top: 0;
 }
 
+/* Plain white sections, mixed in with the linen for rhythm */
+.section--white {
+  --bg-section: #ffffff;
+  background: #ffffff;
+}
+
+/* A color change needs full breathing room on both sides of it */
+.section.section--white,
+.section--white + .section--flush-top,
+.section--dark + .section--flush-top {
+  padding-top: var(--section);
+}
+
+.section.section--white {
+  padding-bottom: var(--section);
+}
+
+/* The closing CTA's hairline is redundant right after a white section */
+main:has(> .section--white:last-child) + .cta {
+  border-top-color: transparent;
+}
+
 .section--dark {
   background: var(--surface-dark);
   color: var(--on-dark);
