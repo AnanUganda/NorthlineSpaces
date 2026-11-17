@@ -931,15 +931,13 @@ body.menu-open {
 /* ---------- Hero (home) ---------- */
 .hero {
   position: relative;
-  padding: 8px;
 }
 
 .hero__frame {
   position: relative;
-  /* fill the screen, inside the 8px inset on every side */
-  min-height: calc(100vh - 16px);
-  min-height: calc(100svh - 16px);
-  border-radius: 12px;
+  /* full-bleed, filling the screen */
+  min-height: 100vh;
+  min-height: 100svh;
   overflow: hidden;
   color: var(--on-dark);
   display: grid;
@@ -1027,7 +1025,8 @@ body.menu-open {
   grid-template-rows: auto auto auto;
   align-items: end;
   gap: 32px;
-  padding: clamp(120px, 18vh, 180px) clamp(24px, 3.5vw, 48px) clamp(28px, 3vw, 40px);
+  /* same left/right edge as the header's .container, so logo and headline line up */
+  padding: clamp(120px, 18vh, 180px) max(var(--gutter), calc((100% - var(--container)) / 2)) clamp(28px, 3vw, 40px);
 }
 
 .hero__title {
@@ -1041,7 +1040,7 @@ body.menu-open {
   margin-top: 22px;
   font-size: clamp(16px, 1.4vw, 19px);
   line-height: 1.55;
-  color: var(--on-dark-60);
+  color: rgba(243, 240, 235, 0.88);
   text-wrap: pretty;
 }
 
@@ -1166,6 +1165,8 @@ body.menu-open {
   background: rgba(22, 20, 18, 0.4);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
+  /* shortcuts sit in the same column as the header and headline */
+  padding-inline: max(var(--gutter), calc((100% - var(--container)) / 2));
 }
 
 .hero__strip a {
@@ -1183,6 +1184,14 @@ body.menu-open {
 
 .hero__strip > :first-child {
   border-left: 0;
+}
+
+.hero__strip > a:first-child {
+  padding-left: 0;
+}
+
+.hero__strip > a:last-child {
+  padding-right: 0;
 }
 
 .hero__strip a:hover {
@@ -1229,14 +1238,6 @@ body.menu-open {
 
 /* Phones: keep the hero calm — headline + one swipeable row of shortcuts */
 @media (max-width: 720px) {
-  .hero {
-    padding: 6px;
-  }
-  .hero__frame {
-    min-height: calc(100vh - 12px);
-    min-height: calc(100svh - 12px);
-    border-radius: 10px;
-  }
   .hero__card,
   .hero__cross {
     display: none;
@@ -1245,7 +1246,7 @@ body.menu-open {
     background-size: 50% 25%;
   }
   .hero__body {
-    padding: 120px 20px 24px;
+    padding: 120px var(--gutter) 24px;
   }
   .hero__strip {
     display: flex;
@@ -1254,14 +1255,16 @@ body.menu-open {
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding: 14px 20px 16px;
+    padding: 14px var(--gutter) 16px;
     border-top: 1px solid var(--on-dark-line);
   }
   .hero__strip::-webkit-scrollbar {
     display: none;
   }
   .hero__strip a,
-  .hero__strip > :first-child {
+  .hero__strip > :first-child,
+  .hero__strip > a:first-child,
+  .hero__strip > a:last-child {
     flex: none;
     scroll-snap-align: start;
     padding: 10px 14px;

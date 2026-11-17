@@ -77,7 +77,7 @@ export const pages = {
       f("heroKeyword", "0 · Top of page — Keyword line (small text, helps Google)", "Insulated portable storage in Fallbrook, CA"),
       f("heroHeadline", "0 · Top of page — Headline", "Storage you'll be proud to see in your driveway."),
       f("heroAccent", "0 · Top of page — Headline, bronze part (optional)", ""),
-      f("heroSub", "0 · Top of page — Intro text", "Beautifully built, insulated storage units delivered to your home or jobsite. Honest pricing, and a real person who calls you back within {callbackMinutes} minutes."),
+      f("heroSub", "0 · Top of page — Intro text", "Insulated storage, delivered to your home or jobsite. Honest prices, and a real person calls you back within {callbackMinutes} minutes."),
       f("heroCardLabel", "0 · Top of page — Photo card, small label", "Most popular"),
       f("heroCardTitle", "0 · Top of page — Photo card, title", "8×16 insulated unit"),
       f("heroImage", "0 · Top of page — Background photo (optional; leave empty to keep the current one)", "", "IMAGE"),
