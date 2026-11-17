@@ -962,7 +962,8 @@ body.menu-open {
   /* Heavier scrim at the top so the header reads over bright skies/walls */
   background:
     linear-gradient(180deg, rgba(22, 20, 18, 0.66) 0%, rgba(22, 20, 18, 0.28) 22%, rgba(22, 20, 18, 0.08) 42%, rgba(22, 20, 18, 0.64) 100%),
-    linear-gradient(90deg, rgba(22, 20, 18, 0.35) 0%, rgba(22, 20, 18, 0) 60%);
+    /* Left-to-right scrim behind the headline; the unit on the right stays bright */
+    linear-gradient(90deg, rgba(22, 20, 18, 0.62) 0%, rgba(22, 20, 18, 0.4) 30%, rgba(22, 20, 18, 0.12) 55%, rgba(22, 20, 18, 0) 75%);
 }
 
 .hero__media img {

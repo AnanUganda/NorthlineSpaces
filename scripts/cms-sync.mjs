@@ -29,7 +29,7 @@ const listCollections = async () =>
   Object.fromEntries((await api("GET", "/wix-data/v2/collections?paging.limit=100")).collections.map((c) => [c.id, c]));
 
 /** Put `wanted` fields first, in order, with these labels; keep every other existing field after them. */
-async function upsertCollection(cols, id, displayName, wanted, { drop = [] } = {}) {
+async function upsertCollection(cols, id, displayName, wanted, { drop = [], markUnused = false } = {}) {
   const existing = cols[id];
   const asField = (w) => ({ key: w.key, displayName: w.label, type: w.type ?? "TEXT" });
   if (!existing) {
@@ -41,7 +41,15 @@ async function upsertCollection(cols, id, displayName, wanted, { drop = [] } = {
   const byKey = new Map(existing.fields.map((fld) => [fld.key, fld]));
   const ordered = wanted.map((w) => (byKey.has(w.key) ? { ...byKey.get(w.key), displayName: w.label } : asField(w)));
   const wantedKeys = new Set(wanted.map((w) => w.key));
-  const rest = existing.fields.filter((fld) => !wantedKeys.has(fld.key) && !drop.includes(fld.key));
+  const UNUSED = "Not used on the site — ";
+  // Fields the site no longer reads stay (no data is deleted) but are clearly labeled and sorted last.
+  const rest = existing.fields
+    .filter((fld) => !wantedKeys.has(fld.key) && !drop.includes(fld.key))
+    .map((fld) =>
+      markUnused && !fld.key.startsWith("_") && !String(fld.displayName ?? "").startsWith(UNUSED)
+        ? { ...fld, displayName: UNUSED + (fld.displayName ?? fld.key) }
+        : fld
+    );
   const upd = Object.fromEntries(
     Object.entries(existing).filter(([k]) => ["id", "displayName", "fields", "permissions", "revision", "collectionType"].includes(k))
   );
@@ -105,7 +113,7 @@ const moved = {
 
 console.log("Pages:");
 for (const [pid, page] of Object.entries(pages)) {
-  const status = await upsertCollection(cols, page.collection, page.title, page.fields);
+  const status = await upsertCollection(cols, page.collection, page.title, page.fields, { markUnused: true });
   const carried = legacy[page.slug] ?? {};
   const values = {};
   for (const fld of page.fields) {
