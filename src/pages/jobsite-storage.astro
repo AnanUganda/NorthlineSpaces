@@ -1,30 +1,23 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PageHero from "../components/PageHero.astro";
+import Title from "../components/Title.astro";
 import Eyebrow from "../components/Eyebrow.astro";
 import Button from "../components/Button.astro";
 import Icon from "../components/Icon.astro";
 import { images, href } from "../data/site";
+import { getPage } from "../lib/content";
 
-const reasons = [
-  { t: "Secure.", d: "Lockable and solid, to help keep tools and materials safe overnight." },
-  { t: "Insulated.", d: "Helps protect heat-sensitive materials, adhesives, finishes and electronics." },
-  { t: "Looks professional.", d: "A clean unit on site reflects well on your business, especially in upscale neighborhoods." },
-  { t: "Easy access.", d: "Wide roll-up door, plus a walk-in side door on select sizes." },
-  { t: "Doubles as a site office.", d: "With a window and side door, the larger units work as a simple on-site workspace." },
-];
+const page = await getPage("jobsite");
+const { t } = page;
 ---
 
 <Layout slug="jobsite-storage">
   <PageHero
-    slug="jobsite-storage"
-    no="01"
-    label="Jobsite storage containers"
-    sub="Keep tools, materials and equipment safe, dry and close, so your crew spends less time hauling and more time building."
+    page={page}
     image={images.unitStudioAngle}
     alt="Three-quarter view of a Northline unit showing the window and walk-in side door"
   >
-    Secure, insulated storage <em class="accent">right on your jobsite.</em>
     <Fragment slot="actions">
       <Button href={href("quote")} label="Get My Free Quote" />
       <a class="link" href={href("pricing")}>See pricing <Icon name="arrow-right" /></a>
@@ -35,11 +28,11 @@ const reasons = [
     <div class="container">
       <div class="split">
         <div class="split__sticky">
-          <Eyebrow no="02" label="Built for contractors" />
-          <h2 class="h2" data-reveal>Everything on site, <em class="accent">nothing in the truck.</em></h2>
+          <Eyebrow no="02" label={t("prosLabel")} />
+          <h2 class="h2" data-reveal><Title head={t("prosHeading")} accent={t("prosAccent")} /></h2>
         </div>
         <div class="reasons" data-reveal>
-          {reasons.map((r) => <div class="reason"><span><strong>{r.t}</strong> {r.d}</span></div>)}
+          {[1, 2, 3, 4, 5].map((i) => <div class="reason"><span><strong>{t(`reason${i}Lead`)}</strong> {t(`reason${i}Text`)}</span></div>)}
         </div>
       </div>
     </div>
@@ -49,13 +42,11 @@ const reasons = [
     <div class="container">
       <div class="split">
         <div>
-          <Eyebrow no="03" label="Flexible terms" />
-          <h2 class="h2" data-reveal>Month to month, for as long as <em class="accent">the job runs.</em></h2>
+          <Eyebrow no="03" label={t("termsLabel")} />
+          <h2 class="h2" data-reveal><Title head={t("termsHeading")} accent={t("termsAccent")} /></h2>
         </div>
         <div>
-          <p class="lede mb-3" data-reveal>
-            Working on more than one site? Ask about multiple units.
-          </p>
+          <p class="lede mb-3" data-reveal>{t("termsText")}</p>
           <div data-reveal style="--delay: 80ms">
             <Button href={href("quote")} label="Get My Free Quote" />
           </div>

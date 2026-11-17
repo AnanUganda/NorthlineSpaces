@@ -1,22 +1,21 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PageHero from "../components/PageHero.astro";
+import Title from "../components/Title.astro";
 import Eyebrow from "../components/Eyebrow.astro";
 import Button from "../components/Button.astro";
 import { quoteForm } from "../data/site";
-import { getContent } from "../lib/content";
+import { getPage } from "../lib/content";
 
-const { business } = await getContent();
+
+const page = await getPage("quote");
+const { t } = page;
 ---
 
 <Layout slug="quote" cta={false}>
   <PageHero
-    slug="quote"
-    no="01"
-    label="Free portable storage quote"
-    sub={`Tell us what you need. We'll call you within ${business.callbackMinutes} minutes with your price, no obligation.`}
+    page={page}
   >
-    Get your <em class="accent">free quote.</em>
   </PageHero>
 
   <section class="section section--flush-top">
@@ -24,13 +23,13 @@ const { business } = await getContent();
       <div class="split">
         <!-- What happens next -->
         <div class="split__sticky">
-          <Eyebrow no="02" label="What happens next" />
+          <Eyebrow no="02" label={t("nextLabel")} />
           <ol class="how" data-reveal>
             {
-              quoteForm.next.map((n) => (
+              [1, 2, 3].map((i) => (
                 <li>
                   <span>
-                    <strong>{n.title}</strong> {n.desc}
+                    <strong>{t(`next${i}Lead`)}</strong> {t(`next${i}Text`)}
                   </span>
                 </li>
               ))
@@ -98,15 +97,15 @@ const { business } = await getContent();
             <div class="btn-row">
               <Button label={quoteForm.button} type="submit" />
             </div>
-            <p class="form__note">{quoteForm.note}</p>
+            <p class="form__note">{t("formNote")}</p>
             <p class="form__note" id="form-error" role="alert" style="color:#b4452c; display:none">
               Please fill in the required fields.
             </p>
           </form>
 
           <div class="form__success" id="quote-success" role="status" aria-live="polite">
-            <p class="h4 mb-1">{quoteForm.thanks.title}</p>
-            <p class="muted">{quoteForm.thanks.body}</p>
+            <p class="h4 mb-1">{t("thanksTitle")}</p>
+            <p class="muted">{t("thanksText")}</p>
           </div>
         </div>
       </div>

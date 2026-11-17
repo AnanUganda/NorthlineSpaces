@@ -20,7 +20,7 @@ interface Props {
 const { slug = "", light = false, cta = true } = Astro.props;
 const content = await getContent();
 const { business, faq, homeFaq, sizes } = content;
-const meta = seoFor(content, slug);
+const meta = await seoFor(slug);
 const title = Astro.props.title ?? meta.title;
 const description = Astro.props.description ?? meta.description;
 
@@ -36,7 +36,7 @@ const business_ld = {
   "@type": "LocalBusiness",
   "@id": new URL("/#business", site).href,
   name: business.name,
-  description: seoFor(content, "").description,
+  description: (await seoFor("")).description,
   ...(business.phone ? { telephone: business.phone } : {}),
   ...(business.email ? { email: business.email } : {}),
   url: new URL("/", site).href,

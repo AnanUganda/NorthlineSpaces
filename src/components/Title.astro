@@ -1,0 +1,10 @@
+---
+/** "Heading text <em>bronze part</em>" — skips the bronze span when it's empty. */
+interface Props {
+  head: string;
+  accent?: string;
+}
+const { head, accent } = Astro.props;
+---
+
+{head}{accent && <> <em class="accent">{accent}</em></>}

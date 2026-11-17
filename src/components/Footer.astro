@@ -5,7 +5,7 @@ import Button from "./Button.astro";
 import { nav, href } from "../data/site";
 import { getContent } from "../lib/content";
 
-const { business } = await getContent();
+const { business, site } = await getContent();
 
 const year = new Date().getFullYear();
 const sitemapA = nav.slice(0, 5);
@@ -24,9 +24,7 @@ const sitemapB = nav.slice(5);
           </span>
         </a>
         <p class="footer__desc">
-          Most portable storage is an eyesore. Northline delivers insulated
-          storage units designed to look good in front of your home, across
-          {business.area}.
+          {site.footerBlurb}
         </p>
         <address class="footer__addr">
           {business.town}, {business.state}<br />

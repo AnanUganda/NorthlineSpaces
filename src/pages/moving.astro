@@ -1,39 +1,24 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PageHero from "../components/PageHero.astro";
+import Title from "../components/Title.astro";
 import Eyebrow from "../components/Eyebrow.astro";
 import Button from "../components/Button.astro";
 import Icon from "../components/Icon.astro";
 import { images, href } from "../data/site";
-import { getContent } from "../lib/content";
+import { getPage } from "../lib/content";
 
-const { business } = await getContent();
 
-const compare = [
-  { k: "Who loads", a: "You, at your own pace", b: "Our team" },
-  { k: "Who unloads", a: "You", b: "Our team" },
-  { k: "Pricing", a: `Monthly rent + ${business.deliveryFee} delivery and pickup`, b: "Custom quote" },
-  { k: "Best for", a: "Flexible timelines, saving money", b: "Busy families, heavy furniture, people who'd rather not lift a thing" },
-];
-
-const reasons = [
-  { t: "No rental truck.", d: "No white-knuckle driving, no rushed return." },
-  { t: "Load at ground level.", d: "No steep ramps." },
-  { t: "Need a gap between homes?", d: "Keep your belongings stored until your new place is ready." },
-  { t: "Insulated protection.", d: "Your things travel and wait in a more stable environment." },
-];
+const page = await getPage("moving");
+const { t } = page;
 ---
 
 <Layout slug="moving">
   <PageHero
-    slug="moving"
-    no="01"
-    label="Portable moving & storage"
-    sub="Load at your own pace with no rental truck and no deadline. Or let our team pack the unit for you."
+    page={page}
     image={images.unitOpenInterior}
     alt="A Northline unit with the roll-up door open, ready to load at ground level"
   >
-    Move on your schedule, or let us do <em class="accent">the heavy lifting.</em>
     <Fragment slot="actions">
       <Button href={href("quote")} label="Get My Free Quote" />
       <a class="link" href={href("pricing")}>See pricing <Icon name="arrow-right" /></a>
@@ -44,16 +29,16 @@ const reasons = [
     <div class="container">
       <div class="section-head">
         <div>
-          <Eyebrow no="02" label="Two ways to move" />
-          <h2 class="h2" data-reveal>Do it yourself, <em class="accent">or full service.</em></h2>
+          <Eyebrow no="02" label={t("waysLabel")} />
+          <h2 class="h2" data-reveal><Title head={t("waysHeading")} accent={t("waysAccent")} /></h2>
         </div>
       </div>
       <table class="table" data-reveal>
         <thead>
-          <tr><th></th><th>Do it yourself</th><th>Full-service move</th></tr>
+          <tr><th></th><th>{t("waysColA")}</th><th>{t("waysColB")}</th></tr>
         </thead>
         <tbody>
-          {compare.map((c) => <tr><td>{c.k}</td><td>{c.a}</td><td>{c.b}</td></tr>)}
+          {[1, 2, 3, 4].map((i) => <tr><td>{t(`row${i}Label`)}</td><td>{t(`row${i}A`)}</td><td>{t(`row${i}B`)}</td></tr>)}
         </tbody>
       </table>
     </div>
@@ -63,11 +48,11 @@ const reasons = [
     <div class="container">
       <div class="split">
         <div class="split__sticky">
-          <Eyebrow no="03" label="Why move with Northline" />
-          <h2 class="h2" data-reveal>Less hauling. <em class="accent">Less hurry.</em></h2>
+          <Eyebrow no="03" label={t("whyLabel")} />
+          <h2 class="h2" data-reveal><Title head={t("whyHeading")} accent={t("whyAccent")} /></h2>
         </div>
         <div class="reasons" data-reveal>
-          {reasons.map((r) => <div class="reason"><span><strong>{r.t}</strong> {r.d}</span></div>)}
+          {[1, 2, 3, 4].map((i) => <div class="reason"><span><strong>{t(`reason${i}Lead`)}</strong> {t(`reason${i}Text`)}</span></div>)}
         </div>
       </div>
     </div>
@@ -77,14 +62,11 @@ const reasons = [
     <div class="container">
       <div class="split">
         <div>
-          <Eyebrow no="04" label={`Moving further than ${business.deliveryRadius}?`} />
-          <h2 class="h2" data-reveal>We'll quote your distance fee <em class="accent">upfront.</em></h2>
+          <Eyebrow no="04" label={t("distanceLabel")} />
+          <h2 class="h2" data-reveal><Title head={t("distanceHeading")} accent={t("distanceAccent")} /></h2>
         </div>
         <div>
-          <p class="lede mb-3" data-reveal>
-            Before you book, never after. Tell us where you're headed and we'll
-            confirm the price on the call.
-          </p>
+          <p class="lede mb-3" data-reveal>{t("distanceText")}</p>
           <div data-reveal style="--delay: 80ms">
             <Button href={href("quote")} label="Get My Free Quote" />
           </div>

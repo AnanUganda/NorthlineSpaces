@@ -1,12 +1,13 @@
 /**
  * Live site content from the Wix CMS, merged over the defaults in src/data/site.ts.
  *
- * The client edits five collections in the Wix dashboard (CMS):
- *   SiteSettings  — one entry: phone, email, hours, callback time, delivery fee/radius, availability
- *   Sizes         — unit sizes, what they fit, rent + buy prices, "most popular", order
- *   FAQs          — question, answer, group, "show on homepage", order
- *   UnitFeatures  — the features table on The Unit page
- *   PageContent   — per page: keyword line, headline, highlighted part, subheadline, SEO, hero image
+ * The client edits these in the Wix dashboard (CMS):
+ *   Page: Home, Page: About, …  — one entry per page holding every piece of its text, in page
+ *                                 order (fields defined in src/data/pages.ts; read with getPage)
+ *   Site-wide (SiteSettings)    — contact details, hours, delivery fee/radius, closing CTA, footer
+ *   List: Sizes & prices        — unit sizes, what they fit, rent + buy prices, "most popular", order
+ *   List: FAQs                  — question, answer, group, "show on homepage", order
+ *   List: Unit features         — the features table on The Unit page
  *
  * Pages render on request (Wix-managed Astro, `output: "server"`), so an edit shows on the live site
  * without a rebuild — after at most CACHE_MS. `@wix/astro` signs the `@wix/data` calls in as a site
@@ -18,6 +19,7 @@
 import { items } from "@wix/data";
 import { media } from "@wix/sdk";
 import * as d from "../data/site";
+import { pages, pageIdBySlug, siteWideFields, type PageId } from "../data/pages";
 
 /* ------------------------------------------------------------------ */
 /* Types                                                              */
@@ -26,22 +28,10 @@ import * as d from "../data/site";
 export type Business = typeof d.business & {
   phone: string;
   email: string;
-  /** Owner / family photo, set in the CMS (Site Settings → Owner photo). */
-  ownerPhoto?: string;
-  ownerName: string;
-  ownerCaption: string;
 };
 
-export type PageEntry = {
-  keyword?: string;
-  headline?: string;
-  headlineAccent?: string;
-  subheadline?: string;
-  seoTitle?: string;
-  seoDescription?: string;
-  /** Absolute image URL when the client set a hero image in the CMS. */
-  heroImage?: string;
-};
+/** Site-wide text: the closing section on every page + the footer blurb. */
+export type SiteText = Record<(typeof siteWideFields)[number]["key"], string>;
 
 export type Content = {
   business: Business;
@@ -50,8 +40,7 @@ export type Content = {
   homeFaq: d.FaqItem[];
   features: typeof d.features;
   closing: typeof d.closing;
-  /** Keyed by page slug ("" = home). */
-  pages: Record<string, PageEntry>;
+  site: SiteText;
   /** True when at least one collection was read from the CMS. */
   live: boolean;
 };
@@ -111,9 +100,6 @@ function mapBusiness(rows: Raw[] | null): Business {
     area: str(s.serviceArea) ?? d.business.area,
     phone: str(s.phone) ?? "",
     email: str(s.email) ?? "",
-    ownerPhoto: imageUrl(s.ownerPhoto),
-    ownerName: str(s.ownerName) ?? "The Northline family",
-    ownerCaption: str(s.ownerCaption) ?? `Founders, ${d.business.town}, ${d.business.state}`,
   };
 }
 
@@ -160,25 +146,6 @@ function mapFeatures(rows: Raw[] | null): typeof d.features {
   return out.length ? out : d.features;
 }
 
-function mapPages(rows: Raw[] | null): Record<string, PageEntry> {
-  const pages: Record<string, PageEntry> = {};
-  for (const r of rows ?? []) {
-    const raw = str(r.slug);
-    if (!raw) continue;
-    const slug = raw === "home" ? "" : raw;
-    pages[slug] = {
-      keyword: str(r.keyword),
-      headline: str(r.headline),
-      headlineAccent: str(r.headlineAccent),
-      subheadline: str(r.subheadline),
-      seoTitle: str(r.seoTitle),
-      seoDescription: str(r.seoDescription),
-      heroImage: imageUrl(r.heroImage),
-    };
-  }
-  return pages;
-}
-
 /** The closing block's facts follow the settings and the cheapest rent. */
 function mapClosing(business: Business, sizes: d.Size[], rows: Raw[] | null): typeof d.closing {
   const rents = sizes
@@ -186,17 +153,42 @@ function mapClosing(business: Business, sizes: d.Size[], rows: Raw[] | null): ty
     .filter((r) => r.value > 0)
     .sort((a, b) => a.value - b.value);
   const from = rents[0]?.label ?? d.sizes[0].rent;
-  const availability = str(rows?.[0]?.availability) ?? d.closing.availability;
+  const site = mapSite(business, rows);
   return {
     ...d.closing,
-    availability,
-    sub: `Get your price in ${business.callbackMinutes} minutes, and get your driveway back to looking like home.`,
+    availability: site.closingAvailability,
+    title: [site.closingHeading, site.closingAccent],
+    sub: site.closingText,
     facts: [
       { no: "(01)", value: `${business.callbackMinutes} minutes`, label: "to a real person with your price" },
       { no: "(02)", value: d.closing.facts[1].value, label: d.closing.facts[1].label },
       { no: "(03)", value: `From ${from} / month`, label: `${business.deliveryFee} delivery within ${business.deliveryRadius}` },
     ],
   };
+}
+
+/** Fill {deliveryFee}, {deliveryRadius}, {town}, {callbackMinutes}, {businessHours} from Business details. */
+export function fillTokens(text: string, b: Business): string {
+  const tokens: Record<string, string> = {
+    deliveryFee: b.deliveryFee,
+    deliveryRadius: b.deliveryRadius,
+    town: b.town,
+    callbackMinutes: String(b.callbackMinutes),
+    businessHours: b.hours,
+    serviceArea: b.area,
+  };
+  return text.replace(/\{(\w+)\}/g, (m, k) => tokens[k] ?? m);
+}
+
+function mapSite(business: Business, rows: Raw[] | null): SiteText {
+  const s = rows?.[0] ?? {};
+  // "availability" is the field's original key; prefer the new one, then the old.
+  const out: Record<string, string> = {};
+  for (const fld of siteWideFields) {
+    const legacy = fld.key === "closingAvailability" ? str(s.availability) : undefined;
+    out[fld.key] = fillTokens(str(s[fld.key]) ?? legacy ?? fld.default, business);
+  }
+  return out as SiteText;
 }
 
 /* ------------------------------------------------------------------ */
@@ -207,12 +199,11 @@ function mapClosing(business: Business, sizes: d.Size[], rows: Raw[] | null): ty
 export async function getContent(): Promise<Content> {
   if (cache && Date.now() - cache.at < CACHE_MS) return cache.value;
 
-  const [settings, sizeRows, faqRows, featureRows, pageRows] = await Promise.all([
+  const [settings, sizeRows, faqRows, featureRows] = await Promise.all([
     load("SiteSettings", false),
     load("Sizes"),
     load("FAQs"),
     load("UnitFeatures"),
-    load("PageContent", false),
   ]);
 
   const business = mapBusiness(settings);
@@ -226,20 +217,58 @@ export async function getContent(): Promise<Content> {
     homeFaq,
     features: mapFeatures(featureRows),
     closing: mapClosing(business, sizes, settings),
-    pages: mapPages(pageRows),
-    live: [settings, sizeRows, faqRows, featureRows, pageRows].some((r) => r !== null),
+    site: mapSite(business, settings),
+    live: [settings, sizeRows, faqRows, featureRows].some((r) => r !== null),
   };
 
   cache = { at: Date.now(), value };
   return value;
 }
 
-/** SEO title/description for a page: CMS first, then site.ts. */
-export function seoFor(content: Content, slug: string): { title: string; description: string } {
-  const fallback = d.seo[slug] ?? d.seo[""];
-  const p = content.pages[slug] ?? {};
-  return {
-    title: p.seoTitle ?? fallback.title,
-    description: p.seoDescription ?? fallback.description,
+/* ------------------------------------------------------------------ */
+/* Pages                                                              */
+/* ------------------------------------------------------------------ */
+
+/** A page's text: `t("key")` → CMS value, else the registry default, with tokens filled. */
+export type PageText = {
+  t: (key: string) => string;
+  /** CMS image URL for an IMAGE field, or undefined when empty. */
+  image: (key: string) => string | undefined;
+  /** Split a "a · b · c" field into a list. */
+  items: (key: string) => string[];
+};
+
+const pageCache = new Map<PageId, { at: number; row: Raw }>();
+
+async function pageRow(id: PageId): Promise<Raw> {
+  const hit = pageCache.get(id);
+  if (hit && Date.now() - hit.at < CACHE_MS) return hit.row;
+  const rows = await load(pages[id].collection, false);
+  const row = rows?.[0] ?? {};
+  pageCache.set(id, { at: Date.now(), row });
+  return row;
+}
+
+/** Load one page's editable text from its CMS entry ("Page: Home", …). */
+export async function getPage(id: PageId): Promise<PageText> {
+  const [row, content] = await Promise.all([pageRow(id), getContent()]);
+  const defaults = new Map(pages[id].fields.map((fld) => [fld.key, fld.default] as const));
+  const t = (key: string) => {
+    if (!defaults.has(key)) console.warn(`[content] page "${id}" has no field "${key}" in pages.ts`);
+    return fillTokens(str(row[key]) ?? defaults.get(key) ?? "", content.business);
   };
+  return {
+    t,
+    image: (key) => imageUrl(row[key]),
+    items: (key) => t(key).split("·").map((x) => x.trim()).filter(Boolean),
+  };
+}
+
+/** SEO title/description for a page slug ("" = home): its page entry, then the defaults. */
+export async function seoFor(slug: string): Promise<{ title: string; description: string }> {
+  const id = pageIdBySlug[slug];
+  const fallback = d.seo[slug] ?? d.seo[""];
+  if (!id) return fallback;
+  const p = await getPage(id);
+  return { title: p.t("seoTitle") || fallback.title, description: p.t("seoDescription") || fallback.description };
 }

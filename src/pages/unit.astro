@@ -2,33 +2,26 @@
 import Img from "../components/Img.astro";
 import Layout from "../layouts/Layout.astro";
 import PageHero from "../components/PageHero.astro";
+import Title from "../components/Title.astro";
 import Eyebrow from "../components/Eyebrow.astro";
 import Button from "../components/Button.astro";
 import Icon from "../components/Icon.astro";
 import SizeTable from "../components/SizeTable.astro";
 import { images, href } from "../data/site";
-import { getContent } from "../lib/content";
+import { getContent, getPage } from "../lib/content";
 
-const { features, business } = await getContent();
+const { features } = await getContent();
 
-const protects = [
-  "Wood furniture from warping and cracking",
-  "Electronics and appliances from heat damage",
-  "Artwork, photos and paperwork from fading and curling",
-  "Clothing and fabrics from that stale, stuffy smell",
-];
+const page = await getPage("unit");
+const { t } = page;
 ---
 
 <Layout slug="unit">
   <PageHero
-    slug="unit"
-    no="01"
-    label="Insulated portable storage units"
-    sub="Most portable storage is a metal box. Ours is closer to a small, well-built room: insulated, secure and handsome enough for any driveway."
+    page={page}
     image={images.unitOpenInterior}
     alt="A Northline unit with its roll-up door open, showing the lit, wood-lined, insulated interior"
   >
-    Built to protect your things. <em class="accent">Designed to look good doing it.</em>
     <Fragment slot="actions">
       <Button href={href("quote")} label="Get My Free Quote" />
       <a class="link" href={href("pricing")}>See pricing <Icon name="arrow-right" /></a>
@@ -40,18 +33,12 @@ const protects = [
     <div class="container">
       <div class="split">
         <div class="split__sticky">
-          <Eyebrow no="02" label="Designed for beautiful homes" />
-          <h2 class="h2" data-reveal>Built to sit in front of a home <em class="accent">you're proud of.</em></h2>
+          <Eyebrow no="02" label={t("designLabel")} />
+          <h2 class="h2" data-reveal><Title head={t("designHeading")} accent={t("designAccent")} /></h2>
         </div>
         <div>
-          <p class="intro mb-4" data-reveal>
-            Charcoal ribbed siding. Warm cedar-tone trim. Clean, simple lines.
-          </p>
-          <p class="lede mb-4" data-reveal style="--delay: 80ms">
-            We designed Northline units to sit in front of a beautiful home
-            without looking out of place, so you're never counting the days
-            until it's gone.
-          </p>
+          <p class="intro mb-4" data-reveal>{t("designIntro")}</p>
+          <p class="lede mb-4" data-reveal style="--delay: 80ms">{t("designText")}</p>
           <div class="media media--4x3 media--hover" data-reveal="scale">
             <Img src={images.detailBadgeTrim} alt="Close-up of the cedar-tone trim, fasteners and Northline badge" widths={[700, 1100, 1500]} sizes="(max-width: 860px) 100vw, 700px" format="webp" quality={72} />
           </div>
@@ -65,16 +52,13 @@ const protects = [
     <div class="container">
       <div class="section-head">
         <div>
-          <Eyebrow no="03" label="Insulated, inside and out" />
-          <h2 class="h2" data-reveal>Inland summers are hard on <em class="accent">stored belongings.</em></h2>
+          <Eyebrow no="03" label={t("insulatedLabel")} />
+          <h2 class="h2" data-reveal><Title head={t("insulatedHeading")} accent={t("insulatedAccent")} /></h2>
         </div>
-        <p class="lede section-head__aside" data-reveal style="--delay: 80ms">
-          Insulated walls and ceiling help keep the inside cooler and more
-          stable, which helps protect:
-        </p>
+        <p class="lede section-head__aside" data-reveal style="--delay: 80ms">{t("insulatedText")}</p>
       </div>
       <div class="reasons" data-reveal>
-        {protects.map((p) => <div class="reason"><span>{p}</span></div>)}
+        {[1, 2, 3, 4].map((i) => t(`protect${i}`)).filter(Boolean).map((x) => <div class="reason"><span>{x}</span></div>)}
       </div>
     </div>
   </section>
@@ -84,8 +68,8 @@ const protects = [
     <div class="container">
       <div class="split">
         <div class="split__sticky">
-          <Eyebrow no="04" label="Features" />
-          <h2 class="h2" data-reveal>What's built in, <em class="accent">and what it means for you.</em></h2>
+          <Eyebrow no="04" label={t("featuresLabel")} />
+          <h2 class="h2" data-reveal><Title head={t("featuresHeading")} accent={t("featuresAccent")} /></h2>
         </div>
         <table class="table table--2" data-reveal>
           <thead>
@@ -104,13 +88,10 @@ const protects = [
     <div class="container">
       <div class="section-head">
         <div>
-          <Eyebrow no="05" label="Choose your size" />
-          <h2 class="h2" data-reveal>Three sizes. <em class="accent">One build quality.</em></h2>
+          <Eyebrow no="05" label={t("sizesLabel")} />
+          <h2 class="h2" data-reveal><Title head={t("sizesHeading")} accent={t("sizesAccent")} /></h2>
         </div>
-        <p class="lede section-head__aside" data-reveal style="--delay: 80ms">
-          Not sure which size? Tell us what you're storing and we'll help you
-          choose when we call.
-        </p>
+        <p class="lede section-head__aside" data-reveal style="--delay: 80ms">{t("sizesText")}</p>
       </div>
       <SizeTable mode="both" />
     </div>
@@ -121,15 +102,11 @@ const protects = [
     <div class="container">
       <div class="split">
         <div>
-          <Eyebrow no="06" label="Placed with care" />
-          <h2 class="h2" data-reveal>Exactly where <em class="accent">you want it.</em></h2>
+          <Eyebrow no="06" label={t("placedLabel")} />
+          <h2 class="h2" data-reveal><Title head={t("placedHeading")} accent={t("placedAccent")} /></h2>
         </div>
         <div>
-          <p class="lede mb-3" data-reveal>
-            We deliver to your driveway or jobsite and set the unit exactly where
-            you want it. Delivery is {business.deliveryFee} within {business.deliveryRadius} of{" "}
-            {business.town}. Further out, we quote the distance fee before you book.
-          </p>
+          <p class="lede mb-3" data-reveal>{t("placedText")}</p>
           <div data-reveal style="--delay: 80ms">
             <Button href={href("quote")} label="Get My Free Quote" />
           </div>

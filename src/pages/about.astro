@@ -2,26 +2,27 @@
 import Img from "../components/Img.astro";
 import Layout from "../layouts/Layout.astro";
 import PageHero from "../components/PageHero.astro";
+import Title from "../components/Title.astro";
 import Eyebrow from "../components/Eyebrow.astro";
 import Button from "../components/Button.astro";
 import Icon from "../components/Icon.astro";
 import Logo from "../components/Logo.astro";
-import { images, href, beliefs } from "../data/site";
-import { getContent } from "../lib/content";
+import { images, href } from "../data/site";
+import { getContent, getPage } from "../lib/content";
 
 const { business } = await getContent();
+const page = await getPage("about");
+const { t } = page;
+const home = await getPage("home"); // the three beliefs are edited on Page: Home
+const ownerPhoto = page.image("ownerPhoto");
 ---
 
 <Layout slug="about">
   <PageHero
-    slug="about"
-    no="01"
-    label="About Northline Spaces"
-    sub="We build storage we'd be proud to put in our own driveway."
+    page={page}
     image={images.estateAerial}
     alt="Aerial view of a Northline unit on the paved courtyard of a hillside estate at golden hour"
   >
-    A family business, <em class="accent">not a franchise.</em>
     <Fragment slot="actions">
       <Button href={href("quote")} label="Get My Free Quote" />
       <a class="link" href={href("unit")}>See the unit <Icon name="arrow-right" /></a>
@@ -33,43 +34,31 @@ const { business } = await getContent();
     <div class="container">
       <div class="split">
         <div class="split__sticky">
-          <Eyebrow no="02" label="Our story" />
-          <h2 class="h2" data-reveal>Beautiful homes deserve better than <em class="accent">a beat-up box.</em></h2>
+          <Eyebrow no="02" label={t("storyLabel")} />
+          <h2 class="h2" data-reveal><Title head={t("storyHeading")} accent={t("storyAccent")} /></h2>
         </div>
         <div class="prose">
           <figure class="owner" data-reveal="scale">
             {
-              business.ownerPhoto ? (
+              ownerPhoto ? (
                 <div class="media media--4x3">
-                  <img src={business.ownerPhoto} alt={`${business.ownerName}, ${business.name}`} width="1200" height="900" loading="eager" decoding="async" />
+                  <img src={ownerPhoto} alt={`${t("ownerName")}, ${business.name}`} width="1200" height="900" loading="eager" decoding="async" />
                 </div>
               ) : (
-                <div class="media media--4x3 owner__placeholder" role="img" aria-label="Photo of the Northline family coming soon">
-                  <Logo class="owner__mark" />
-                  <span class="owner__note">Family photo coming soon</span>
+                <div class="media media--4x3">
+                  <Img src={images.gardenWorkshop} alt="Northline storage unit in a landscaped garden — placeholder for the family photo" sizes="(min-width: 900px) 55vw, 100vw" />
                 </div>
               )
             }
             <figcaption class="owner__caption">
-              <span class="label">{business.ownerName}</span>
-              <span class="small muted">{business.ownerCaption}</span>
+              <span class="label">{ownerPhoto ? t("ownerName") : "Northline Spaces"}</span>
+              <span class="small muted">{ownerPhoto ? t("ownerCaption") : "Placeholder image · Family photo coming soon"}</span>
             </figcaption>
           </figure>
 
-          <p class="intro mb-4" data-reveal>
-            We kept seeing the same thing: beautiful homes, and a beat-up metal
-            storage box parked out front.
-          </p>
-          <p class="lede" data-reveal style="--delay: 60ms">
-            Storage is something almost everyone needs at some point, whether it's a move, a remodel or just a busy year. It shouldn't have to look
-            like an afterthought.
-          </p>
-          <p class="lede" data-reveal style="--delay: 120ms">
-            So we started building our own. Units that are insulated to protect
-            what's inside, and designed to look good outside. And we decided to
-            run the business the way we'd want to be treated: honest prices, a
-            real person on the phone, and care for every property we visit.
-          </p>
+          <p class="intro mb-4" data-reveal>{t("storyIntro")}</p>
+          <p class="lede" data-reveal style="--delay: 60ms">{t("storyText1")}</p>
+          <p class="lede" data-reveal style="--delay: 120ms">{t("storyText2")}</p>
         </div>
       </div>
     </div>
@@ -80,18 +69,18 @@ const { business } = await getContent();
     <div class="container">
       <div class="section-head">
         <div>
-          <Eyebrow no="03" label="What we believe" />
-          <h2 class="h2" data-reveal>Three things <em class="accent">we won't bend on.</em></h2>
+          <Eyebrow no="03" label={t("beliefsLabel")} />
+          <h2 class="h2" data-reveal><Title head={t("beliefsHeading")} accent={t("beliefsAccent")} /></h2>
         </div>
       </div>
       <div class="feature-list" data-reveal>
         {
-          beliefs.map((b, i) => (
+          [1, 2, 3].map((i) => (
             <div class="feature">
-              <span class="index">(0{i + 1})</span>
+              <span class="index">(0{i})</span>
               <div>
-                <h3 class="feature__title">{b.title}</h3>
-                <p class="feature__desc">{b.desc}</p>
+                <h3 class="feature__title">{home.t(`belief${i}Title`)}</h3>
+                <p class="feature__desc">{home.t(`belief${i}Text`)}</p>
               </div>
             </div>
           ))
@@ -108,12 +97,9 @@ const { business } = await getContent();
     <div class="container">
       <div class="split split--even" style="align-items: center">
         <div>
-          <Eyebrow no="04" label="The name" />
-          <h2 class="h2 mb-3" data-reveal>Why the <em class="accent">compass star.</em></h2>
-          <p class="lede muted mb-3" data-reveal style="--delay: 80ms">
-            There's a compass star in our logo. For us it's a simple reminder:
-            do the job right, and do it the same way every time.
-          </p>
+          <Eyebrow no="04" label={t("nameLabel")} />
+          <h2 class="h2 mb-3" data-reveal><Title head={t("nameHeading")} accent={t("nameAccent")} /></h2>
+          <p class="lede muted mb-3" data-reveal style="--delay: 80ms">{t("nameText")}</p>
           <div data-reveal style="--delay: 140ms">
             <Button href={href("quote")} label="Get My Free Quote" variant="light" />
           </div>
@@ -129,32 +115,6 @@ const { business } = await getContent();
 <style>
   .owner {
     margin: 0 0 clamp(28px, 4vw, 44px);
-  }
-
-  .owner__placeholder {
-    display: grid;
-    place-items: center;
-    align-content: center;
-    gap: 14px;
-    border: 1px dashed var(--line-strong);
-    background:
-      repeating-linear-gradient(135deg, transparent 0 14px, rgba(22, 20, 18, 0.025) 14px 15px),
-      var(--surface, rgba(255, 255, 255, 0.35));
-  }
-
-  /* The svg comes from the Logo component, so it needs :global to match */
-  .owner__placeholder :global(.owner__mark) {
-    width: clamp(56px, 8vw, 88px);
-    height: auto;
-    color: var(--ink-42);
-    opacity: 0.6;
-  }
-
-  .owner__note {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--ink-42);
   }
 
   .owner__caption {

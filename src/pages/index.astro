@@ -6,25 +6,36 @@ import Button from "../components/Button.astro";
 import Icon from "../components/Icon.astro";
 import SizeTable from "../components/SizeTable.astro";
 import Faq from "../components/Faq.astro";
-import { images, href, audiences, beliefs, process } from "../data/site";
-import { getContent } from "../lib/content";
+import Title from "../components/Title.astro";
+import { images, href, audiences } from "../data/site";
+import { getContent, getPage } from "../lib/content";
 
 const content = await getContent();
-const { homeFaq, business, closing } = content;
+const { homeFaq, business } = content;
+const { t, items, image } = await getPage("home");
 
-const benefits = [
-  { title: "Your things stay protected.", desc: "Insulated walls and ceiling guard furniture, electronics and paperwork against Fallbrook's heat." },
-  { title: "Your home still looks good.", desc: "Charcoal siding and cedar-tone trim that suit a beautiful driveway." },
-  { title: "Loading is easy.", desc: "A wide roll-up door at ground level, with no ramps to wrestle." },
-];
-const home = content.pages[""] ?? {};
+const n3 = [1, 2, 3];
+const n4 = [1, 2, 3, 4];
+const icons = ["clock", "tag", "shield", "thermo"] as const;
 
-const stats = [
-  { no: "01", value: "15", unit: "min", label: "To a real person", sub: "We call back with your price", icon: "clock" },
-  { no: "02", value: "$99", unit: "", label: "Delivery & pickup", sub: "Within 10 miles of Fallbrook", icon: "tag" },
-  { no: "03", value: "3", unit: "", label: "Sizes", sub: "8×12, 8×16 and 8×20", icon: "shield" },
-  { no: "04", value: "0", unit: "", label: "Hidden fees", sub: "The price you see is the price you pay", icon: "thermo" },
-] as const;
+const stats = n4.map((i) => ({
+  no: `0${i}`,
+  value: t(`stat${i}Value`),
+  unit: i === 1 ? t("stat1Unit") : "",
+  label: t(`stat${i}Label`),
+  sub: t(`stat${i}Sub`),
+  icon: icons[i - 1],
+}));
+
+// Service cards: the copy comes from the CMS; slug + photo stay with the code.
+const services = audiences.map((a, i) => ({
+  ...a,
+  title: t(`service${i + 1}Title`),
+  short: t(`service${i + 1}Short`),
+  blurb: t(`service${i + 1}Text`),
+  tags: items(`service${i + 1}Tags`),
+}));
+const heroImage = image("heroImage");
 
 const work = [
   {
@@ -32,40 +43,40 @@ const work = [
     ratio: "media--4x3",
     image: images.unitOpenInterior,
     alt: "Northline unit with the roll-up door open, showing the lit, wood-lined interior",
-    title: "Walk right in",
-    year: "Interior",
-    desc: "Ground-level loading through a wide roll-up door. Lit, lined and insulated inside.",
-    chips: ["Roll-up door", "Insulated", "Ground level"],
+    title: t("photo1Title"),
+    year: t("photo1Tag"),
+    desc: t("photo1Text"),
+    chips: items("photo1Chips"),
   },
   {
     span: "span-5",
     ratio: "media--3x4",
     image: images.detailBadgeTrim,
     alt: "Close-up of the cedar-tone trim and Northline badge on the unit",
-    title: "Built like it's meant to stay",
-    year: "Detail",
-    desc: "Charcoal ribbed siding, warm cedar-tone trim, clean simple lines.",
-    chips: ["Cedar-tone trim", "Ribbed siding"],
+    title: t("photo2Title"),
+    year: t("photo2Tag"),
+    desc: t("photo2Text"),
+    chips: items("photo2Chips"),
   },
   {
     span: "span-5",
     ratio: "media--1x1",
     image: images.estateAerial,
     alt: "Aerial view of a Northline unit on the paved courtyard of a hillside estate",
-    title: "At home on any property",
-    year: "On site",
-    desc: "Designed to sit in front of a beautiful home without looking out of place.",
-    chips: ["Driveway or courtyard", "Secure locking"],
+    title: t("photo3Title"),
+    year: t("photo3Tag"),
+    desc: t("photo3Text"),
+    chips: items("photo3Chips"),
   },
   {
     span: "span-7",
     ratio: "media--4x3",
     image: images.unitStudioAngle,
     alt: "Three-quarter view of a Northline unit showing the window and walk-in side door",
-    title: "Window and side door",
-    year: "Select sizes",
-    desc: "Natural light to see what you're doing, and a walk-in door so you can grab something without opening the main one.",
-    chips: ["Window", "Side door", "8×16 · 8×20"],
+    title: t("photo4Title"),
+    year: t("photo4Tag"),
+    desc: t("photo4Text"),
+    chips: items("photo4Chips"),
   },
 ];
 ---
@@ -75,6 +86,9 @@ const work = [
   <section class="hero">
     <div class="hero__frame">
       <div class="hero__media">
+        {heroImage ? (
+          <img src={heroImage} alt="" loading="eager" fetchpriority="high" decoding="async" />
+        ) : (
         <Img
           src={images.heroDriveway}
           alt="A Northline portable storage unit parked on the paver driveway of a modern farmhouse at golden hour"
@@ -85,6 +99,7 @@ const work = [
           loading="eager"
           fetchpriority="high"
         />
+        )}
       </div>
       <div class="hero__grid" aria-hidden="true">
         <span class="hero__cross" style="left: 25%; top: 25%"></span>
@@ -97,15 +112,11 @@ const work = [
       <div class="hero__body">
         <h1 class="h1 hero__title words" data-words>
           <span class="eyebrow h1-kicker" data-static>
-            <span>{home.keyword ?? "Insulated portable storage in Fallbrook, CA"}</span>
+            <span>{t("heroKeyword")}</span>
           </span>
-          {home.headline ?? "Storage you'll be proud to see in your driveway."}
-          {home.headlineAccent && <> <em class="accent">{home.headlineAccent}</em></>}
+          <Title head={t("heroHeadline")} accent={t("heroAccent")} />
         </h1>
-        <p class="hero__sub" data-reveal style="--delay: 450ms">
-          {home.subheadline ??
-            "Beautifully built, insulated storage units delivered to your home or jobsite. Honest pricing, and a real person who calls you back within 15 minutes."}
-        </p>
+        <p class="hero__sub" data-reveal style="--delay: 450ms">{t("heroSub")}</p>
         <div class="btn-row hero__actions" data-reveal style="--delay: 560ms">
           <Button href={href("quote")} label="Get My Free Quote" variant="light" />
           <a class="link" href={href("pricing")}>See pricing <Icon name="arrow-right" /></a>
@@ -116,8 +127,8 @@ const work = [
             <Img src={images.unitStudioFront} alt="" widths={[128, 256]} sizes="64px" format="webp" quality={70} />
           </div>
           <div>
-            <div class="hero__card-label">Most popular</div>
-            <div class="hero__card-title">8×16 insulated unit</div>
+            <div class="hero__card-label">{t("heroCardLabel")}</div>
+            <div class="hero__card-title">{t("heroCardTitle")}</div>
             <div class="hero__card-meta">{business.town}, {business.state} — {business.founded}</div>
           </div>
           <Icon name="arrow-up-right" />
@@ -126,7 +137,7 @@ const work = [
 
       <div class="hero__strip">
         {
-          audiences.map((a) => (
+          services.map((a) => (
             <a href={href(a.slug)}>
               <span class="hero__strip-label">
                 <span class="index">({a.index})</span>
@@ -145,19 +156,11 @@ const work = [
     <div class="container">
       <div class="split">
         <div class="split__sticky">
-          <Eyebrow no="01" label="The problem" />
-          <h2 class="h2" data-reveal>Storage shouldn't make your home <em class="accent">look worse.</em></h2>
+          <Eyebrow no="01" label={t("problemLabel")} />
+          <h2 class="h2" data-reveal><Title head={t("problemHeading")} accent={t("problemAccent")} /></h2>
         </div>
         <div>
-          <p class="intro mb-3" data-reveal>
-            A move or a remodel is stressful enough. Then a dented metal box
-            lands in your driveway and stays for months. The bill has fees
-            nobody mentioned. And when you call with a question, nobody picks up.
-          </p>
-          <p class="lede" data-reveal style="--delay: 80ms">
-            You shouldn't have to choose between protecting your things and
-            keeping your home looking good.
-          </p>
+          <p class="intro" data-reveal>{t("problemText")}</p>
         </div>
       </div>
     </div>
@@ -168,15 +171,10 @@ const work = [
     <div class="container">
       <div class="split">
         <div class="split__sticky">
-          <Eyebrow no="02" label="About Northline" />
-          <h2 class="h2" data-reveal>We built the storage we'd want in <em class="accent">our own driveway.</em></h2>
+          <Eyebrow no="02" label={t("aboutLabel")} />
+          <h2 class="h2" data-reveal><Title head={t("aboutHeading")} accent={t("aboutAccent")} /></h2>
         </div>
-        <p class="intro" data-reveal>
-          We're a {business.town} family, and we know how much care goes into a
-          home. So we build our own units: small, insulated, secure rooms that
-          look like they belong, and we run things the way we'd want to be
-          treated.
-        </p>
+        <p class="intro" data-reveal>{t("aboutText")}</p>
       </div>
 
       <div class="stats mt-5" data-reveal>
@@ -205,17 +203,15 @@ const work = [
     <div class="container">
       <div class="section-head">
         <div>
-          <Eyebrow no="03" label="How we can help" />
-          <h2 class="h2" data-reveal>Whatever you're working on, <em class="accent">we've got space for it.</em></h2>
+          <Eyebrow no="03" label={t("servicesLabel")} />
+          <h2 class="h2" data-reveal><Title head={t("servicesHeading")} accent={t("servicesAccent")} /></h2>
         </div>
-        <p class="lede section-head__aside" data-reveal style="--delay: 80ms">
-          Renovating, moving, building or just out of room? One well-built unit, delivered to your driveway or jobsite.
-        </p>
+        <p class="lede section-head__aside" data-reveal style="--delay: 80ms">{t("servicesText")}</p>
       </div>
 
       <div class="svc" data-reveal>
         {
-          audiences.map((a, i) => (
+          services.map((a, i) => (
             <article class:list={["svc__item", { "is-open": i === 0 }]} tabindex="0" aria-label={a.title}>
               <Img src={a.image} alt="" widths={[800, 1200, 1600]} sizes="(max-width: 860px) 100vw, 900px" format="webp" quality={70} />
               <div class="svc__collapsed">
@@ -247,8 +243,8 @@ const work = [
     <div class="container">
       <div class="section-head">
         <div>
-          <Eyebrow no="04" label="Your unit" />
-          <h2 class="h2" data-reveal>Built to protect. <em class="accent">Designed to look good doing it.</em></h2>
+          <Eyebrow no="04" label={t("unitLabel")} />
+          <h2 class="h2" data-reveal><Title head={t("unitHeading")} accent={t("unitAccent")} /></h2>
         </div>
         <div class="section-head__aside" data-reveal style="--delay: 80ms">
           <a class="link" href={href("unit")}>See the unit <Icon name="arrow-right" /></a>
@@ -257,12 +253,12 @@ const work = [
 
       <div class="feature-list mb-4" data-reveal>
         {
-          benefits.map((b, i) => (
+          n3.map((i) => (
             <div class="feature">
-              <span class="index">(0{i + 1})</span>
+              <span class="index">(0{i})</span>
               <div>
-                <h3 class="feature__title">{b.title}</h3>
-                <p class="feature__desc">{b.desc}</p>
+                <h3 class="feature__title">{t(`benefit${i}Title`)}</h3>
+                <p class="feature__desc">{t(`benefit${i}Text`)}</p>
               </div>
             </div>
           ))
@@ -297,23 +293,17 @@ const work = [
     <div class="container">
       <div class="section-head">
         <div>
-          <Eyebrow no="05" label="Sizes & pricing" />
-          <h2 class="h2" data-reveal>Simple pricing. <em class="accent">No surprises.</em></h2>
+          <Eyebrow no="05" label={t("pricingLabel")} />
+          <h2 class="h2" data-reveal><Title head={t("pricingHeading")} accent={t("pricingAccent")} /></h2>
         </div>
         <div class="section-head__aside" data-reveal style="--delay: 80ms">
-          <p class="lede mb-2">
-            The price you see is the price you pay. Month to month, keep it as
-            long as you need. {business.deliveryFee} delivery and pickup within{" "}
-            {business.deliveryRadius} of {business.town}.
-          </p>
+          <p class="lede mb-2">{t("pricingText")}</p>
           <Button href={href("pricing")} label="See full pricing" variant="outline" size="sm" />
         </div>
       </div>
 
       <SizeTable mode="both" />
-      <p class="small muted mt-2" data-reveal>
-        Not sure which size? Tell us what you're storing and we'll help you choose when we call.
-      </p>
+      <p class="small muted mt-2" data-reveal>{t("pricingNote")}</p>
     </div>
   </section>
 
@@ -325,27 +315,24 @@ const work = [
     <div class="container">
       <div class="section-head">
         <div>
-          <Eyebrow no="06" label="How it works" />
-          <h2 class="h2" data-reveal>Three simple steps. <em class="accent">One phone call.</em></h2>
+          <Eyebrow no="06" label={t("stepsLabel")} />
+          <h2 class="h2" data-reveal><Title head={t("stepsHeading")} accent={t("stepsAccent")} /></h2>
         </div>
         <div class="section-head__aside" data-reveal style="--delay: 80ms">
-          <p class="lede muted mb-2">
-            No forms that go nowhere, no "call for pricing". Tell us what you
-            need and a real person calls you back.
-          </p>
+          <p class="lede muted mb-2">{t("stepsText")}</p>
           <Button href={href("quote")} label="Get My Free Quote" variant="light" size="sm" />
         </div>
       </div>
 
       <div class="steps">
         {
-          process.map((p, i) => (
-            <div class="step" data-reveal style={`--delay: ${i * 80}ms`}>
+          n3.map((i) => (
+            <div class="step" data-reveal style={`--delay: ${(i - 1) * 80}ms`}>
               <span class="step__no">
-                <Icon name="arrow-right" /> 0{i + 1}.
+                <Icon name="arrow-right" /> 0{i}.
               </span>
-              <h3 class="step__title">{p.title}</h3>
-              <p class="step__desc">{p.desc}</p>
+              <h3 class="step__title">{t(`step${i}Title`)}</h3>
+              <p class="step__desc">{t(`step${i}Text`)}</p>
             </div>
           ))
         }
@@ -358,26 +345,23 @@ const work = [
     <div class="container">
       <div class="section-head">
         <div>
-          <Eyebrow no="07" label="What we believe" />
-          <h2 class="h2" data-reveal>A family business, <em class="accent">not a franchise.</em></h2>
+          <Eyebrow no="07" label={t("beliefsLabel")} />
+          <h2 class="h2" data-reveal><Title head={t("beliefsHeading")} accent={t("beliefsAccent")} /></h2>
         </div>
         <div class="section-head__aside" data-reveal style="--delay: 80ms">
-          <p class="lede mb-2">
-            When you call Northline, you talk to us. Honest prices, a real
-            person on the phone, and care for every property we visit.
-          </p>
+          <p class="lede mb-2">{t("beliefsText")}</p>
           <a class="link" href={href("about")}>Our story <Icon name="arrow-right" /></a>
         </div>
       </div>
 
       <div class="feature-list" data-reveal>
         {
-          beliefs.map((b, i) => (
+          n3.map((i) => (
             <div class="feature">
-              <span class="index">(0{i + 1})</span>
+              <span class="index">(0{i})</span>
               <div>
-                <h3 class="feature__title">{b.title}</h3>
-                <p class="feature__desc">{b.desc}</p>
+                <h3 class="feature__title">{t(`belief${i}Title`)}</h3>
+                <p class="feature__desc">{t(`belief${i}Text`)}</p>
               </div>
             </div>
           ))
@@ -391,24 +375,24 @@ const work = [
     <div class="container">
       <div class="section-head section-head--stack">
         <div>
-          <Eyebrow no="08" label="Picture it" />
-          <h2 class="h2" data-reveal>Your project with one less thing <em class="accent">to worry about.</em></h2>
+          <Eyebrow no="08" label={t("outcomesLabel")} />
+          <h2 class="h2" data-reveal><Title head={t("outcomesHeading")} accent={t("outcomesAccent")} /></h2>
         </div>
       </div>
       <div class="outcomes" data-reveal>
         <div class="outcomes__with">
-          <p class="label">With Northline</p>
+          <p class="label">{t("withLabel")}</p>
           <ul class="reasons">
-            {closing.withUs.map((t) => <li class="reason"><span>{t}</span></li>)}
+            {n4.map((i) => t(`with${i}`)).filter(Boolean).map((x) => <li class="reason"><span>{x}</span></li>)}
           </ul>
           <div class="mt-3">
             <Button href={href("quote")} label="Get My Free Quote" size="sm" />
           </div>
         </div>
         <div class="outcomes__without">
-          <p class="label faint">Without it</p>
+          <p class="label faint">{t("withoutLabel")}</p>
           <ul>
-            {closing.withoutUs.map((t) => <li>{t}</li>)}
+            {n3.map((i) => t(`without${i}`)).filter(Boolean).map((x) => <li>{x}</li>)}
           </ul>
         </div>
       </div>
@@ -420,11 +404,9 @@ const work = [
     <div class="container">
       <div class="split">
         <div class="split__sticky">
-          <Eyebrow no="09" label="FAQ" />
-          <h2 class="h2 mb-2" data-reveal>Questions, <em class="accent">answered.</em></h2>
-          <p class="lede mb-2" data-reveal style="--delay: 80ms">
-            Sizes, delivery, permits, buying: the things people ask us most.
-          </p>
+          <Eyebrow no="09" label={t("faqLabel")} />
+          <h2 class="h2 mb-2" data-reveal><Title head={t("faqHeading")} accent={t("faqAccent")} /></h2>
+          <p class="lede mb-2" data-reveal style="--delay: 80ms">{t("faqText")}</p>
           <a class="link" href={href("faq")} data-reveal style="--delay: 140ms">
             Ask us anything <Icon name="arrow-right" />
           </a>

@@ -1,23 +1,23 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PageHero from "../components/PageHero.astro";
+import Title from "../components/Title.astro";
 import Button from "../components/Button.astro";
 import Icon from "../components/Icon.astro";
 import Faq from "../components/Faq.astro";
 import { href } from "../data/site";
-import { getContent } from "../lib/content";
+import { getContent, getPage } from "../lib/content";
 
 const { faq } = await getContent();
+
+const page = await getPage("faq");
+const { t } = page;
 ---
 
 <Layout slug="faq">
   <PageHero
-    slug="faq"
-    no="01"
-    label="Portable storage FAQ"
-    sub="Sizes, pricing, delivery, permits and buying: the things people ask us most. Don't see yours? Ask us anything when we call."
+    page={page}
   >
-    Questions? <em class="accent">We've got answers.</em>
     <Fragment slot="actions">
       <Button href={href("quote")} label="Get My Free Quote" />
       <a class="link" href={href("pricing")}>See pricing <Icon name="arrow-right" /></a>
