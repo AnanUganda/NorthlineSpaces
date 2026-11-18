@@ -83,6 +83,7 @@ const { t } = page;
             <ul class="feature__desc" style="display: grid; gap: 8px">
               {[1, 2, 3, 4].map((i) => t(`included${i}`)).filter(Boolean).map((x) => <li>— {x}</li>)}
             </ul>
+            {t("upgradeText") && <p class="feature__desc mt-2"><strong>{t("upgradeLead")}</strong> {t("upgradeText")}</p>}
           </div>
         </div>
       </div>

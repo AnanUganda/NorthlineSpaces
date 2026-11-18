@@ -74,10 +74,10 @@ export const pages = {
     title: "Page: Home",
     slug: "",
     fields: [
-      f("heroKeyword", "0 · Top of page — Keyword line (small text, helps Google)", "Insulated portable storage in Fallbrook, CA"),
+      f("heroKeyword", "0 · Top of page — Keyword line (small text, helps Google)", "Premium portable storage serving Southern California"),
       f("heroHeadline", "0 · Top of page — Headline", "Storage you'll be proud to see in your driveway."),
       f("heroAccent", "0 · Top of page — Headline, bronze part (optional)", ""),
-      f("heroSub", "0 · Top of page — Intro text", "Insulated storage, delivered to your home or jobsite. Honest prices, and a real person calls you back within {callbackMinutes} minutes."),
+      f("heroSub", "0 · Top of page — Intro text", "Insulated storage, delivered to your home or jobsite. Honest prices, and a real person responds within {callbackMinutes} minutes."),
       f("heroCardLabel", "0 · Top of page — Photo card, small label", "Most popular"),
       f("heroCardTitle", "0 · Top of page — Photo card, title", "8×16 insulated unit"),
       f("heroImage", "0 · Top of page — Background photo (optional; leave empty to keep the current one)", "", "IMAGE"),
@@ -86,8 +86,8 @@ export const pages = {
       f("aboutText", "1 · About us — Text", "We're a {town} family, and we know how much care goes into a home. So we build our own units: small, insulated, secure rooms that look like they belong, and we run things the way we'd want to be treated."),
       f("stat1Value", "1 · About us — Number box 1, number", "{callbackMinutes}"),
       f("stat1Unit", "1 · About us — Number box 1, small unit", "min"),
-      f("stat1Label", "1 · About us — Number box 1, label", "To a real person"),
-      f("stat1Sub", "1 · About us — Number box 1, small text", "We call back with your price"),
+      f("stat1Label", "1 · About us — Number box 1, label", "Response time"),
+      f("stat1Sub", "1 · About us — Number box 1, small text", "During business hours"),
       f("stat2Value", "1 · About us — Number box 2, number", "{deliveryFee}"),
       f("stat2Label", "1 · About us — Number box 2, label", "Delivery & pickup"),
       f("stat2Sub", "1 · About us — Number box 2, small text", "Within {deliveryRadius} of {town}"),
@@ -124,8 +124,8 @@ export const pages = {
         ["Loading is easy.", "A wide roll-up door at ground level, with no ramps to wrestle."],
       ], "Benefit"),
       ...[
-        ["Walk right in", "Interior", "Ground-level loading through a wide roll-up door. Lit, lined and insulated inside.", "Roll-up door · Insulated · Ground level"],
-        ["Built like it's meant to stay", "Detail", "Charcoal ribbed siding, warm cedar-tone trim, clean simple lines.", "Cedar-tone trim · Ribbed siding"],
+        ["Walk right in", "Interior", "Ground-level loading through a wide roll-up door. Lined and insulated inside, with optional interior lighting.", "Roll-up door · Insulated · Ground level"],
+        ["Built like it's meant to stay", "Detail", "Durable double wall construction in high-grade aluminum, with clean, simple lines.", "Double wall · High-grade aluminum"],
         ["At home on any property", "On site", "Designed to sit in front of a beautiful home without looking out of place.", "Driveway or courtyard · Secure locking"],
         ["Window and side door", "Select sizes", "Natural light to see what you're doing, and a walk-in door so you can grab something without opening the main one.", "Window · Side door · 8×16 · 8×20"],
       ].flatMap(([title, tag, text, chips], i) => [
@@ -142,7 +142,7 @@ export const pages = {
       ...head(5, "How it works", "steps", "How it works", "Three simple steps.", "One phone call."),
       f("stepsText", "5 · How it works — Text", "No forms that go nowhere, no \"call for pricing\". Tell us what you need and a real person calls you back."),
       ...titled(5, "How it works", "step", [
-        ["Get your free quote", "Tell us what you need. A real person calls you back within {callbackMinutes} minutes with your price."],
+        ["Get your free quote", "Tell us what you need. A real person responds within {callbackMinutes} minutes with your price."],
         ["We deliver and place it", "Your unit arrives for a flat {deliveryFee} within {deliveryRadius} of {town}, set exactly where you want it."],
         ["Load at your own pace", "Keep it month to month, for as long as you need. Call us when you're done."],
       ], "Step"),
@@ -248,6 +248,8 @@ export const pages = {
         "Placement exactly where you want it",
         "A real person on the phone within {callbackMinutes} minutes",
       ], "Card 3, item"),
+      f("upgradeLead", "4 · Extras — Card 3, optional upgrade bold start", "Optional upgrade:"),
+      f("upgradeText", "4 · Extras — Card 3, optional upgrade rest", "solar-powered motion lights inside the unit, a flat $50 for the whole rental."),
       ...seoFields("pricing"),
     ],
   },
@@ -290,7 +292,7 @@ export const pages = {
       ...[
         ["Who loads", "You, at your own pace", "Our team"],
         ["Who unloads", "You", "Our team"],
-        ["Pricing", "Monthly rent + {deliveryFee} delivery and pickup", "Custom quote"],
+        ["Pricing", "Monthly rent + mileage fee (custom quote)", "Custom quote"],
         ["Best for", "Flexible timelines, saving money", "Busy families, heavy furniture, people who'd rather not lift a thing"],
       ].flatMap(([k, a, b], i) => [
         f(`row${i + 1}Label`, `2 · Two ways to move — Row ${i + 1}, label`, k),
@@ -301,11 +303,11 @@ export const pages = {
       ...pairs(3, "Why move with us", "reason", [
         ["No rental truck.", "No white-knuckle driving, no rushed return."],
         ["Load at ground level.", "No steep ramps."],
-        ["Need a gap between homes?", "Keep your belongings stored until your new place is ready."],
+        ["Double wall construction.", "Sturdy aluminum walls protect your things on the road."],
         ["Insulated protection.", "Your things travel and wait in a more stable environment."],
       ]),
-      ...head(4, "Longer distances", "distance", "Moving further than {deliveryRadius}?", "We'll quote your distance fee", "upfront."),
-      f("distanceText", "4 · Longer distances — Text", "Before you book, never after. Tell us where you're headed and we'll confirm the price on the call."),
+      ...head(4, "Mileage fee", "distance", "Mileage fee", "Every move includes a mileage fee,", "quoted upfront."),
+      f("distanceText", "4 · Mileage fee — Text", "Moves are priced by distance, so you get a custom quote before you book, never after. Tell us where you're headed and we'll confirm it on the call."),
       ...seoFields("moving"),
     ],
   },
@@ -348,8 +350,8 @@ export const pages = {
       f("pricesText", "3 · Prices — Text (the prices are in “List: Sizes & prices”)", "Delivery is {deliveryFee} within {deliveryRadius} of {town}. Further away, we'll quote your distance fee upfront."),
       ...titled(4, "Extras", "extra", [
         ["Renting first?", "Try before you buy. Rent a unit, and if you love it, ask us about buying it."],
-        ["Good to know", "A permanent unit may be treated differently from a temporary one by your city or HOA. We recommend checking local rules before you buy, and we're happy to help."],
-        ["Built by our family", "Made with care in {town}, not mass-produced."],
+        ["Good to know", "A permanent unit may be treated differently from a temporary one by your city or HOA. We recommend checking local rules before you buy."],
+        ["Built by our family", "Made with care in {town}, not mass-produced. All-metal siding and roof give greater fire resistance."],
       ]),
       ...seoFields("buy"),
     ],
@@ -389,7 +391,7 @@ export type PageId = keyof typeof pages;
 
 /** Site-wide fields added to the existing "Site Settings" collection (closing CTA + footer). */
 export const siteWideFields: Field[] = [
-  f("closingAvailability", "Closing section (bottom of every page) — Small line above", "(Now delivering across Fallbrook & North County)"),
+  f("closingAvailability", "Closing section (bottom of every page) — Small line above", "(Now delivering across Southern California)"),
   f("closingHeading", "Closing section — Heading", "Ready for storage that"),
   f("closingAccent", "Closing section — Heading, bronze part", "looks the part?"),
   f("closingText", "Closing section — Text", "Get your price in {callbackMinutes} minutes, and get your driveway back to looking like home."),

@@ -120,12 +120,12 @@ function mapSizes(rows: Raw[] | null): d.Size[] {
   });
 }
 
-function mapFaq(rows: Raw[] | null): { faq: d.FaqGroup[]; homeFaq: d.FaqItem[] } {
+function mapFaq(rows: Raw[] | null, b: Business): { faq: d.FaqGroup[]; homeFaq: d.FaqItem[] } {
   if (!rows?.length) return { faq: d.faq, homeFaq: d.homeFaq };
   const groups: d.FaqGroup[] = [];
   for (const r of rows) {
     const q = str(r.title);
-    const a = str(r.answer);
+    const a = str(r.answer) && fillTokens(str(r.answer)!, b);
     if (!q || !a) continue;
     const name = str(r.group) ?? "More questions";
     let g = groups.find((x) => x.group === name);
@@ -160,7 +160,7 @@ function mapClosing(business: Business, sizes: d.Size[], rows: Raw[] | null): ty
     title: [site.closingHeading, site.closingAccent],
     sub: site.closingText,
     facts: [
-      { no: "(01)", value: `${business.callbackMinutes} minutes`, label: "to a real person with your price" },
+      { no: "(01)", value: `${business.callbackMinutes} minutes`, label: "response time, during business hours" },
       { no: "(02)", value: d.closing.facts[1].value, label: d.closing.facts[1].label },
       { no: "(03)", value: `From ${from} / month`, label: `${business.deliveryFee} delivery within ${business.deliveryRadius}` },
     ],
@@ -208,7 +208,7 @@ export async function getContent(): Promise<Content> {
 
   const business = mapBusiness(settings);
   const sizes = mapSizes(sizeRows);
-  const { faq, homeFaq } = mapFaq(faqRows);
+  const { faq, homeFaq } = mapFaq(faqRows, business);
 
   const value: Content = {
     business,

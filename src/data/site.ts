@@ -69,8 +69,8 @@ export const business = {
   wordmark: "Northline",
   tagline: "Spaces delivered",
   town: "Fallbrook",
-  region: "North County San Diego",
-  area: "Fallbrook & North County San Diego",
+  region: "Southern California",
+  area: "Southern California",
   state: "CA",
   callbackMinutes: 15,
   hours: "Mon–Sat, 8am–6pm",
@@ -195,10 +195,10 @@ export const closing = {
   ],
   button: "Get My Free Quote",
   secondary: "See pricing",
-  availability: "(Now delivering across Fallbrook & North County)",
+  availability: "(Now delivering across Southern California)",
   facts: [
     { no: "(01)", value: "15 minutes", label: "to a real person with your price" },
-    { no: "(02)", value: "Fallbrook & North County", label: "delivered to your driveway or jobsite" },
+    { no: "(02)", value: "Southern California", label: "delivered to your driveway or jobsite" },
     { no: "(03)", value: "From $179 / month", label: "$99 delivery within 10 miles" },
   ],
 };
@@ -261,7 +261,7 @@ export const faq: FaqGroup[] = [
       },
       {
         q: "What does insulated actually protect against?",
-        a: "Heat and big temperature swings, which can warp wood furniture and damage electronics, artwork and documents. Inland San Diego County summers are the worst for it.",
+        a: "Heat and big temperature swings, which can warp wood furniture and damage electronics, artwork and documents.",
         home: true,
       },
       {
@@ -275,7 +275,7 @@ export const faq: FaqGroup[] = [
     items: [
       {
         q: "Are there any hidden fees?",
-        a: "No. You pay the monthly rent, plus $99 for delivery and pickup within 10 miles of Fallbrook. Beyond that, we'll quote your distance fee before you book.",
+        a: "No. You pay the monthly rent, plus $99 for delivery and pickup within 10 miles of Fallbrook. Beyond that, we'll quote your distance fee before you book. Late payment, cleaning or damage fees may apply if needed.",
         home: true,
       },
       {
@@ -301,7 +301,7 @@ export const faq: FaqGroup[] = [
       },
       {
         q: "Do I need a permit or HOA approval?",
-        a: "Usually not, if the unit sits on your own driveway. Some HOAs and towns have their own rules, so it's worth a quick check. We're happy to help.",
+        a: "Usually not, if the unit sits on your own driveway. Some HOAs and towns have their own rules, so it's worth a quick check.",
         home: true,
       },
       {
@@ -328,7 +328,7 @@ export const faq: FaqGroup[] = [
       },
       {
         q: "What can't I store?",
-        a: "For safety, no hazardous, flammable or perishable items, and no people or pets.",
+        a: "For safety, no hazardous, flammable or perishable items. Units can't be used as living space or as a pet shelter.",
       },
     ],
   },
