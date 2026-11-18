@@ -8,66 +8,56 @@ import { getContent } from "../lib/content";
 const { business, site } = await getContent();
 
 const year = new Date().getFullYear();
-const sitemapA = nav.slice(0, 5);
-const sitemapB = nav.slice(5);
+// One "Explore" list, split over two short columns. Home and Get a Quote are
+// left out: the logo goes home and the button below asks for the quote.
+const links = nav.filter((n) => n.slug !== "" && n.slug !== "quote");
+const half = Math.ceil(links.length / 2);
+const tel = business.phone.replace(/[^0-9+]/g, "");
 ---
 
 <footer class="footer">
   <div class="container">
     <div class="footer__grid">
-      <div>
-        <a class="brand" href={href("")} aria-label="Northline Spaces home">
-          <Logo class="brand__mark" />
+      <div class="footer__brand">
+        <a class="brand brand--on-dark" href={href("")} aria-label="Northline Spaces home">
+          <Logo class="brand__mark" star="soft" />
           <span class="brand__text">
             <span class="brand__name">{business.wordmark}</span>
             <span class="brand__sub">{business.tagline}</span>
           </span>
         </a>
-        <p class="footer__desc">
-          {site.footerBlurb}
-        </p>
-        <address class="footer__addr">
-          {business.town}, {business.state}<br />
-          Serving {business.area}
-          {business.phone && <><br /><a href={`tel:${business.phone.replace(/[^0-9+]/g, "")}`}>{business.phone}</a></>}
-          {business.email && <><br /><a href={`mailto:${business.email}`}>{business.email}</a></>}
-          <br />{business.hours}
-        </address>
+        <p class="footer__desc">{site.footerBlurb}</p>
       </div>
 
-      <div class="footer__col">
-        <p class="footer__h">Sitemap</p>
-        <ul>
-          {sitemapA.map((n) => <li><a href={href(n.slug)}>{n.label}</a></li>)}
-        </ul>
-      </div>
-
-      <div class="footer__col">
-        <p class="footer__h">More</p>
-        <ul>
-          {sitemapB.map((n) => <li><a href={href(n.slug)}>{n.label}</a></li>)}
-        </ul>
-      </div>
-
-      <div class="footer__cta">
-        <p class="label faint">Get a quote</p>
-        <p>Tell us what you need. We'll respond within {business.callbackMinutes} minutes during business hours with your price.</p>
-        <Button href={href("quote")} label="Get My Free Quote" size="sm" />
-        <a class="footer__contact" href={href("contact")}>Or contact us <Icon name="arrow-right" /></a>
-      </div>
-    </div>
-
-    <div class="footer__bar">
-      <span>&copy; {year} {business.name}. All rights reserved.</span>
-      <nav aria-label="Legal">
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-        <a href="#top" class="footer__top">
-          Back to top <Icon name="arrow-up" />
-        </a>
+      <nav class="footer__col" aria-label="Footer">
+        <p class="footer__h">Explore</p>
+        <div class="footer__links">
+          <ul>{links.slice(0, half).map((n) => <li><a href={href(n.slug)}>{n.label}</a></li>)}</ul>
+          <ul>{links.slice(half).map((n) => <li><a href={href(n.slug)}>{n.label}</a></li>)}</ul>
+        </div>
       </nav>
+
+      <div class="footer__col footer__contact">
+        <p class="footer__h">Get in touch</p>
+        <ul>
+          {business.phone && <li><a href={`tel:${tel}`}>{business.phone}</a></li>}
+          {business.email && <li><a href={`mailto:${business.email}`}>{business.email}</a></li>}
+          <li class="footer__meta">{business.hours} · Serving {business.area}</li>
+        </ul>
+        <Button href={href("quote")} label="Get a Free Quote" size="sm" variant="light" class="footer__btn" />
+      </div>
     </div>
 
     <div class="footer__wordmark" aria-hidden="true">Northline</div>
+
+    <div class="footer__bar">
+      <span>&copy; {year} {business.name}</span>
+      <span class="footer__credit">
+        Site by <a href="https://openbrands.studio" target="_blank" rel="noopener">Open Brands Studio</a>
+      </span>
+      <a href="#top" class="footer__top">
+        Back to top <Icon name="arrow-up" />
+      </a>
+    </div>
   </div>
 </footer>

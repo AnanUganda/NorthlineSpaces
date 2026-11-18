@@ -181,7 +181,7 @@ export const audiences: Audience[] = [
 
 export const closing = {
   title: ["Ready for storage that", "looks the part?"],
-  sub: "Get your price within 15 minutes during business hours, and get your driveway back to looking like home.",
+  sub: "Get your price, and get your driveway back to looking like home.",
   /** The customer's side of the story (StoryBrand), shown before the FAQ. */
   withUs: [
     "Your furniture is safe, dry and a few steps from your door",
@@ -198,7 +198,7 @@ export const closing = {
   secondary: "See pricing",
   availability: "(Now delivering across Southern California)",
   facts: [
-    { no: "(01)", value: "15 minutes", label: "response time, during business hours" },
+    { no: "(01)", value: "Double wall", label: "insulated, high-grade aluminum construction" },
     { no: "(02)", value: "Southern California", label: "delivered to your driveway or jobsite" },
     { no: "(03)", value: "From $179 / month", label: "$99 delivery within 10 miles" },
   ],

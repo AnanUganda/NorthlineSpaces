@@ -160,7 +160,7 @@ function mapClosing(business: Business, sizes: d.Size[], rows: Raw[] | null): ty
     title: [site.closingHeading, site.closingAccent],
     sub: site.closingText,
     facts: [
-      { no: "(01)", value: `${business.callbackMinutes} minutes`, label: "response time, during business hours" },
+      { no: "(01)", value: "Double wall", label: "insulated, high-grade aluminum construction" },
       { no: "(02)", value: d.closing.facts[1].value, label: d.closing.facts[1].label },
       { no: "(03)", value: `From ${from} / month`, label: `${business.deliveryFee} delivery within ${business.deliveryRadius}` },
     ],
