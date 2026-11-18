@@ -76,13 +76,12 @@ const emails = [1, 2]
 
         <!-- Message form -->
         <div>
-          <!--
-            TODO: wire to Wix Forms (same as the quote form) so messages land in
-            the Northline Wix dashboard. For now it validates and shows the
-            thank-you state.
-          -->
           <Eyebrow no="03" label={t("formTitle")} />
-          <form class="form" id="contact-form" novalidate data-reveal>
+          <form class="form" id="contact-form" novalidate data-reveal data-phone={business.phone}>
+            <div class="hp" aria-hidden="true">
+              <label for="website">Leave this empty</label>
+              <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+            </div>
             <div class="form__row">
               <div class="field">
                 <label for="name">Name <span class="req">*</span></label>
@@ -150,27 +149,13 @@ const emails = [1, 2]
 </style>
 
 <script>
+  import { wireForm } from "../scripts/wire-form";
   const form = document.getElementById("contact-form") as HTMLFormElement | null;
-  const success = document.getElementById("contact-success");
-  const error = document.getElementById("contact-error");
-
-  form?.addEventListener("submit", (e) => {
-    e.preventDefault();
-    let valid = true;
-    form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("[required]").forEach((el) => {
-      const ok = el.checkValidity() && el.value.trim() !== "";
-      el.closest(".field")?.classList.toggle("is-invalid", !ok);
-      if (!ok) valid = false;
-    });
-    if (!valid) {
-      if (error) error.style.display = "block";
-      form.querySelector<HTMLElement>(".is-invalid input, .is-invalid textarea")?.focus();
-      return;
-    }
-    // Front-end only for now; Wix Forms wiring is the next step.
-    if (error) error.style.display = "none";
-    form.classList.add("is-sent");
-    success?.classList.add("is-visible");
-    success?.scrollIntoView({ behavior: "smooth", block: "center" });
+  wireForm({
+    form,
+    key: "contact",
+    success: document.getElementById("contact-success"),
+    error: document.getElementById("contact-error"),
+    fallback: `Sorry, that didn't go through. Please try again, or call us at ${form?.dataset.phone ?? ""}.`,
   });
 </script>

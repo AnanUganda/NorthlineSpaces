@@ -2458,6 +2458,14 @@ body.menu-open {
   line-height: 1.5;
 }
 
+.hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .form__success {
   padding: 28px;
   border: 1px solid var(--line);
