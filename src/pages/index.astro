@@ -118,7 +118,7 @@ const work = [
         </h1>
         <p class="hero__sub" data-reveal style="--delay: 450ms">{t("heroSub")}</p>
         <div class="btn-row hero__actions" data-reveal style="--delay: 560ms">
-          <Button href={href("quote")} label="Get My Free Quote" variant="light" />
+          <Button href={href("quote")} label="Get My Free Quote" variant="accent" />
           <a class="link" href={href("pricing")}>See pricing <Icon name="arrow-right" /></a>
         </div>
 
@@ -371,7 +371,7 @@ const work = [
             {n4.map((i) => t(`with${i}`)).filter(Boolean).map((x) => <li class="reason"><span>{x}</span></li>)}
           </ul>
           <div class="mt-3">
-            <Button href={href("quote")} label="Get My Free Quote" size="sm" />
+            <Button variant="accent" href={href("quote")} label="Get My Free Quote" size="sm" />
           </div>
         </div>
         <div class="outcomes__without">

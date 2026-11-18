@@ -43,7 +43,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
       </nav>
 
       <!-- Desktop: the main CTA. Mobile: the menu trigger (hamburger → ×). -->
-      <Button href={href("quote")} label="Get My Free Quote" size="sm" class="header__cta" />
+      <Button variant="accent" href={href("quote")} label="Get My Free Quote" size="sm" class="header__cta" />
 
       <button
         class="menu-btn"
@@ -82,6 +82,6 @@ const pad = (n: number) => String(n).padStart(2, "0");
   </nav>
   <div class="container menu__foot">
     <span>{business.name} · {business.town}, {business.state}</span>
-    <Button href={href("quote")} label="Get My Free Quote" size="sm" />
+    <Button variant="accent" href={href("quote")} label="Get My Free Quote" size="sm" />
   </div>
 </div>

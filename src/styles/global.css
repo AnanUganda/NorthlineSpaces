@@ -15,6 +15,9 @@
   --line: rgba(22, 20, 18, 0.16);
   --accent: #8a6742;
   --accent-soft: #f1dfc2;
+  /* deeper bronze for filled buttons: linen text on it passes WCAG AA (5:1) */
+  --accent-strong: #80603e;
+  --accent-deep: #6b5034;
   --surface-dark: #161412;
   --on-dark: #f3f0eb;
   --on-dark-60: rgba(243, 240, 235, 0.6);
@@ -447,6 +450,18 @@ main:has(> .section--white:last-child) + .cta {
   --btn-arrow: var(--bg);
 }
 
+/* Accent: bronze pill (the footer wordmark's colour) for the quote CTAs */
+.btn--accent {
+  --btn-bg: var(--accent-strong);
+  --btn-fg: var(--on-dark);
+  --btn-circle: var(--on-dark);
+  --btn-arrow: var(--accent-deep);
+}
+
+.btn--accent:hover {
+  --btn-bg: var(--accent-deep);
+}
+
 /* Outline: hairline pill, dark circle */
 .btn--outline {
   --btn-bg: transparent;
@@ -827,13 +842,7 @@ a:hover > .img-btn,
   }
 }
 
-/* Over a photo the CTA inverts to the light pill */
-.header.is-light:not(.is-scrolled):not(.is-open) .header__cta {
-  --btn-bg: var(--on-dark);
-  --btn-fg: var(--ink);
-  --btn-circle: var(--ink);
-  --btn-arrow: var(--on-dark);
-}
+/* The bronze CTA reads on both linen and the hero photo, so it never inverts. */
 
 /* ---------- Full-screen menu ---------- */
 .menu {

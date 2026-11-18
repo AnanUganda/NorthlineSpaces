@@ -22,7 +22,7 @@ const { facts = true } = Astro.props;
     </h2>
     <p class="cta__sub" data-reveal style="--delay: 120ms">{closing.sub}</p>
     <div class="btn-row" data-reveal style="--delay: 180ms">
-      <Button href={href("quote")} label={closing.button} />
+      <Button variant="accent" href={href("quote")} label={closing.button} />
       <a class="link" href={href("pricing")}>
         {closing.secondary} <Icon name="arrow-right" />
       </a>

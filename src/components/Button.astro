@@ -8,7 +8,7 @@ import Icon from "./Icon.astro";
 interface Props {
   href?: string;
   label: string;
-  variant?: "dark" | "light" | "outline";
+  variant?: "dark" | "light" | "outline" | "accent";
   size?: "md" | "sm";
   icon?: "arrow-right" | "arrow-up-right" | "plus";
   type?: "button" | "submit";
@@ -30,6 +30,7 @@ const classes = [
   "btn",
   variant === "light" && "btn--light",
   variant === "outline" && "btn--outline",
+  variant === "accent" && "btn--accent",
   onDark && "btn--on-dark",
   size === "sm" && "btn--sm",
   className,
