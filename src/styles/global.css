@@ -2208,6 +2208,24 @@ body.menu-open {
   align-content: start;
 }
 
+.footer__contact {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--ink-60);
+  justify-self: start;
+}
+
+.footer__contact:hover {
+  color: var(--ink);
+}
+
+.footer__contact svg {
+  width: 12px;
+  height: 12px;
+}
+
 .footer__cta p {
   font-size: 15px;
   color: var(--ink-60);

@@ -3,7 +3,7 @@ export const seo: Record<string, { title: string; description: string }> = {
   "": {
     title: "Northline Spaces | Insulated Portable Storage in Fallbrook",
     description:
-      "Insulated portable storage units that look good in any driveway. Rent by the month or buy. $99 delivery within 10 miles of Fallbrook. We call within 15 minutes.",
+      "Insulated portable storage units that look good in any driveway. Rent by the month or buy. $99 delivery within 10 miles of Fallbrook. We respond within 15 minutes during business hours.",
   },
   unit: {
     title: "Insulated Portable Storage Units | Northline Spaces",
@@ -44,9 +44,13 @@ export const seo: Record<string, { title: string; description: string }> = {
     title: "Portable Storage FAQ | Northline Spaces",
     description: "Answers on portable storage sizes, pricing, delivery, permits and HOAs, and buying a unit, from Northline Spaces in Fallbrook and North County San Diego.",
   },
+  contact: {
+    title: "Contact Us | Northline Spaces",
+    description: "Call, email or message Northline Spaces about portable storage in Southern California. We respond within 15 minutes during business hours.",
+  },
   quote: {
     title: "Get a Free Storage Quote | Northline Spaces",
     description:
-      "Request a free portable storage quote in Fallbrook. Tell us what you need and we'll call within 15 minutes during business hours. No obligation, no spam.",
+      "Request a free portable storage quote in Fallbrook. Tell us what you need and we'll respond within 15 minutes during business hours. No obligation, no spam.",
   },
 };

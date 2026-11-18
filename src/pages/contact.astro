@@ -1,0 +1,176 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHero from "../components/PageHero.astro";
+import Eyebrow from "../components/Eyebrow.astro";
+import Button from "../components/Button.astro";
+import { href } from "../data/site";
+import { getContent, getPage } from "../lib/content";
+
+const { business } = await getContent();
+const page = await getPage("contact");
+const { t } = page;
+const tel = business.phone.replace(/[^0-9+]/g, "");
+const emails = [1, 2]
+  .map((i) => ({ label: t(`email${i}Label`), address: t(`email${i}`) }))
+  .filter((e) => e.address);
+---
+
+<Layout slug="contact" cta={false}>
+  <PageHero page={page} />
+
+  <section class="section section--flush-top">
+    <div class="container">
+      <div class="split">
+        <!-- Ways to reach us -->
+        <div class="split__sticky">
+          <Eyebrow no="02" label={t("waysLabel")} />
+          <div class="feature-list contact-list" data-reveal>
+            {
+              business.phone && (
+                <div class="feature">
+                  <span class="index">(A)</span>
+                  <div>
+                    <h3 class="feature__title">{t("callTitle")}</h3>
+                    <p class="feature__desc"><a class="contact__link" href={`tel:${tel}`}>{business.phone}</a></p>
+                  </div>
+                </div>
+              )
+            }
+            <div class="feature">
+              <span class="index">(B)</span>
+              <div>
+                <h3 class="feature__title">Email</h3>
+                {
+                  emails.map((e) => (
+                    <p class="feature__desc mb-1">
+                      <span class="faint">{e.label}</span>
+                      <br />
+                      <a class="contact__link" href={`mailto:${e.address}`}>{e.address}</a>
+                    </p>
+                  ))
+                }
+              </div>
+            </div>
+            <div class="feature">
+              <span class="index">(C)</span>
+              <div>
+                <h3 class="feature__title">{t("hoursTitle")}</h3>
+                <p class="feature__desc">{business.hours}. {t("hoursText")}</p>
+              </div>
+            </div>
+            <div class="feature">
+              <span class="index">(D)</span>
+              <div>
+                <h3 class="feature__title">{t("areaTitle")}</h3>
+                <p class="feature__desc">{t("areaText")}</p>
+              </div>
+            </div>
+          </div>
+          <p class="feature__desc mt-3">
+            <strong>{t("quoteLead")}</strong> {t("quoteText")}
+          </p>
+          <div class="btn-row mt-2">
+            <Button href={href("quote")} label="Get My Free Quote" size="sm" />
+          </div>
+        </div>
+
+        <!-- Message form -->
+        <div>
+          <!--
+            TODO: wire to Wix Forms (same as the quote form) so messages land in
+            the Northline Wix dashboard. For now it validates and shows the
+            thank-you state.
+          -->
+          <Eyebrow no="03" label={t("formTitle")} />
+          <form class="form" id="contact-form" novalidate data-reveal>
+            <div class="form__row">
+              <div class="field">
+                <label for="name">Name <span class="req">*</span></label>
+                <input id="name" name="name" type="text" autocomplete="name" required />
+              </div>
+              <div class="field">
+                <label for="phone">Phone <span class="faint">(optional)</span></label>
+                <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="email">Email <span class="req">*</span></label>
+              <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required />
+            </div>
+
+            <div class="field">
+              <label for="message">Message <span class="req">*</span></label>
+              <textarea id="message" name="message" placeholder="How can we help?" required></textarea>
+            </div>
+
+            <div class="btn-row">
+              <Button label="Send Message" type="submit" />
+            </div>
+            <p class="form__note">{t("formNote")}</p>
+            <p class="form__note" id="contact-error" role="alert" style="color:#b4452c; display:none">
+              Please fill in the required fields.
+            </p>
+          </form>
+
+          <div class="form__success" id="contact-success" role="status" aria-live="polite">
+            <p class="h4 mb-1">{t("thanksTitle")}</p>
+            <p class="muted">{t("thanksText")}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* stacked rows in the narrow column: index on the left, details on the right */
+  .contact-list {
+    grid-template-columns: 1fr;
+  }
+  .contact-list :global(.feature),
+  .contact-list :global(.feature + .feature) {
+    grid-template-columns: 56px 1fr;
+    grid-template-rows: auto;
+    gap: 16px;
+    padding: 22px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .contact-list :global(.feature__title) {
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+  .contact__link {
+    color: var(--ink, inherit);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+</style>
+
+<script>
+  const form = document.getElementById("contact-form") as HTMLFormElement | null;
+  const success = document.getElementById("contact-success");
+  const error = document.getElementById("contact-error");
+
+  form?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let valid = true;
+    form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("[required]").forEach((el) => {
+      const ok = el.checkValidity() && el.value.trim() !== "";
+      el.closest(".field")?.classList.toggle("is-invalid", !ok);
+      if (!ok) valid = false;
+    });
+    if (!valid) {
+      if (error) error.style.display = "block";
+      form.querySelector<HTMLElement>(".is-invalid input, .is-invalid textarea")?.focus();
+      return;
+    }
+    // Front-end only for now; Wix Forms wiring is the next step.
+    if (error) error.style.display = "none";
+    form.classList.add("is-sent");
+    success?.classList.add("is-visible");
+    success?.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+</script>

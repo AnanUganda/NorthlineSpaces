@@ -54,6 +54,7 @@ export const nav: NavItem[] = [
   { slug: "buy", label: "Buy a Unit" },
   { slug: "about", label: "About" },
   { slug: "faq", label: "FAQ" },
+  { slug: "contact", label: "Contact" },
   { slug: "quote", label: "Get a Quote" },
 ];
 
@@ -180,7 +181,7 @@ export const audiences: Audience[] = [
 
 export const closing = {
   title: ["Ready for storage that", "looks the part?"],
-  sub: "Get your price in 15 minutes, and get your driveway back to looking like home.",
+  sub: "Get your price within 15 minutes during business hours, and get your driveway back to looking like home.",
   /** The customer's side of the story (StoryBrand), shown before the FAQ. */
   withUs: [
     "Your furniture is safe, dry and a few steps from your door",
@@ -197,7 +198,7 @@ export const closing = {
   secondary: "See pricing",
   availability: "(Now delivering across Southern California)",
   facts: [
-    { no: "(01)", value: "15 minutes", label: "to a real person with your price" },
+    { no: "(01)", value: "15 minutes", label: "response time, during business hours" },
     { no: "(02)", value: "Southern California", label: "delivered to your driveway or jobsite" },
     { no: "(03)", value: "From $179 / month", label: "$99 delivery within 10 miles" },
   ],
@@ -221,7 +222,7 @@ export const beliefs = [
 export const process = [
   {
     title: "Get your free quote",
-    desc: "Tell us what you need. A real person calls you back within 15 minutes with your price.",
+    desc: "Tell us what you need. A real person responds within 15 minutes during business hours with your price.",
   },
   {
     title: "We deliver and place it",
@@ -353,15 +354,15 @@ export const quoteForm = {
   needs: ["Storage", "Moving", "Storage and moving", "Buy a unit", "Full-service move"],
   sizes: ["8×12", "8×16", "8×20", "Not sure"],
   button: "Get My Free Quote",
-  note: "We'll call you within 15 minutes during business hours (Mon–Sat, 8am–6pm). Outside those hours, first thing the next morning. Your details stay with us. No spam, ever.",
+  note: "We'll respond within 15 minutes during business hours (Mon–Sat, 8am–6pm). Outside those hours, first thing the next morning. Your details stay with us. No spam, ever.",
   next: [
-    { title: "We call you", desc: "within 15 minutes to confirm your price" },
+    { title: "We respond", desc: "within 15 minutes during business hours to confirm your price" },
     { title: "We book your delivery", desc: "for a date that works for you" },
     { title: "We deliver it", desc: "and place it exactly where you want" },
   ],
   thanks: {
     title: "Thanks, we've got your request.",
-    body: "Keep your phone close. We'll call you within 15 minutes during business hours.",
+    body: "Keep your phone close. We'll respond within 15 minutes during business hours.",
   },
 };
 

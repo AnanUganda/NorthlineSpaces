@@ -51,8 +51,9 @@ const sitemapB = nav.slice(5);
 
       <div class="footer__cta">
         <p class="label faint">Get a quote</p>
-        <p>Tell us what you need. We'll call within {business.callbackMinutes} minutes with your price.</p>
+        <p>Tell us what you need. We'll respond within {business.callbackMinutes} minutes during business hours with your price.</p>
         <Button href={href("quote")} label="Get My Free Quote" size="sm" />
+        <a class="footer__contact" href={href("contact")}>Or contact us <Icon name="arrow-right" /></a>
       </div>
     </div>
 
